@@ -4,7 +4,7 @@ const precision = 1;
 const files = {
   "pm25-2020": {
     file: "pm25-2020.jsonld",
-    url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM25_sr_roczna`,
+    // url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM25_sr_roczna`,
     values: {
       min: 6.5,
       max: 150,
@@ -12,7 +12,7 @@ const files = {
   },
   "pm10-2020": {
     file: "pm10-2020.jsonld",
-    url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM10_sr_roczna`,
+    // url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM10_sr_roczna`,
     values: {
       min: 6.5,
       max: 150,
@@ -48,10 +48,7 @@ export async function GET(request: Request) {
       }[];
     } = { features: [] };
 
-    if (fileToGet.url && fileToGet.url !== "") {
-      const response = await fetch(fileToGet.url);
-      data = await response.json();
-    } else if (fileToGet.file && fileToGet.file !== "") {
+    if (fileToGet.file && fileToGet.file !== "") {
       const file = fs.readFileSync(`${process.cwd()}/public/jsons/${fileToGet.file}`, "utf-8");
       data = JSON.parse(file);
     } else {
