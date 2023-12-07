@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       {children}
       <div className="absolute w-3/4 sm:w-auto left-1/2 bottom-1/2 -translate-x-1/2 translate-y-1/2 grid gap-10 ">
         <div className="grid gap-6">
-          <span className="text-lg sm:text-xl font-bold text-black text-center whitespace-nowrap">
+          <span className="text-lg sm:text-xl font-jost font-black text-black text-center whitespace-nowrap">
             Zobacz czym oddychasz. Zmień to!
           </span>
           <AutoCompleteSearch />

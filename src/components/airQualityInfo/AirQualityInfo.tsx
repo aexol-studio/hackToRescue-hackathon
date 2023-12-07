@@ -8,18 +8,8 @@ import { airQualityColors } from "@/constans";
 import { useAppStore } from "@/stores";
 
 export const AirQualityInfo = () => {
-  const {
-    airQuality,
-    qualityLoading,
-    setHoveredQualityIndex,
-    selectedStation,
-  } = useAppStore(
-    ({
-      airQuality,
-      qualityLoading,
-      setHoveredQualityIndex,
-      selectedStation,
-    }) => ({
+  const { airQuality, qualityLoading, setHoveredQualityIndex, selectedStation } = useAppStore(
+    ({ airQuality, qualityLoading, setHoveredQualityIndex, selectedStation }) => ({
       airQuality,
       qualityLoading,
       setHoveredQualityIndex,
@@ -52,20 +42,16 @@ export const AirQualityInfo = () => {
                 onMouseOver={() => {
                   setHoveredQualityIndex(value.indexLevel?.id);
                 }}
-                onMouseOut={() => setHoveredQualityIndex(undefined)}
-              >
+                onMouseOut={() => setHoveredQualityIndex(undefined)}>
                 <span>{key === "st" ? "Ogólna" : key}</span>
                 <span
                   style={{
                     ...((value.indexLevel?.id ?? "") in airQualityColors
                       ? { color: `${airQualityColors[value.indexLevel?.id!]}` }
                       : {}),
-                  }}
-                >
+                  }}>
                   {!value.indexLevel?.indexLevelName ||
-                  value.indexLevel?.indexLevelName
-                    .toLowerCase()
-                    .includes("brak")
+                  value.indexLevel?.indexLevelName.toLowerCase().includes("brak")
                     ? "-"
                     : value.indexLevel?.indexLevelName.replace(/.$/, "a")}
                 </span>
@@ -74,9 +60,7 @@ export const AirQualityInfo = () => {
                     ...((value.indexLevel?.id ?? "") in airQualityColors
                       ? {
                           background: `${airQualityColors[value.indexLevel?.id!]}`,
-                          width: `calc(50px - ${
-                            (value.indexLevel?.id ?? 0) * 10
-                          }px)`,
+                          width: `calc(50px - ${(value.indexLevel?.id ?? 0) * 10}px)`,
                         }
                       : {}),
                   }}

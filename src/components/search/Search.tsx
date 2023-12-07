@@ -12,9 +12,8 @@ import { useAppStore } from "@/stores";
 import { Globe2 } from "lucide-react";
 
 export const Search = () => {
-  const { selectStation, setShowLunge } = useAppStore(({ selectStation, setShowLunge }) => ({
+  const { selectStation } = useAppStore(({ selectStation }) => ({
     selectStation,
-    setShowLunge,
   }));
   return (
     <div className="absolute left-1/2 top-6 flex w-screen -translate-x-1/2 justify-center">
@@ -44,12 +43,11 @@ export const Search = () => {
             <AutoCompleteSearch />
           </div>
           <div className="hidden sm:block">
-            <HoverInfo infoText="Geolokalizacja">
+            <HoverInfo infoText="Wróć do mapy">
               <div
                 className="flex p-1 bg-white rounded-full cursor-pointer"
                 onClick={() => {
                   selectStation(null);
-                  setShowLunge(false);
                 }}>
                 <Globe2 color="black" />
               </div>

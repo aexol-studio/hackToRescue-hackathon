@@ -1,7 +1,109 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-Black.ttf') format('truetype');
+font-weight: 900;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-BlackItalic.ttf') format('truetype');
+font-weight: 900;
+font-style: italic;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-ExtraBold.ttf') format('truetype');
+font-weight: 800;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-ExtraBoldItalic.ttf') format('truetype');
+font-weight: 800;
+font-style: italic;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-ExtraBold.ttf') format('truetype');
+font-weight: 700;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-ExtraBoldItalic.ttf') format('truetype');
+font-weight: 700;
+font-style: italic;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-Bold.ttf') format('truetype');
+font-weight: 600;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-BoldItalic.ttf') format('truetype');
+font-weight: 600;
+font-style: italic;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-Medium.ttf') format('truetype');
+font-weight: 500;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-MediumItalic.ttf') format('truetype');
+font-weight: 500;
+font-style: italic;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-Regular.ttf') format('truetype');
+font-weight: 400;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-Italic.ttf') format('truetype');
+font-weight: 400;
+font-style: italic;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-Light.ttf') format('truetype');
+font-weight: 300;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-LightItalic.ttf') format('truetype');
+font-weight: 300;
+font-style: italic;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-ExtraLight.ttf') format('truetype');
+font-weight: 200;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-ExtraLightItalic.ttf') format('truetype');
+font-weight: 200;
+font-style: italic;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-Thin.ttf') format('truetype');
+font-weight: 100;
+}
+@font-face {
+font-family: 'Jost';
+src: url('/fonts/Jost/Jost-ThinItalic.ttf') format('truetype');
+font-weight: 100;
+font-style: italic;
+}
 html {
   width: 100%;
   height: 100%;

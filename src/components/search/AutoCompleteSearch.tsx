@@ -4,10 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
 import { useAppStore } from "@/stores";
-import { X } from "lucide-react";
 import { useLazyQuery } from "@apollo/client";
 import { GET_CITY_AIR_QUALITY } from "@/graphql/queries";
-import { set } from "date-fns";
 import { GeoLocalizationButton } from "./GeoLocationButton";
 import { HoverInfo } from "./HoverInfo";
 
@@ -25,9 +23,9 @@ export const AutoCompleteSearch = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChangeStation = async (name: string, city: string) => {
+  const handleChangeStation = async (name: string) => {
     if (!inputRef.current) return;
-    inputRef.current.value = city;
+    inputRef.current.value = name;
     setIsSearchOpen(false);
     await new Promise(resolve => setTimeout(resolve, 700));
     if (selectedStation?.name === name) {
@@ -36,7 +34,7 @@ export const AutoCompleteSearch = () => {
       return;
     }
     selectStation(name);
-    setSearchValue(city);
+    setSearchValue(name);
   };
 
   const [getCityAirQuality] = useLazyQuery(GET_CITY_AIR_QUALITY, {
@@ -73,7 +71,7 @@ export const AutoCompleteSearch = () => {
             onChange={e => setSearchValue(e.target.value)}
             onFocus={() => setIsSearchOpen(true)}
             className={cx(
-              "text-base text-black-300 w-full px-[1.2rem] py-[0.8rem] focus:outline-none bg-transparent rounded-3xl"
+              "text-base font-jost text-black w-full px-[1.2rem] py-[0.8rem] focus:outline-none bg-transparent rounded-3xl"
             )}
           />
         </div>
@@ -83,21 +81,13 @@ export const AutoCompleteSearch = () => {
               "transition-[height] duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin",
               isSearchOpen ? "h-[24rem] overflow-y-auto" : "h-0 overflow-hidden"
             )}>
-            {searchResults.map(({ location, name }, idx) => (
+            {searchResults.map(({ name }, idx) => (
               <div key={name + idx}>
                 <div
                   className={cx(
-                    "text-dark-200 flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
+                    "text-black flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
                   )}
-                  onClick={async () => {
-                    await getCityAirQuality({
-                      variables: {
-                        city: name,
-                        startDate: set(new Date(), { hours: 0 }).toISOString(),
-                        endDate: set(new Date(), { hours: 24 }).toISOString(),
-                      },
-                    });
-                  }}>
+                  onClick={() => handleChangeStation(name)}>
                   <h1
                     className={cx(
                       "select-none"
