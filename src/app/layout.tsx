@@ -54,7 +54,7 @@ const chain = (option: "query" | "mutation") => {
     headers: {
       "Content-type": "application/json",
     },
-    cache: "no-cache",
+    // cache: "no-cache",
   })(option);
 };
 
@@ -64,9 +64,12 @@ const getInitialData = async () => {
       getCollectedCities: citySelector,
     });
 
+    console.log(getCollectedCities);
     if (!getCollectedCities) return [];
     return getCollectedCities;
   } catch (error) {
     return [];
   }
 };
+
+export const revalidate = 3600;

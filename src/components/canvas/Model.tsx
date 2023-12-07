@@ -1,17 +1,14 @@
-import { Loader, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { animated, useSprings } from "@react-spring/three";
 import React, { useRef, useState, useMemo, useEffect } from "react";
 import { Group, Mesh } from "three";
 import { useAppStore } from "@/stores";
 import { airQualityColors } from "@/constans";
-import * as THREE from "three";
 useGLTF.preload(`/assets/models/model.glb`);
-useGLTF.preload(`/assets/models/111lungs.glb`);
 
 export const Model = () => {
   const { nodes } = useGLTF(`/assets/models/model.glb`) as any;
-  // const { nodes: newNodes } = useGLTF(`/assets/models/111lungs.glb`);
   const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(
     (state) => ({
       allowRotation: state.allowRotation,
@@ -30,18 +27,6 @@ export const Model = () => {
         .filter(Boolean) as Mesh[],
     []
   );
-
-  // const modelMeshes2: Mesh[] = useMemo(
-  //   () =>
-  //     Object.entries(newNodes)
-  //       .map(([key, value]) =>
-  //         key.toLowerCase().includes("sculpt") ? value : null
-  //       )
-  //       .filter(Boolean) as Mesh[],
-  //   []
-  // );
-  // // console.log(newNodes);
-  // console.log(modelMeshes2);
 
   useFrame((_, delta) => {
     if (!groupRef.current || allowRotation) return;
