@@ -3,8 +3,8 @@ import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import { ApolloProvider } from "@/graphql/ApolloProvider";
 import { AppStoreProvider } from "@/stores/AppStoreProvider";
-import { Education } from "@/components/education/Education";
-import { ToggleEducation } from "@/components/education/ToggleEducation";
+import { Chain } from "@/graphql/zeus";
+import { citySelector } from "@/graphql/querires";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +14,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const data = await getInitialData();
-
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
@@ -48,22 +47,26 @@ export default async function RootLayout({
   );
 }
 
-const getInitialData = async () => {
+const chain = (option: "query" | "mutation") => {
   const API_URL = process.env.NEXT_PUBLIC_API;
   if (!API_URL) throw new Error("No API URL");
-  const response = await fetch(API_URL, {
-    method: "POST",
+  return Chain(API_URL!, {
     headers: {
-      "Content-Type": "application/json",
+      "Content-type": "application/json",
     },
     cache: "no-cache",
-    body: JSON.stringify({
-      query: `query { getCollectedCities { name country location { lat long } } }`,
-    }),
-  });
-  if (!("data" in response)) {
+  })(option);
+};
+
+const getInitialData = async () => {
+  try {
+    const { getCollectedCities } = await chain("query")({
+      getCollectedCities: citySelector,
+    });
+
+    if (!getCollectedCities) return [];
+    return getCollectedCities;
+  } catch (error) {
     return [];
   }
-  const { data } = await response.json();
-  return data.getCollectedCities;
 };

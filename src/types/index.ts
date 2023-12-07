@@ -11,14 +11,6 @@ export type AirQuality = Record<
     sourceDataDate: string | null;
   }
 >;
-export type City = {
-  country: string;
-  location: {
-    lat: number;
-    long: number;
-  };
-  name: string;
-};
 
 type Address = {
   road: string;

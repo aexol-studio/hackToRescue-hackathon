@@ -69,7 +69,7 @@ export async function uploadFile(formData: FormData) {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           name: response[0].name ?? city,
-          location: { lat: response[0].lat, lon: response[0].lon },
+          location: { lat: response[0].lat, long: response[0].lon },
           country: response[0].country,
           state: response[0].state,
         });

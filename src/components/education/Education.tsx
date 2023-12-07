@@ -15,8 +15,8 @@ export const Education = () => {
       <ToggleEducation />
       <div
         className={cx(
-          "absolute h-screen -left-full w-full top-1/2 py-6 pr-6 -translate-y-1/2 duration-700 transition-transform  z-50 ",
-          educationOpen && "translate-x-full "
+          "absolute h-3/4 top-full w-full px-6 duration-700 transition-transform  z-50 ",
+          educationOpen && "-translate-y-full "
         )}
       >
         <div className="relative w-full h-full bg-dark-500 border-[1px] scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-[#FF7000] border-l-none border-light-700 rounded text-light-700 overflow-y-auto">

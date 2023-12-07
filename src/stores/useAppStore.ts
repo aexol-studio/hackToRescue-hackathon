@@ -1,4 +1,5 @@
-import { AirQuality, GeoLocation, LocationData, City } from "@/types";
+import { CityType } from "@/graphql/querires";
+import { AirQuality, GeoLocation, LocationData } from "@/types";
 import { checkWhereLatLong, requestGeolocation } from "@/utils";
 import { createStore } from "zustand";
 type MoveMap = "station" | undefined;
@@ -7,12 +8,12 @@ export interface AppStoreProps {
   educationOpen: boolean;
   loading: boolean;
   qualityLoading: boolean;
-  stations: City[];
-  selectedStation: City | null;
+  stations: CityType[];
+  selectedStation: CityType | null;
   location: LocationData | null;
   geoLocation: GeoLocation | null;
   searchValue: string | null;
-  searchResults: City[];
+  searchResults: CityType[];
   airQualities: Record<string, AirQuality> | null;
   airQuality: AirQuality | null;
   allowRotation: boolean;
