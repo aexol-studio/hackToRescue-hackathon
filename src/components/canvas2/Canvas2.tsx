@@ -8,10 +8,10 @@ import { Model2 } from "./Model2";
 import { Loader } from "./Loader";
 import { useAppStore } from "@/stores";
 
-export const Canvas2: FC<{ test: boolean,test2:boolean }> = ({ test,test2 }) => {
+export const Canvas2: FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const orbitControlsRef = useRef<OrbitControlsRef>(null);
-  const { allowRotation } = useAppStore((state) => ({
+  const { allowRotation } = useAppStore(state => ({
     allowRotation: state.allowRotation,
   }));
   const zoomRef = useRef(1);
@@ -31,16 +31,11 @@ export const Canvas2: FC<{ test: boolean,test2:boolean }> = ({ test,test2 }) => 
 
   return (
     <FiberCanvas ref={canvasRef}>
-      <directionalLight
-        castShadow
-        position={[1, 2, 3]}
-        intensity={4.5}
-        shadow-normalBias={0.04}
-      />
+      <directionalLight castShadow position={[1, 2, 3]} intensity={4.5} shadow-normalBias={0.04} />
       <ambientLight intensity={1.5} />
       <Suspense fallback={<Loader />}>
-      <Model2 test={test} test2={test2}/>
-         </Suspense>
+        <Model2 />
+      </Suspense>
       <OrbitControls
         ref={orbitControlsRef}
         enabled={allowRotation}

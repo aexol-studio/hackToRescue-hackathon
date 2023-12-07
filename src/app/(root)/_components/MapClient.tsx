@@ -4,40 +4,32 @@ import { useAppStore } from "@/stores";
 import { Minimap } from "./MiniMap";
 import { pickGoodIcon } from "./utils";
 import { cx, generatePolygonColor } from "@/utils";
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  useMemo,
-} from "react";
+import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { Canvas } from "@/components/canvas/Canvas";
 import { Search } from "@/components/search/Search";
 import { ScalableView } from "@/components/scalableView/ScalableView";
 const ClientMap = () => {
   const [loading, setLoading] = useState(false);
   const json = useRef(null);
-  const {
-    selectedStation,
-    stations,
-    selectStation,
-    goTo,
-    moveMap,
-  } = useAppStore((state) => ({
-    selectedStation: state.selectedStation,
-    selectStation: state.selectStation,
-    goTo: state.goTo,
-    stations: state.stations,
-    moveMap: state.moveMap,
-  }));
+  const { selectedStation, stations, selectStation, goTo, moveMap, setShowLunge } = useAppStore(
+    state => ({
+      selectedStation: state.selectedStation,
+      selectStation: state.selectStation,
+      goTo: state.goTo,
+      stations: state.stations,
+      moveMap: state.moveMap,
+      setShowLunge: state.setShowLunge,
+      setShowLounge: state.setShowLunge,
+    })
+  );
   const [map, setMap] = useState<MapType | null>(null);
   const [position, setPosition] = useState(() => map?.getCenter());
-  const [test, setTest] = useState(false);
-  const onZoom = useCallback(() => {
-    if (map?.getZoom() === 9.5) {
-      setTest(true);
-    } else setTest(false);
-  }, [map]);
+
+  // const onZoom = useCallback(() => {
+  //   if (map?.getZoom() === 9.5) {
+  //     setShowLunge(true);
+  //   } else setShowLunge(false);
+  // }, [map]);
 
   const onMove = useCallback(() => {
     setPosition(map?.getCenter());
@@ -45,40 +37,37 @@ const ClientMap = () => {
 
   useEffect(() => {
     map?.on("move", onMove);
-    map?.on("zoom", onZoom);
+    // map?.on("zoom", onZoom);
     return () => {
       map?.off("move", onMove);
-      map?.off("zoom", onZoom);
+      // map?.off("zoom", onZoom);
     };
   }, [map]);
 
   const goToSelectedStation = useCallback(() => {
     if (selectedStation) {
       const zoom = 14;
-   
-      map?.flyTo(
-        [selectedStation.location.lat, selectedStation.location.long],
-        zoom,
-        {
-          animate: true,
-          duration: 2,
-          easeLinearity: 0.2,
-        }
-      );
+
+      map?.flyTo([selectedStation.location.lat, selectedStation.location.long], zoom, {
+        animate: true,
+        duration: 2,
+        easeLinearity: 0.2,
+      });
     }
   }, [map, selectedStation]);
 
   useEffect(() => {
-    console.log(moveMap)
+    console.log(moveMap);
     if (selectedStation && moveMap === "station") goToSelectedStation();
   }, [selectedStation, moveMap]);
 
   const dblclick = async (name: string) => {
     if (window.innerWidth < 640) close();
     selectStation(name);
+    setShowLunge(true);
     await goTo("station");
   };
-  const onButtonClick =async (name: string) => {
+  const onButtonClick = async (name: string) => {
     if (window.innerWidth < 640) close();
     selectStation(name);
     await goTo("station");
@@ -121,8 +110,7 @@ const ClientMap = () => {
         maxZoom={9.5}
         // minZoom={5.5}
         zoomControl={false}
-        ref={setMap}
-      >
+        ref={setMap}>
         {stations.map(({ name, country, location: { lat, long } }, idx) => {
           const isSelected = selectedStation?.name === name;
           return (
@@ -131,14 +119,11 @@ const ClientMap = () => {
               eventHandlers={{ dblclick: async () => await dblclick(name) }}
               opacity={true ? 0.8 : 0.5}
               icon={pickGoodIcon(isSelected ? "selected" : "default")}
-              position={[lat, long]}
-            >
+              position={[lat, long]}>
               <Popup>
                 <div className="flex flex-col">
                   <span>{name}</span>
-                  <button onClick={() => onButtonClick(name)}>
-                    Zmień stacje
-                  </button>
+                  <button onClick={() => onButtonClick(name)}>Zmień stacje</button>
                 </div>
               </Popup>
             </Marker>

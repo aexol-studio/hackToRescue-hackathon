@@ -21,6 +21,8 @@ export interface AppStoreProps {
   hoveredQualityIndex: number | undefined;
   isOpen: boolean;
   moveMap: MoveMap;
+  scaleLounge: boolean;
+  showLounge: boolean;
 }
 
 export interface AppStoreState extends AppStoreProps {
@@ -36,6 +38,8 @@ export interface AppStoreState extends AppStoreProps {
   open: () => void;
   close: () => void;
   toggle: () => void;
+  setScaleLounge: (state: boolean) => void;
+  setShowLunge: (state: boolean) => void;
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
@@ -44,11 +48,11 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
   createStore<AppStoreState>()((set, get) => {
     const open = () => set({ isOpen: true });
     const close = () => set({ isOpen: false });
-    const toggle = () => set((state) => ({ isOpen: !state.isOpen }));
+    const toggle = () => set(state => ({ isOpen: !state.isOpen }));
 
     const goTo = async (where: MoveMap) => {
       set({ moveMap: where });
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       set({ moveMap: undefined });
     };
 
@@ -65,9 +69,13 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       set({ searchValue: value });
     };
 
+    const setScaleLounge = (state: boolean) => {
+      set({ scaleLounge: state });
+    };
+
     const setSearch = (search: string) => {
       const stations = get().stations;
-      const searchResults = stations.filter((station) =>
+      const searchResults = stations.filter(station =>
         station.name.toLowerCase().includes(search.toLowerCase())
       );
       set({ searchResults });
@@ -81,7 +89,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
         return;
       }
       const stations = get().stations;
-      const station = stations.find((station) => station.name === name);
+      const station = stations.find(station => station.name === name);
       set({ selectedStation: station, qualityLoading: true });
 
       // try {
@@ -109,6 +117,8 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       set({ hoveredQualityIndex: id });
     };
 
+    const setShowLunge = (showLounge: boolean) => set({ showLounge });
+
     return {
       isOpen: false,
       moveMap: undefined,
@@ -126,6 +136,8 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       airQuality: null,
       qualityLoading: false,
       airQualities: null,
+      scaleLounge: false,
+      showLounge: false,
       close,
       goTo,
       open,
@@ -138,6 +150,8 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       toggleRotation,
       setEducationOpen,
       setStations,
+      setScaleLounge,
+      setShowLunge,
       ...initProps,
     };
   });

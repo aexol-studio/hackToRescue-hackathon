@@ -9,23 +9,20 @@ import * as THREE from "three";
 
 useGLTF.preload(`/assets/models/onlylungs.glb`);
 
-export const Model2: FC<{ test: boolean; test2: boolean }> = ({
-  test,
-  test2,
-}) => {
-  console.log(test);
+export const Model2: FC = () => {
+  const { scaleLounge, showLounge } = useAppStore(({ scaleLounge, showLounge }) => ({
+    scaleLounge,
+    showLounge,
+  }));
   const { nodes } = useGLTF(`/assets/models/onlylungs.glb`) as any;
   // const { nodes: newNodes } = useGLTF(`/assets/models/111lungs.glb`);
-  const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(
-    (state) => ({
-      allowRotation: state.allowRotation,
-      airQuality: state.airQuality,
-      hoveredQualityIndex: state.hoveredQualityIndex,
-    })
-  );
+  const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(state => ({
+    allowRotation: state.allowRotation,
+    airQuality: state.airQuality,
+    hoveredQualityIndex: state.hoveredQualityIndex,
+  }));
   const vec = new THREE.Vector3();
-  const { scale } = useSpring({ scale: test ? 0.5 : 1, delay: 0 });
-  const { opacity } = useSpring({ opacity: test ? 0.8 : 0 });
+  const { scale } = useSpring({ scale: scaleLounge ? 0.5 : 1, delay: 0 });
 
   // console.log(scale);
   const [colors, setColors] = useState({ old: "#ffffff00", new: "#fff" });
@@ -33,9 +30,7 @@ export const Model2: FC<{ test: boolean; test2: boolean }> = ({
   const modelMeshes: Mesh[] = useMemo(
     () =>
       Object.entries(nodes)
-        .map(([key, value]) =>
-          key.toLowerCase().includes("object") ? value : null
-        )
+        .map(([key, value]) => (key.toLowerCase().includes("object") ? value : null))
         .filter(Boolean) as Mesh[],
     []
   );
@@ -56,7 +51,7 @@ export const Model2: FC<{ test: boolean; test2: boolean }> = ({
     if (!groupRef.current || allowRotation) return;
     groupRef.current.rotation.z += delta * 0.2;
     // state.camera.lookAt(groupRef.current.position);
-    if (test) state.camera.position.lerp(vec.set(0, -2, 6), 0.1);
+    if (scaleLounge) state.camera.position.lerp(vec.set(0, -2, 6), 0.1);
     else state.camera.position.lerp(vec.set(0, 0, 6), 0.1);
 
     groupRef.current.updateMatrixWorld();
@@ -65,35 +60,31 @@ export const Model2: FC<{ test: boolean; test2: boolean }> = ({
   const [opacities] = useSprings(
     10,
 
-    (i) => ({
+    i => ({
       // config: { duration: 100 },
       delay: 100 * i,
-      from: { color: test2 ? 0 : 1 },
-      to: { color: test2 ? 1 : 0 },
+      from: { color: showLounge ? 0 : 1 },
+      to: { color: showLounge ? 1 : 0 },
     }),
-    [test2]
+    [showLounge]
   );
 
   const zoomRef = useRef(1);
   useEffect(() => {
     if (hoveredQualityIndex !== undefined && hoveredQualityIndex !== -1) {
-      setColors((p) => ({
-        new: airQualityColors[
-          hoveredQualityIndex as keyof typeof airQualityColors
-        ],
+      setColors(p => ({
+        new: airQualityColors[hoveredQualityIndex as keyof typeof airQualityColors],
         old: p.new,
       }));
       return;
     } else if ((airQuality?.st?.indexLevel?.id ?? -1) < 0)
-      setColors((p) => ({
+      setColors(p => ({
         old: "#fff",
         new: "#fff",
       }));
     else
-      setColors((p) => ({
-        new: airQualityColors[
-          airQuality?.st.indexLevel?.id as keyof typeof airQualityColors
-        ],
+      setColors(p => ({
+        new: airQualityColors[airQuality?.st.indexLevel?.id as keyof typeof airQualityColors],
         old: p.new,
       }));
   }, [airQuality, , hoveredQualityIndex]);
@@ -112,8 +103,7 @@ export const Model2: FC<{ test: boolean; test2: boolean }> = ({
     };
 
     window.addEventListener("resize", () => handleModelResize());
-    return () =>
-      window.removeEventListener("resize", () => handleModelResize());
+    return () => window.removeEventListener("resize", () => handleModelResize());
   }, []);
 
   return (
@@ -124,22 +114,11 @@ export const Model2: FC<{ test: boolean; test2: boolean }> = ({
         ref={groupRef}
         dispose={null}
         position={[0, 0.2, 0]}
-        rotation={[-(Math.PI / 2.5), 0, 0]}
-      >
+        rotation={[-(Math.PI / 2.5), 0, 0]}>
         {opacities.map((color, i) => (
-          <mesh
-            key={i}
-            scale={0.012}
-            castShadow
-            receiveShadow
-            geometry={modelMeshes[i].geometry}
-          >
+          <mesh key={i} scale={0.012} castShadow receiveShadow geometry={modelMeshes[i].geometry}>
             {/* @ts-ignore */}
-            <animated.meshToonMaterial
-              color={"#FFF"}
-              opacity={color.color}
-              transparent
-            />
+            <animated.meshToonMaterial color={"#FFF"} opacity={color.color} transparent />
           </mesh>
         ))}
       </animated.group>

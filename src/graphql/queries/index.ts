@@ -26,10 +26,7 @@ export const airQualitiesIndexSelector = Selector("Parameters")({
   time: true,
 });
 
-export type WeatherType = InputType<
-  GraphQLTypes["Weather"],
-  typeof weatherSelector
->;
+export type WeatherType = InputType<GraphQLTypes["Weather"], typeof weatherSelector>;
 
 export const citySelector = Selector("City")({
   name: true,
@@ -47,7 +44,11 @@ export type CityType = InputType<GraphQLTypes["City"], typeof citySelector> & {
 
 export const GET_CITY_AIR_QUALITY = typedQuery({
   getCityParameters: [
-    { city: $("city", "String!") },
+    {
+      city: $("city", "String!"),
+      startDate: $("startDate", "String!"),
+      endDate: $("endDate", "String!"),
+    },
     { parameters: airQualitiesIndexSelector },
   ],
 });
