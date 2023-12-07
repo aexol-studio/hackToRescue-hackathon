@@ -14,6 +14,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <body className={`${inter.className}`}>
         <ApolloProvider>
+          {/* @ts-ignore */}
           <AppStoreProvider
             {...{
               searchResults: data,
