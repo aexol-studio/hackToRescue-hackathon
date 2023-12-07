@@ -3,7 +3,7 @@ import { Map as MapType } from "leaflet";
 import { useAppStore } from "@/stores";
 import { Minimap } from "./MiniMap";
 import { pickGoodIcon } from "./utils";
-import { generatePolygonColor } from "@/utils";
+import { cx, generatePolygonColor } from "@/utils";
 import React, {
   useEffect,
   useState,
@@ -11,6 +11,9 @@ import React, {
   useRef,
   useMemo,
 } from "react";
+import { Canvas } from "@/components/canvas/Canvas";
+import { Search } from "@/components/search/Search";
+import { ScalableView } from "@/components/scalableView/ScalableView";
 const ClientMap = () => {
   const [loading, setLoading] = useState(false);
   const json = useRef(null);
@@ -31,11 +34,11 @@ const ClientMap = () => {
   }));
   const [map, setMap] = useState<MapType | null>(null);
   const [position, setPosition] = useState(() => map?.getCenter());
-
+  const [test, setTest] = useState(false);
   const onZoom = useCallback(() => {
     if (map?.getZoom() === 9.5) {
-      setEducationOpen(true);
-    }
+      setTest(true);
+    } else setTest(false);
   }, [map]);
 
   const onMove = useCallback(() => {
@@ -115,7 +118,7 @@ const ClientMap = () => {
         center={[51.91, 19.14]}
         zoom={5.5}
         maxZoom={9.5}
-        minZoom={5.5}
+        // minZoom={5.5}
         zoomControl={false}
         ref={setMap}
       >
@@ -180,6 +183,7 @@ const ClientMap = () => {
           </form>
         )}
       </div>
+      <ScalableView show={test} />
     </>
   );
 };

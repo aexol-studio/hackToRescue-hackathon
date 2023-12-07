@@ -19,61 +19,64 @@ export const Education = () => {
           educationOpen && "-translate-y-full "
         )}
       >
-        <div className="relative w-full h-full bg-dark-500 border-[1px] scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-[#FF7000] border-l-none border-light-700 rounded text-light-700 overflow-y-auto">
-          <X
-            onClick={() => setEducationOpen(false)}
-            className="absolute right-5 top-5 cursor-pointer text-light-700"
-          />
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          <div>Education</div>
-          Education Education Education Education Education Education Education
-          Education Education Education Education Education Education Education
-          Education Education Education Education Education Education Education
-          Education Education Education Education Education Education Education
-          Education Education Education Education Education Education Education
-          Education Education Education Education Education Education Education
+        <div className="w-full h-full overflow-hidden border-[#FF7000] border-[1px] rounded-t-xl ">
+          <div className="relative w-full h-full bg-light-800  scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-[#FF7000] border-b-none   text-dark-500 p-10 overflow-y-auto">
+            <X
+              onClick={() => setEducationOpen(false)}
+              className="absolute right-5 top-5 cursor-pointer text-dark-500"
+            />
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            <div>Education</div>
+            Education Education Education Education Education Education
+            Education Education Education Education Education Education
+            Education Education Education Education Education Education
+            Education Education Education Education Education Education
+            Education Education Education Education Education Education
+            Education Education Education Education Education Education
+            Education Education Education Education Education Education
+          </div>
         </div>
       </div>
     </>
