@@ -1,4 +1,4 @@
-import { CityType } from "@/graphql/querires";
+import { CityType } from "@/graphql/queries";
 import { AirQuality, GeoLocation, LocationData } from "@/types";
 import { checkWhereLatLong, requestGeolocation } from "@/utils";
 import { createStore } from "zustand";

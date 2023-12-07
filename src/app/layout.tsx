@@ -1,10 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "leaflet/dist/leaflet.css";
 import { ApolloProvider } from "@/graphql/ApolloProvider";
 import { AppStoreProvider } from "@/stores/AppStoreProvider";
 import { Chain } from "@/graphql/zeus";
-import { citySelector } from "@/graphql/querires";
+import { citySelector, weatherSelector } from "@/graphql/queries";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,7 +53,7 @@ const chain = (option: "query" | "mutation") => {
     headers: {
       "Content-type": "application/json",
     },
-    // cache: "no-cache",
+    cache: "no-cache",
   })(option);
 };
 
@@ -63,10 +62,20 @@ const getInitialData = async () => {
     const { getCollectedCities } = await chain("query")({
       getCollectedCities: citySelector,
     });
+    const citiesWithWeather = await Promise.all(
+      getCollectedCities.map(async (city) => {
+        const { getRealTimeWeather } = await chain("query")({
+          getRealTimeWeather: [
+            { lat: city.location.lat, long: city.location.long },
+            weatherSelector,
+          ],
+        });
+        return { ...city, weather: getRealTimeWeather };
+      })
+    );
 
-    console.log(getCollectedCities);
     if (!getCollectedCities) return [];
-    return getCollectedCities;
+    return citiesWithWeather;
   } catch (error) {
     return [];
   }

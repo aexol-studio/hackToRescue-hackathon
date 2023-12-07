@@ -5,7 +5,7 @@ const DynamicMap = dynamic(() => import("./_components/Map"), {
   loading: () => <div>Loading map...</div>,
 });
 
-export default async function Home() {
+export default function Home() {
   return (
     <section>
       <DynamicMap />

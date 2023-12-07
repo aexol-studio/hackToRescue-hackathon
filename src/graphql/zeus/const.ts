@@ -1,22 +1,31 @@
 /* eslint-disable */
 
 export const AllTypesProps: Record<string,any> = {
-	DATA_SOURCE_TYPE: "enum" as const,
 	Query:{
 		getCityParameters:{
 
+		},
+		getRealTimeParameters:{
+
+		},
+		getRealTimeWeather:{
+
 		}
-	}
+	},
+	DATA_SOURCE_TYPE: "enum" as const
 }
 
 export const ReturnTypes: Record<string,any> = {
-	Station:{
-		city:"String",
-		createdAt:"String",
-		kind:"DATA_SOURCE_TYPE",
-		parameters:"Parameters",
-		stationId:"Int",
-		updatedAt:"String"
+	Mutation:{
+		refreshStations:"String"
+	},
+	Weather:{
+		clouds:"Int",
+		description:"String",
+		feelTemp:"Float",
+		humidity:"Int",
+		main:"String",
+		temp:"Float"
 	},
 	Parameters:{
 		no2:"Float",
@@ -37,9 +46,19 @@ export const ReturnTypes: Record<string,any> = {
 		lat:"Float",
 		long:"Float"
 	},
+	Station:{
+		city:"String",
+		createdAt:"String",
+		kind:"DATA_SOURCE_TYPE",
+		parameters:"Parameters",
+		stationId:"Int",
+		updatedAt:"String"
+	},
 	Query:{
 		getCityParameters:"Station",
 		getCollectedCities:"City",
+		getRealTimeParameters:"Station",
+		getRealTimeWeather:"Weather",
 		test:"String"
 	},
 	City:{
@@ -49,9 +68,6 @@ export const ReturnTypes: Record<string,any> = {
 		name:"String",
 		state:"String",
 		stationsInCity:"Station"
-	},
-	Mutation:{
-		refreshStations:"String"
 	}
 }
 
