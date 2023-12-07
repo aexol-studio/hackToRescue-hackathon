@@ -5,7 +5,9 @@ export default function Admin() {
     <section>
       <form action={uploadFile}>
         <input name="files" type="file" multiple />
-        <button type="submit">Upload Data</button>
+        <button type="submit" className="bg-white">
+          Upload Data
+        </button>
       </form>
     </section>
   );
