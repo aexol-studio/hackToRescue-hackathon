@@ -3,42 +3,59 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
-import { useAppStore } from "@/stores";
+import { NewAutoCompleteResult, useAppStore } from "@/stores";
 import { useLazyQuery } from "@apollo/client";
 import { GET_CITY_AIR_QUALITY } from "@/graphql/queries";
 import { GeoLocalizationButton } from "./GeoLocationButton";
 import { HoverInfo } from "./HoverInfo";
+import { set } from "date-fns";
 
 export const AutoCompleteSearch = () => {
-  const { searchResults, selectedStation, selectStation, searchValue, setSearchValue } =
+  const { searchResults, searchValue, setSearchValue, setNewAutoCompleteResult, showLounge, goTo } =
     useAppStore(
-      ({ searchResults, selectStation, selectedStation, searchValue, setSearchValue }) => ({
+      ({
         searchResults,
-        selectStation,
-        selectedStation,
         searchValue,
         setSearchValue,
+        setNewAutoCompleteResult,
+        showLounge,
+        goTo,
+      }) => ({
+        searchResults,
+        searchValue,
+        setSearchValue,
+        setNewAutoCompleteResult,
+        showLounge,
+        goTo,
       })
     );
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChangeStation = async (name: string) => {
-    if (!inputRef.current) return;
-    inputRef.current.value = name;
-    setIsSearchOpen(false);
-    await new Promise(resolve => setTimeout(resolve, 700));
-    if (selectedStation?.name === name) {
-      inputRef.current.value = "";
-      setSearchValue(null);
-      return;
-    }
-    selectStation(name);
+  const handleChangeStation = (option: NewAutoCompleteResult) => {
+    const { name } = option;
     setSearchValue(name);
+    setNewAutoCompleteResult(option as NewAutoCompleteResult);
+    setIsSearchOpen(p => !p);
+    if (showLounge) {
+      getCityAirQuality({
+        variables: {
+          city: name,
+          startDate: set(new Date(), { hours: 0 }).toISOString(),
+          endDate: set(new Date(), { hours: 24 }).toISOString(),
+        },
+      });
+    } else {
+      goTo("station");
+    }
   };
 
   const [getCityAirQuality] = useLazyQuery(GET_CITY_AIR_QUALITY, {
-    onCompleted: d => console.log(d),
+    onCompleted: d => {
+      // const reducedArr = d.getCityParameters.reduce(([acc,curr])=>)
+
+      console.log(d);
+    },
   });
 
   const listRef = useRef<HTMLDivElement>(null);
@@ -55,10 +72,10 @@ export const AutoCompleteSearch = () => {
   }, []);
 
   return (
-    <div ref={listRef} className="w-full h-[50px] z-[1200]">
+    <div ref={listRef} className="w-full h-[50px] z-[1200] ">
       <div className="bg-white rounded-3xl">
         <div className="relative">
-          <div className="absolute right-5 top-1/2 z-10 -translate-y-1/2 flex gap-2 items-center">
+          <div className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex gap-2 items-center">
             <HoverInfo infoText="Geolokalizacja">
               <GeoLocalizationButton />
             </HoverInfo>
@@ -75,30 +92,26 @@ export const AutoCompleteSearch = () => {
             )}
           />
         </div>
-        <div className="rounded-b-3xl overflow-hidden">
+        <div className="rounded-b-3xl overflow-hidden ">
           <div
             className={cx(
               "transition-[height] duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin",
-              isSearchOpen ? "h-[24rem] overflow-y-auto" : "h-0 overflow-hidden"
+              isSearchOpen ? "h-[258px] overflow-y-auto" : "h-0"
             )}>
-            {searchResults.map(({ name }, idx) => (
-              <div key={name + idx}>
-                <div
-                  className={cx(
-                    "text-black flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
-                  )}
-                  onClick={() => handleChangeStation(name)}>
-                  <h1
+            {searchResults.map((option, idx) => {
+              const { name } = option;
+              return (
+                <div key={name + idx}>
+                  <div
                     className={cx(
-                      "select-none"
-                      // !haveAddress && isSelected && "text-white",
-                      // haveAddress && "cursor-default"
-                    )}>
-                    {name}
-                  </h1>
+                      "text-black flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
+                    )}
+                    onClick={() => handleChangeStation(option)}>
+                    <h1 className={cx("select-none")}>{name}</h1>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
