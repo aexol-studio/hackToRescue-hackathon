@@ -151,11 +151,7 @@ export async function GET(request: Request) {
       return selectedFeatures;
     };
 
-    transformedData.features = prioritizeFeatures(transformedData.features, 9);
-
-    const updatedResponseData = JSON.stringify(transformedData);
-    fs.writeFileSync(`${process.cwd()}/public/jsons/mapa.json`, updatedResponseData);
-
+    transformedData.features = prioritizeFeatures(transformedData.features, 8);
     return Response.json({ ...transformedData });
   } catch (e) {
     return Response.json({ error: "Server error" }, { status: 500 });
