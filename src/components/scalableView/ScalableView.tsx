@@ -8,12 +8,11 @@ import { airQualityColors } from "@/constans";
 import { Globe2 } from "lucide-react";
 
 export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
-  const { airQuality, selectStation, showLounge, setShowLunge } = useAppStore(
-    ({ airQuality, selectStation, showLounge, setShowLunge }) => ({
+  const { airQuality, selectStation, showLounge } = useAppStore(
+    ({ airQuality, selectStation, showLounge }) => ({
       airQuality,
       selectStation,
       showLounge,
-      setShowLunge,
     })
   );
 

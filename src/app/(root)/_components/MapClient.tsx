@@ -4,12 +4,15 @@ import { useAppStore } from "@/stores";
 import { Minimap } from "./MiniMap";
 import { pickGoodIcon } from "./utils";
 import { generatePolygonColor } from "@/utils";
-import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import toast from "react-hot-toast";
 import { ScalableView } from "@/components/scalableView/ScalableView";
 
 const getLatestData = async () => {
-  const res = await fetch(`http://localhost:3000/api/getld?param=pm25-2019`);
+  const URL =
+    process.env.NODE_ENV === "development" ? "http://localhost:3000/" : process.env.NEXT_PUBLIC_URL;
+  if (!URL) throw new Error("No URL");
+  const res = await fetch(`${URL}api/getld?param=pm25-2020`);
   const data = await res.json();
   return data;
 };
@@ -88,7 +91,7 @@ const ClientMap = () => {
     selectStation(name);
   };
 
-  const data = ["none", "pm25-2019", "pm25-2020", "pm10-2019", "pm10-2020", "pm10-2021"];
+  const data = ["none", "pm25-2020", "pm10-2020"];
   const loadData = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -119,13 +122,13 @@ const ClientMap = () => {
     return {
       fillColor: generatePolygonColor(
         feature.properties.nazwa_wska as string,
-        feature.properties.wartosc as number
+        feature.properties.density as number
       ),
       weight: 0.3,
       opacity: 1,
       color: generatePolygonColor(
         feature.properties.nazwa_wska as string,
-        feature.properties.wartosc as number
+        feature.properties.density as number
       ),
       dashArray: "3",
       fillOpacity: 0.5,
@@ -171,7 +174,14 @@ const ClientMap = () => {
             data={{
               type: "FeatureCollection",
               // @ts-ignore
-              features: json.features,
+              features: json.features.map((f: any) => {
+                return {
+                  ...f,
+                  properties: {
+                    ...f.properties,
+                  },
+                };
+              }),
             }}
           />
         )}
@@ -186,7 +196,7 @@ const ClientMap = () => {
   return (
     <>
       <div className="h-screen w-screen fixed top-0 left-0 ">{display}</div>
-      <div className="text-sm w-[160px] flex flex-col gap-2 p-4 absolute bottom-5 left-5 text-black bg-white rounded z-50">
+      <div className="text-sm w-[160px] hidden sm:flex flex-col gap-2 p-4 absolute bottom-5 left-5 text-black bg-white rounded z-50">
         <p className="flex justify-between">
           <span>latitude:</span>
           <span> {position ? position.lat.toFixed(2) : 51.91}</span>

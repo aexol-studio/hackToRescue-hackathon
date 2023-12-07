@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Education } from "@/components/education/Education";
-import { Canvas } from "@/components/canvas/Canvas";
-import { AirQualityInfo } from "@/components/airQualityInfo/AirQualityInfo";
-import { Timeline } from "@/components/Timeline";
 import "leaflet/dist/leaflet.css";
+import { ToggleEducation } from "@/components/education/ToggleEducation";
+import { AutoCompleteSearch } from "@/components/search/AutoCompleteSearch";
 
 export const metadata: Metadata = {
   title: "Polski Alert Smogowy | App",
@@ -14,9 +13,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <main className="relative w-full min-h-screen overflow-hidden">
       {children}
+      <div className="absolute w-3/4 sm:w-auto left-1/2 bottom-1/2 -translate-x-1/2 translate-y-1/2 grid gap-10 ">
+        <div className="grid gap-6">
+          <span className="text-lg sm:text-xl font-jost font-black text-black text-center whitespace-nowrap">
+            Zobacz czym oddychasz. Zmień to!
+          </span>
+          <AutoCompleteSearch />
+        </div>
+        <ToggleEducation />
+      </div>
       <Education />
-      {/* <ToggleEducation /> */}
-      <Timeline />
     </main>
   );
 }

@@ -1,12 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import {
-  MapContainer,
-  Polygon,
-  Rectangle,
-  TileLayer,
-  useMap,
-  useMapEvent,
-} from "react-leaflet";
+import { MapContainer, Polygon, Rectangle, TileLayer, useMap, useMapEvent } from "react-leaflet";
 import { useEventHandlers } from "@react-leaflet/core";
 import { Map } from "leaflet";
 
@@ -26,10 +19,7 @@ const MinimapBounds = ({ parentMap }: { parentMap: Map }) => {
     minimap.setView(parentMap.getCenter(), 0);
   }, [minimap, parentMap]);
   const handlers = useMemo(() => ({ move: onChange, zoom: onChange }), []);
-  useEventHandlers(
-    { instance: parentMap, context: { __version: 1, map: minimap } },
-    handlers
-  );
+  useEventHandlers({ instance: parentMap, context: { __version: 1, map: minimap } }, handlers);
   return <Rectangle bounds={bounds} pathOptions={{ weight: 1 }} />;
 };
 
@@ -46,8 +36,7 @@ export const Minimap = () => {
         doubleClickZoom={false}
         scrollWheelZoom={false}
         attributionControl={false}
-        zoomControl={false}
-      >
+        zoomControl={false}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Polygon
           pathOptions={{ color: "blue", weight: 1.3, opacity: 0.5 }}
@@ -60,7 +49,7 @@ export const Minimap = () => {
   );
 
   return (
-    <div className="leaflet-top leaflet-right">
+    <div className="leaflet-top leaflet-right hidden sm:flex">
       <div className="leaflet-control leaflet-bar">{minimap}</div>
     </div>
   );
