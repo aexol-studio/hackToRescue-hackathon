@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Education } from "@/components/education/Education";
 import "leaflet/dist/leaflet.css";
 import { ToggleEducation } from "@/components/education/ToggleEducation";
-import { Search } from "@/components/search/Search";
 import { AutoCompleteSearch } from "@/components/search/AutoCompleteSearch";
 
 export const metadata: Metadata = {
@@ -14,9 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <main className="relative w-full min-h-screen overflow-hidden">
       {children}
-      <div className="absolute left-1/2 bottom-1/2 -translate-x-1/2 grid gap-10">
+      <div className="absolute w-3/4 sm:w-auto left-1/2 bottom-1/2 -translate-x-1/2 translate-y-1/2 grid gap-10 ">
         <div className="grid gap-6">
-          <span className="text-5xl font-bold text-white">See what you breathe</span>
+          <span className="text-xl sm:text-3xl font-bold text-black text-center whitespace-nowrap">
+            Zobacz czym oddychasz.
+          </span>
           <AutoCompleteSearch />
         </div>
         <ToggleEducation />

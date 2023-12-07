@@ -21,12 +21,8 @@ export const ToggleEducation = () => {
           educationOpen && "hidden"
         )}
         onClick={() => setEducationOpen(true)}>
-        <div className="p-2 md:px-10 md:py-3 bg-black  rounded-full text-white justify-center items-center">
-          <span className="font-normal text-sm hidden md:flex whitespace-nowrap">Change it</span>
-          <Info
-            onClick={() => setEducationOpen(true)}
-            className={cx("text-light-700 sm:flex md:hidden", educationOpen && "hidden")}
-          />
+        <div className="px-10 py-3 bg-black  rounded-full text-white justify-center items-center">
+          <span className="font-normal text-xs whitespace-nowrap">Zmień to!</span>
         </div>
       </div>
     </div>

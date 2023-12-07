@@ -15,15 +15,10 @@ export const YourLung = () => {
     })
   );
   const [selectedNumber, setSelectedNumber] = useState(1);
-  console.log(selectedStation);
 
   return (
     <div className="transition-max-height duration-500 ease-in-out">
-      <button
-        className="bg-white flex justify-center px-10 py-4 gap-1 md:gap-3 lg:gap-4 items-center cursor-pointer text-xs sm:text-lg md:text-lg lg:text-2xl font-semibold"
-        onClick={() => {
-          setScaleLounge(!scaleLounge);
-        }}>
+      <button className="bg-white flex justify-center px-10 py-4 gap-1 md:gap-3 lg:gap-4 items-center cursor-pointer text-xs sm:text-lg md:text-lg lg:text-2xl font-semibold">
         <span className="text-black whitespace-nowrap">See what you breathe</span>
         {DAYS.map(day => (
           <span
@@ -37,7 +32,12 @@ export const YourLung = () => {
           </span>
         ))}
         <span className="text-black whitespace-nowrap">DAYS IN</span>
-        <ChevronDown />
+        <ChevronDown
+          className={cx(!scaleLounge && "rotate-180")}
+          onClick={() => {
+            setScaleLounge(!scaleLounge);
+          }}
+        />
       </button>
       <div
         className={cx(

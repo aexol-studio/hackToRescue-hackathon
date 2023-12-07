@@ -134,23 +134,20 @@ export const generatePolygonColor = (key: string, density: number) => {
     }
   }
   if (key.toLowerCase().includes("pm25")) {
-    if (density > 110) {
-      return "#990000";
+    if (density >= 25) {
+      return "#FF000060";
     }
-    if (density >= 75.1 && density <= 110) {
-      return "#FF0000";
+    if (density >= 15 && density <= 25) {
+      return "#FF660060";
     }
-    if (density >= 55.1 && density <= 75) {
-      return "#FF6600";
+    if (density >= 10 && density <= 15) {
+      return "#FFFF0060";
     }
-    if (density >= 35.1 && density <= 55) {
-      return "#FFFF00";
+    if (density >= 5 && density <= 10) {
+      return "#99FF3360";
     }
-    if (density >= 13.1 && density <= 35) {
-      return "#99FF33";
-    }
-    if (density >= 0 && density <= 13) {
-      return "#009900";
+    if (density >= 0 && density <= 5) {
+      return "#00990060";
     }
   }
   return "#000";

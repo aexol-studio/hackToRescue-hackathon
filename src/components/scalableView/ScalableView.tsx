@@ -22,21 +22,13 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
       className={cx(
         "w-full h-screen absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  -z-[60] ",
         showLounge && "z-[100]"
-        //  airQuality?.st.indexLevel ? airQualityColors[airQuality.st.indexLevel.id] : "bg-black"
       )}>
       <div
         className={cx(
           "w-full h-full absolute top-0 rounded-full scale-0 left-0 bg-black opacity-0 duration-1000 delay-300 ",
-          showLounge && "opacity-[75%] scale-125"
+          showLounge && "opacity-[75%] scale-[300%]"
         )}></div>
-      <div
-        className="z-[1100] absolute left-8 top-8 p-1 bg-white rounded-full cursor-pointer"
-        onClick={() => {
-          selectStation(null);
-          setShowLunge(false);
-        }}>
-        <Globe2 color="black" />
-      </div>
+
       <div className="absolute left-1/2 z-[1000]">
         <Search />
       </div>

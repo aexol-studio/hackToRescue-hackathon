@@ -49,7 +49,8 @@ export const GET_CITY_AIR_QUALITY = typedQuery({
       startDate: $("startDate", "String!"),
       endDate: $("endDate", "String!"),
     },
-    { parameters: airQualitiesIndexSelector },
+
+    { city: true, stationId: true, parameters: airQualitiesIndexSelector },
   ],
 });
 

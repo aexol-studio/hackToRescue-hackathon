@@ -14,7 +14,7 @@ export const Education = () => {
       <div
         className={cx(
           "absolute h-3/4 top-full w-full px-6 duration-700 transition-transform  z-50 ",
-          educationOpen && "-translate-y-full "
+          educationOpen && "-translate-y-full"
         )}>
         <div className="w-full h-full overflow-hidden border-[#FF7000] border-[1px] rounded-t-xl ">
           <div className="relative w-full h-full bg-light-800  scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-[#FF7000] border-b-none   text-dark-500 p-10 overflow-y-auto">
