@@ -5,22 +5,36 @@ const files = {
   "pm25-2019": {
     name: "pm25-2019.jsonld",
     values: {
-      min: 9,
-      max: 50,
+      min: 10,
+      max: 150,
     },
   },
   "pm25-2020": {
     name: "pm25-2020.jsonld",
     values: {
-      min: 9,
-      max: 50,
+      min: 10,
+      max: 150,
     },
   },
-  "pm25-2021": {
-    name: "pm25-2021.jsonld",
+  "pm10-2019": {
+    name: "pm10-2019.jsonld",
     values: {
-      min: 9,
-      max: 50,
+      min: 10,
+      max: 25,
+    },
+  },
+  "pm10-2020": {
+    name: "pm10-2020.jsonld",
+    values: {
+      min: 10,
+      max: 25,
+    },
+  },
+  "pm10-2021": {
+    name: "pm10-2021.jsonld",
+    values: {
+      min: 10,
+      max: 25,
     },
   },
 };
@@ -30,10 +44,15 @@ export async function GET(request: Request) {
   const searchParams = url.searchParams;
   const param = searchParams.get("param");
   const fileToGet = files[param as keyof typeof files];
-  console.log(fileToGet);
+
+  if (!param) {
+    return Response.json({ error: "No param" }, { status: 404 });
+  }
+
   if (!fileToGet) {
     return Response.json({ error: "No such file" }, { status: 404 });
   }
+
   const file = fs.readFileSync(`${process.cwd()}/public/jsons/${fileToGet.name}`, "utf8");
   const data = JSON.parse(file) as {
     type: string;
@@ -71,6 +90,9 @@ export async function GET(request: Request) {
     ) {
       return;
     }
+    if (feature.properties.wartosc < 0) {
+      return;
+    }
 
     const roundedCoordinates = feature.geometry.coordinates.map(
       coord =>
@@ -106,14 +128,34 @@ export async function GET(request: Request) {
   });
 
   const transformedData = {
-    ...data,
     features: Object.values(groupedFeatures).filter(feature => !!feature),
   };
 
-  // fs.writeFileSync(
-  //   `${process.cwd()}/public/jsons/mapaa.jsonld`,
-  //   JSON.stringify(transformedData)
-  // );
+  const prioritizeFeatures = (features: any[], maxSize: number) => {
+    const sortedFeatures = features
+      .slice()
+      .sort((a, b) => b.properties.density - a.properties.density);
+    let currentSize = 0;
+    let selectedFeatures = [];
+
+    for (const feature of sortedFeatures) {
+      const featureSize = Buffer.from(JSON.stringify(feature)).length / (1024 * 1024);
+      if (currentSize + featureSize <= maxSize) {
+        selectedFeatures.push(feature);
+        currentSize += featureSize;
+      } else {
+        break;
+      }
+    }
+
+    return selectedFeatures;
+  };
+
+  transformedData.features = prioritizeFeatures(transformedData.features, 8);
+
+  // const updatedResponseData = JSON.stringify(transformedData);
+
+  // fs.writeFileSync(`${process.cwd()}/public/jsons/mapaa.jsonld`, updatedResponseData);
 
   return Response.json({ ...transformedData });
 }
