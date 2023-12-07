@@ -24,6 +24,7 @@ export interface AppStoreProps {
 }
 
 export interface AppStoreState extends AppStoreProps {
+  setStations: (stations: CityType[]) => void;
   setEducationOpen: (state: boolean) => void;
   selectStation: (name: string | null) => void;
   setSearchValue: (value: string | null) => void;
@@ -71,7 +72,9 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       );
       set({ searchResults });
     };
-
+    const setStations = (stations: CityType[]) => {
+      set({ stations });
+    };
     const selectStation = async (name: string | null) => {
       if (!name) {
         set({ selectedStation: null, airQuality: null });
@@ -134,6 +137,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       setHoveredQualityIndex,
       toggleRotation,
       setEducationOpen,
+      setStations,
       ...initProps,
     };
   });

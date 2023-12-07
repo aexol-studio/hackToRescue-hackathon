@@ -7,15 +7,14 @@ import { useAppStore } from "@/stores";
 import { airQualityColors } from "@/constans";
 import * as THREE from "three";
 
-useGLTF.preload(`/assets/models/model.glb`);
-useGLTF.preload(`/assets/models/111lungs.glb`);
+useGLTF.preload(`/assets/models/onlylungs.glb`);
 
 export const Model2: FC<{ test: boolean; test2: boolean }> = ({
   test,
   test2,
 }) => {
   console.log(test);
-  const { nodes } = useGLTF(`/assets/models/model.glb`) as any;
+  const { nodes } = useGLTF(`/assets/models/onlylungs.glb`) as any;
   // const { nodes: newNodes } = useGLTF(`/assets/models/111lungs.glb`);
   const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(
     (state) => ({
@@ -59,14 +58,16 @@ export const Model2: FC<{ test: boolean; test2: boolean }> = ({
     // state.camera.lookAt(groupRef.current.position);
     if (test) state.camera.position.lerp(vec.set(0, -2, 6), 0.1);
     else state.camera.position.lerp(vec.set(0, 0, 6), 0.1);
+
     groupRef.current.updateMatrixWorld();
     state.camera.updateProjectionMatrix();
   });
   const [opacities] = useSprings(
     10,
-    (i) => ({
-      delay: 200 * i,
 
+    (i) => ({
+      // config: { duration: 100 },
+      delay: 100 * i,
       from: { color: test2 ? 0 : 1 },
       to: { color: test2 ? 1 : 0 },
     }),

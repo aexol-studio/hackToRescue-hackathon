@@ -1,5 +1,5 @@
 import { typedQuery } from "../typed";
-import { GraphQLTypes, InputType, Selector } from "../zeus";
+import { $, GraphQLTypes, InputType, Selector } from "../zeus";
 
 export const weatherSelector = Selector("Weather")({
   clouds: true,
@@ -8,6 +8,22 @@ export const weatherSelector = Selector("Weather")({
   feelTemp: true,
   humidity: true,
   main: true,
+});
+
+export const airQualitiesIndexSelector = Selector("Parameters")({
+  no2: true,
+  o3: true,
+  no2Time: true,
+  o3Time: true,
+  pm1: true,
+  pm10: true,
+  pm10Time: true,
+  pm25: true,
+  pm25Time: true,
+  pm2p5: true,
+  so2: true,
+  so2Time: true,
+  time: true,
 });
 
 export type WeatherType = InputType<
@@ -28,6 +44,13 @@ export const citySelector = Selector("City")({
 export type CityType = InputType<GraphQLTypes["City"], typeof citySelector> & {
   weather: WeatherType;
 };
+
+export const GET_CITY_AIR_QUALITY = typedQuery({
+  getCityParameters: [
+    { city: $("city", "String!") },
+    { parameters: airQualitiesIndexSelector },
+  ],
+});
 
 export const GET_CITIES = typedQuery({
   getCollectedCities: citySelector,

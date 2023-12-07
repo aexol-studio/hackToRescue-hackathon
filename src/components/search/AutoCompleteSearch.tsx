@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { cx } from "@/utils";
 import { useAppStore } from "@/stores";
 import { X } from "lucide-react";
+import { useLazyQuery } from "@apollo/client";
+import { GET_CITY_AIR_QUALITY } from "@/graphql/queries";
 
 export const AutoCompleteSearch = () => {
   const {
@@ -27,7 +29,6 @@ export const AutoCompleteSearch = () => {
     })
   );
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const handleChangeStation = async (name: string, city: string) => {
     if (!inputRef.current) return;
@@ -43,6 +44,10 @@ export const AutoCompleteSearch = () => {
     setSearchValue(city);
   };
 
+  const [getCityAirQuality] = useLazyQuery(GET_CITY_AIR_QUALITY, {
+    onCompleted: (d) => console.log(d),
+  });
+
   const listRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -56,7 +61,7 @@ export const AutoCompleteSearch = () => {
   return (
     <div className="relative">
       <X
-        className="text-light-700 absolute right-2 top-1/2 z-10 -translate-y-1/2 cursor-pointer"
+        className="text-[#FF7000] absolute right-2 top-1/2 z-10 -translate-y-1/2 cursor-pointer"
         onClick={() => {
           setSearchValue(null);
           selectStation(null);
@@ -74,8 +79,8 @@ export const AutoCompleteSearch = () => {
           setIsSearchOpen(true);
         }}
         className={cx(
-          "text-light-700 border-light700  hover-light-700 w-full rounded-lg border-[1px] bg-transparent px-[1.2rem] py-[0.8rem] transition-all duration-700 ease-in-out",
-          "focus:border-black focus:outline-none",
+          "text-black-300 border-[#FF7000] bg-light-900  hover-light-700 w-full rounded-lg border-[1px] px-[1.2rem] py-[0.8rem] transition-all duration-700 ease-in-out",
+          " focus:outline-none",
           isSearchOpen && "rounded-b-none"
         )}
       />
@@ -89,43 +94,40 @@ export const AutoCompleteSearch = () => {
         <div
           ref={listRef}
           className={cx(
-            "border-light700_dark400 border-t-none z-10 h-full w-full overflow-hidden rounded-b-lg  shadow-lg",
+            "border-[#FF7000] border-t-none z-10 h-full w-full overflow-hidden rounded-b-lg  shadow-lg",
             isSearchOpen ? "border border-t-0" : ""
           )}
         >
           <div
             className={cx(
-              "scrollbar-thumb-rounded-full background-light900 h-full w-full overflow-y-auto scrollbar-thin  scrollbar-thumb-[#FF7000]",
+              "scrollbar-thumb-rounded-full bg-light-900 h-full w-full overflow-y-auto scrollbar-thin  scrollbar-thumb-[#FF7000]",
               !!Object.entries(searchResults).length && "py-[0.4rem]"
             )}
           >
-            {searchValue?.length &&
-              searchResults.map(({ country, location, name }, idx) => {
-                return (
-                  <div className={cx("flex flex-col")} key={name + idx}>
-                    <div
+            {searchResults.map(({ country, location, name }, idx) => {
+              return (
+                <div className={cx("flex flex-col")} key={name + idx}>
+                  <div
+                    className={cx(
+                      "text-dark-200 flex  flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-light-500",
+                      "bg-light-800",
+                      "cursor-pointer"
+                    )}
+                    onClick={async () => {
+                      await getCityAirQuality({ variables: { city: name } });
+                    }}
+                  >
+                    <h1
                       className={cx(
-                        "text-light-700_dark200 flex  flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out",
-
-                        "background-light800_dark300",
-                        "cursor-pointer"
+                        "select-none"
+                        // !haveAddress && isSelected && "text-white",
+                        // haveAddress && "cursor-default"
                       )}
-                      // onClick={async () => {
-                      //   if (!haveAddress)
-                      //     await handleChangeStation(val[0].id, city);
-                      // }}
                     >
-                      <h1
-                        className={cx(
-                          "select-none"
-                          // !haveAddress && isSelected && "text-white",
-                          // haveAddress && "cursor-default"
-                        )}
-                      >
-                        {name}
-                      </h1>
-                    </div>
-                    {/* {haveAddress && (
+                      {name}
+                    </h1>
+                  </div>
+                  {/* {haveAddress && (
                       <div className="text-light-700_dark200 flex flex-col">
                         {val.map((station, _index) =>
                           !station?.addressStreet?.includes("bez ulicy") ? (
@@ -150,9 +152,9 @@ export const AutoCompleteSearch = () => {
                         )}
                       </div>
                     )} */}
-                  </div>
-                );
-              })}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

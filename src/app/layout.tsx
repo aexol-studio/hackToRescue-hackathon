@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ApolloProvider } from "@/graphql/ApolloProvider";
-import { AppStoreProvider } from "@/stores/AppStoreProvider";
+import { AppStoreProvider, useAppStore } from "@/stores/AppStoreProvider";
 import { Chain } from "@/graphql/zeus";
 import { citySelector, weatherSelector } from "@/graphql/queries";
 
@@ -13,6 +13,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const data = await getInitialData();
+
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
