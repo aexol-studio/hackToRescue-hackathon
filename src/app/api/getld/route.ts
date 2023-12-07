@@ -166,7 +166,7 @@ export async function GET(request: Request) {
       return selectedFeatures;
     };
 
-    transformedData.features = prioritizeFeatures(transformedData.features, 30);
+    transformedData.features = prioritizeFeatures(transformedData.features, 10);
 
     // const updatedResponseData = JSON.stringify(transformedData);
     // fs.writeFileSync(`${process.cwd()}/public/jsons/mapaa.jsonld`, updatedResponseData);
@@ -176,9 +176,3 @@ export async function GET(request: Request) {
     return Response.json({ error: "Server error" }, { status: 500 });
   }
 }
-
-export const config = {
-  api: {
-    responseLimit: false,
-  },
-};
