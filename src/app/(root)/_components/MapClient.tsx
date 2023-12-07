@@ -17,16 +17,23 @@ const getLatestData = async () => {
 const ClientMap = () => {
   const [loading, setLoading] = useState(false);
   const [json, setJson] = useState<any>();
-  const { selectedStation, stations, selectStation, goTo, setEducationOpen, moveMap } = useAppStore(
-    state => ({
-      selectedStation: state.selectedStation,
-      setEducationOpen: state.setEducationOpen,
-      selectStation: state.selectStation,
-      goTo: state.goTo,
-      stations: state.stations,
-      moveMap: state.moveMap,
-    })
-  );
+  const {
+    selectedStation,
+    stations,
+    selectStation,
+    goTo,
+    setEducationOpen,
+    moveMap,
+    setShowLunge,
+  } = useAppStore(state => ({
+    selectedStation: state.selectedStation,
+    setEducationOpen: state.setEducationOpen,
+    selectStation: state.selectStation,
+    goTo: state.goTo,
+    stations: state.stations,
+    moveMap: state.moveMap,
+    setShowLunge: state.setShowLunge,
+  }));
 
   useEffect(() => {
     (async () => {
@@ -73,6 +80,7 @@ const ClientMap = () => {
   const dblclick = async (name: string) => {
     if (window.innerWidth < 640) close();
     selectStation(name);
+    setShowLunge(true);
     await goTo("station");
   };
   const onButtonClick = (name: string) => {
