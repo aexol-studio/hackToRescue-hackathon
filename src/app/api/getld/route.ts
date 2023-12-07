@@ -3,7 +3,8 @@ import fs from "fs";
 export async function GET() {
   const file = fs.readFileSync(`${process.cwd()}/public/mapa.jsonld`, "utf8");
   const data = JSON.parse(file);
-  return Response.json({
+
+  const transformedData = {
     ...data,
     features: data.features
       .map(
@@ -20,7 +21,7 @@ export async function GET() {
           },
           index: number
         ) => {
-          if (feature.properties.wartosc <= 20) return;
+          if (feature.properties.wartosc <= 25) return;
           return {
             ...feature,
             id: index,
@@ -32,5 +33,12 @@ export async function GET() {
         }
       )
       .filter((feature: any) => !!feature),
-  });
+  };
+
+  // fs.writeFileSync(
+  //   `${process.cwd()}/public/mapaa.jsonld`,
+  //   JSON.stringify(transformedData)
+  // );
+
+  return Response.json({ ...transformedData });
 }

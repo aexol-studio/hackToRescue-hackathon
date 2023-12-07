@@ -19,7 +19,7 @@ export const Education = () => {
           educationOpen && "-translate-y-full "
         )}
       >
-        <div className="relative w-full h-full bg-dark-500 border-[1px] scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-[#FF7000] border-l-none border-light-700 rounded text-light-700 overflow-y-auto">
+        <div className="relative w-full h-full bg-light-700 border-[1px] scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-[#FF7000]  border-light-700 rounded text-light-700 overflow-y-auto">
           <X
             onClick={() => setEducationOpen(false)}
             className="absolute right-5 top-5 cursor-pointer text-light-700"
