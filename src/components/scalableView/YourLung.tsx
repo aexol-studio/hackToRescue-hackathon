@@ -1,13 +1,14 @@
 import { useAppStore } from "@/stores";
+import { FC } from "react";
 
-export const YourLung = () => {
+export const YourLung:FC<{open:boolean}> = ({open}) => {
   const { airQuality } = useAppStore(({ airQuality }) => ({
     airQuality,
   }));
   return (
     <>
-      <div className="absoulte bg-white left-0 bottom-0 w-full h-full z-[1000]">
-        <span className="text-white">asdasd</span>
+      <div className="bg-white">
+        <span className="text-white ">asdasd</span>
       </div>
     </>
   );

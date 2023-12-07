@@ -73,7 +73,7 @@ export const AirQualityInfo = () => {
                   style={{
                     ...((value.indexLevel?.id ?? "") in airQualityColors
                       ? {
-                          background: `${airQualityColors[0]}`,
+                          background: `${airQualityColors[value.indexLevel?.id!]}`,
                           width: `calc(50px - ${
                             (value.indexLevel?.id ?? 0) * 10
                           }px)`,
