@@ -115,10 +115,10 @@ export async function GET(request: Request) {
     features: Object.values(groupedFeatures).filter((feature) => !!feature),
   };
 
-  fs.writeFileSync(
-    `${process.cwd()}/public/jsons/mapaa.jsonld`,
-    JSON.stringify(transformedData)
-  );
+  // fs.writeFileSync(
+  //   `${process.cwd()}/public/jsons/mapaa.jsonld`,
+  //   JSON.stringify(transformedData)
+  // );
 
   return Response.json({ ...transformedData });
 }
