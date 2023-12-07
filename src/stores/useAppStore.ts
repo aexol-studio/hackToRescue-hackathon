@@ -21,6 +21,7 @@ export interface AppStoreProps {
   hoveredQualityIndex: number | undefined;
   isOpen: boolean;
   moveMap: MoveMap;
+  scaleLounge:boolean
 }
 
 export interface AppStoreState extends AppStoreProps {
@@ -35,6 +36,7 @@ export interface AppStoreState extends AppStoreProps {
   open: () => void;
   close: () => void;
   toggle: () => void;
+  setScaleLounge:(state:boolean)=>void
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
@@ -62,6 +64,10 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
     const setSearchValue = (value: string | null) => {
       setSearch(value || "");
       set({ searchValue: value });
+    };
+
+    const setScaleLounge = (state: boolean) => {
+      set({ scaleLounge: state });
     };
 
     const setSearch = (search: string) => {
@@ -123,6 +129,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       airQuality: null,
       qualityLoading: false,
       airQualities: null,
+      scaleLounge:false,
       close,
       goTo,
       open,
@@ -134,6 +141,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       setHoveredQualityIndex,
       toggleRotation,
       setEducationOpen,
+      setScaleLounge,
       ...initProps,
     };
   });

@@ -21,7 +21,7 @@ export default async function RootLayout({
             {...{
               searchResults: data,
               stations: data,
-
+              scaleLounge:false,
               airQualities: {},
               airQuality: null,
               allowRotation: false,

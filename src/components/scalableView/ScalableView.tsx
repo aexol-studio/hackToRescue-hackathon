@@ -1,3 +1,5 @@
+
+
 import { cx } from "@/utils";
 import React, { FC, useState } from "react";
 import { Search } from "../search/Search";
@@ -8,8 +10,7 @@ import { airQualityColors } from "@/constans";
 import { Globe2 } from "lucide-react";
 
 export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
-  const [test, setTest] = useState(false);
-  const {airQuality,selectStation}=useAppStore(({airQuality, selectStation})=>({airQuality,selectStation}))
+  const {airQuality,selectStation,scaleLounge}=useAppStore(({airQuality, selectStation,scaleLounge})=>({airQuality,selectStation,scaleLounge}))
 
   return (
     <div
@@ -26,9 +27,9 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
       <div className="absolute left-1/2 z-[1000]">
       <Search />
       </div>
-      <Canvas2 test={test} />
-      <div className="absolute left-1/2 w-auto -translate-x-1/2 bottom-20 z-[1100] justify-center"  onClick={() => setTest((p) => !p)}>
-      <YourLung open={test}/>
+      <Canvas2 test={scaleLounge} />
+      <div className="absolute left-1/2 w-auto -translate-x-1/2 bottom-20 z-[1100] justify-center">
+      <YourLung/>
       </div>
     </div>
   );
