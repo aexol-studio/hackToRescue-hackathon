@@ -58,59 +58,57 @@ export const AutoCompleteSearch = () => {
 
   return (
     <div ref={listRef} className="w-full h-[50px] z-[1200]">
-      <div className="absolute w-full">
-        <div className="bg-white rounded-3xl">
-          <div className="relative">
-            <div className="absolute right-5 top-1/2 z-10 -translate-y-1/2 flex gap-2 items-center">
-              <HoverInfo infoText="Geolokalizacja">
-                <GeoLocalizationButton />
-              </HoverInfo>
-            </div>
-            <input
-              value={searchValue || ""}
-              ref={inputRef}
-              type="text"
-              placeholder="Wpisz lub wybierz miasto"
-              onChange={e => setSearchValue(e.target.value)}
-              onFocus={() => setIsSearchOpen(true)}
-              className={cx(
-                "text-base text-black-300 w-full px-[1.2rem] py-[0.8rem] focus:outline-none bg-transparent rounded-3xl"
-              )}
-            />
+      <div className="bg-white rounded-3xl">
+        <div className="relative">
+          <div className="absolute right-5 top-1/2 z-10 -translate-y-1/2 flex gap-2 items-center">
+            <HoverInfo infoText="Geolokalizacja">
+              <GeoLocalizationButton />
+            </HoverInfo>
           </div>
-          <div className="rounded-b-3xl overflow-hidden">
-            <div
-              className={cx(
-                "transition-[height] duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin",
-                isSearchOpen ? "h-[24rem] overflow-y-auto" : "h-0 overflow-hidden"
-              )}>
-              {searchResults.map(({ location, name }, idx) => (
-                <div key={name + idx}>
-                  <div
+          <input
+            value={searchValue || ""}
+            ref={inputRef}
+            type="text"
+            placeholder="Wpisz lub wybierz miasto"
+            onChange={e => setSearchValue(e.target.value)}
+            onFocus={() => setIsSearchOpen(true)}
+            className={cx(
+              "text-base text-black-300 w-full px-[1.2rem] py-[0.8rem] focus:outline-none bg-transparent rounded-3xl"
+            )}
+          />
+        </div>
+        <div className="rounded-b-3xl overflow-hidden">
+          <div
+            className={cx(
+              "transition-[height] duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin",
+              isSearchOpen ? "h-[24rem] overflow-y-auto" : "h-0 overflow-hidden"
+            )}>
+            {searchResults.map(({ location, name }, idx) => (
+              <div key={name + idx}>
+                <div
+                  className={cx(
+                    "text-dark-200 flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
+                  )}
+                  onClick={async () => {
+                    await getCityAirQuality({
+                      variables: {
+                        city: name,
+                        startDate: set(new Date(), { hours: 0 }).toISOString(),
+                        endDate: set(new Date(), { hours: 24 }).toISOString(),
+                      },
+                    });
+                  }}>
+                  <h1
                     className={cx(
-                      "text-dark-200 flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
-                    )}
-                    onClick={async () => {
-                      await getCityAirQuality({
-                        variables: {
-                          city: name,
-                          startDate: set(new Date(), { hours: 0 }).toISOString(),
-                          endDate: set(new Date(), { hours: 24 }).toISOString(),
-                        },
-                      });
-                    }}>
-                    <h1
-                      className={cx(
-                        "select-none"
-                        // !haveAddress && isSelected && "text-white",
-                        // haveAddress && "cursor-default"
-                      )}>
-                      {name}
-                    </h1>
-                  </div>
+                      "select-none"
+                      // !haveAddress && isSelected && "text-white",
+                      // haveAddress && "cursor-default"
+                    )}>
+                    {name}
+                  </h1>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

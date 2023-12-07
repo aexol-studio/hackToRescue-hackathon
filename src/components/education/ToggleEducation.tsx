@@ -14,15 +14,15 @@ export const ToggleEducation = () => {
   );
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center ">
       <div
         className={cx(
-          "z-40 animate-pulse cursor-pointer w-fit justify-center",
+          "z-40 cursor-pointer w-fit justify-center items-center",
           educationOpen && "hidden"
         )}
         onClick={() => setEducationOpen(true)}>
-        <div className="px-10 py-3 bg-black  rounded-full text-white justify-center items-center">
-          <span className="font-normal text-xs whitespace-nowrap">Zmień to!</span>
+        <div className="px-10 py-2 bg-black  rounded-full text-white justify-center items-center">
+          <span className="font-normal text-xs whitespace-nowrap">Chcę to zmienić</span>
         </div>
       </div>
     </div>
