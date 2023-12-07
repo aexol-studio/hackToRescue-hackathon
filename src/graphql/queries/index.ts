@@ -26,6 +26,15 @@ export const airQualitiesIndexSelector = Selector("Parameters")({
   time: true,
 });
 
+export const weatherInfo = Selector("Weather")({
+  main: true,
+  description: true,
+  temp: true,
+  feelTemp: true,
+  humidity: true,
+  clouds: true,
+});
+
 export type WeatherType = InputType<GraphQLTypes["Weather"], typeof weatherSelector>;
 
 export const citySelector = Selector("City")({

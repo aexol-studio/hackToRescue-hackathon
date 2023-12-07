@@ -9,7 +9,26 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const data = await getInitialData();
-
+  console.log(data);
+  const searchREsults = Object.values(
+    data.reduce((acc, curr) => {
+      if (acc[curr.name.trim()])
+        acc[curr.name.trim()] = {
+          ...acc[curr.name.trim()],
+          stations: [
+            ...acc[curr.name.trim()].stations,
+            { state: curr.state, location: { ...curr.location } },
+          ],
+        };
+      else
+        acc[curr.name.trim()] = {
+          name: curr.name,
+          state: curr.state,
+          stations: [{ state: curr.state, location: { ...curr.location } }],
+        };
+      return acc;
+    }, {} as any)
+  );
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
@@ -17,7 +36,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* @ts-ignore */}
           <AppStoreProvider
             {...{
-              searchResults: data,
+              initialSearchResults: searchREsults,
+              searchResults: searchREsults,
               stations: data,
               scaleLounge: false,
               airQualities: {},
@@ -35,6 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               isOpen: false,
               moveMap: undefined,
               showLounge: false,
+              newAutoCompleteResult: null,
             }}>
             {children}
           </AppStoreProvider>
@@ -73,6 +94,7 @@ const getInitialData = async () => {
     // );
 
     if (!getCollectedCities) return [];
+
     return getCollectedCities;
   } catch (error) {
     return [];

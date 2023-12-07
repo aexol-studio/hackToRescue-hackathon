@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 export const AllTypesProps: Record<string,any> = {
+	DATA_SOURCE_TYPE: "enum" as const,
 	Query:{
 		getCityParameters:{
 
@@ -11,13 +12,25 @@ export const AllTypesProps: Record<string,any> = {
 		getRealTimeWeather:{
 
 		}
-	},
-	DATA_SOURCE_TYPE: "enum" as const
+	}
 }
 
 export const ReturnTypes: Record<string,any> = {
-	Mutation:{
-		refreshStations:"String"
+	City:{
+		country:"String",
+		createdAt:"String",
+		location:"PureLocation",
+		name:"String",
+		state:"String",
+		stationsInCity:"Station"
+	},
+	Station:{
+		city:"String",
+		createdAt:"String",
+		kind:"DATA_SOURCE_TYPE",
+		parameters:"Parameters",
+		stationId:"Int",
+		updatedAt:"String"
 	},
 	Weather:{
 		clouds:"Int",
@@ -26,6 +39,20 @@ export const ReturnTypes: Record<string,any> = {
 		humidity:"Int",
 		main:"String",
 		temp:"Float"
+	},
+	Mutation:{
+		refreshStations:"String"
+	},
+	Query:{
+		getCityParameters:"Station",
+		getCollectedCities:"City",
+		getRealTimeParameters:"Station",
+		getRealTimeWeather:"Weather",
+		test:"String"
+	},
+	PureLocation:{
+		lat:"Float",
+		long:"Float"
 	},
 	Parameters:{
 		no2:"Float",
@@ -41,33 +68,6 @@ export const ReturnTypes: Record<string,any> = {
 		so2:"Float",
 		so2Time:"String",
 		time:"String"
-	},
-	PureLocation:{
-		lat:"Float",
-		long:"Float"
-	},
-	Station:{
-		city:"String",
-		createdAt:"String",
-		kind:"DATA_SOURCE_TYPE",
-		parameters:"Parameters",
-		stationId:"Int",
-		updatedAt:"String"
-	},
-	Query:{
-		getCityParameters:"Station",
-		getCollectedCities:"City",
-		getRealTimeParameters:"Station",
-		getRealTimeWeather:"Weather",
-		test:"String"
-	},
-	City:{
-		country:"String",
-		createdAt:"String",
-		location:"PureLocation",
-		name:"String",
-		state:"String",
-		stationsInCity:"Station"
 	}
 }
 

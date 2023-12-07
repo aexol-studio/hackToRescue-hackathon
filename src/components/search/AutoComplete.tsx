@@ -1,41 +1,49 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
-import { useAppStore } from "@/stores";
+import { NewAutoCompleteResult, useAppStore } from "@/stores";
 import { X } from "lucide-react";
 import { useLazyQuery } from "@apollo/client";
 import { GET_CITY_AIR_QUALITY } from "@/graphql/queries";
 import { set } from "date-fns";
 
 export const AutoCompleteSearch = () => {
-  const { searchResults, selectedStation, selectStation, searchValue, setSearchValue } =
-    useAppStore(
-      ({ searchResults, selectStation, selectedStation, searchValue, setSearchValue }) => ({
-        searchResults,
-        selectStation,
-        selectedStation,
-        searchValue,
-        setSearchValue,
-      })
-    );
+  const {
+    searchResults,
+    selectedStation,
+    selectStation,
+    searchValue,
+    setSearchValue,
+    newAutoCompleteResult,
+    setNewAutoCompleteResult,
+  } = useAppStore(
+    ({
+      searchResults,
+      selectStation,
+      selectedStation,
+      searchValue,
+      setSearchValue,
+      newAutoCompleteResult,
+      setNewAutoCompleteResult,
+    }) => ({
+      searchResults,
+      selectStation,
+      selectedStation,
+      searchValue,
+      setSearchValue,
+      newAutoCompleteResult,
+      setNewAutoCompleteResult,
+    })
+  );
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const handleChangeStation = async (name: string, city: string) => {
-    if (!inputRef.current) return;
-    inputRef.current.value = city;
-    setIsSearchOpen(false);
-    await new Promise(resolve => setTimeout(resolve, 700));
-    if (selectedStation?.name === name) {
-      inputRef.current.value = "";
-      setSearchValue(null);
-      return;
-    }
-    selectStation(name);
-    setSearchValue(city);
-  };
 
   const [getCityAirQuality] = useLazyQuery(GET_CITY_AIR_QUALITY, {
-    onCompleted: d => console.log(d),
+    onCompleted: d => {
+      // const reducedArr = d.getCityParameters.reduce(([acc,curr])=>)
+
+      console.log(d);
+    },
   });
 
   const listRef = useRef<HTMLDivElement>(null);
@@ -54,6 +62,7 @@ export const AutoCompleteSearch = () => {
         onClick={() => {
           setSearchValue(null);
           selectStation(null);
+          setNewAutoCompleteResult(null);
         }}
       />
 
@@ -90,58 +99,36 @@ export const AutoCompleteSearch = () => {
               "scrollbar-thumb-rounded-full bg-light-900 h-full w-full overflow-y-auto scrollbar-thin  scrollbar-thumb-[#FF7000]",
               !!Object.entries(searchResults).length && "py-[0.4rem]"
             )}>
-            {searchResults.map(({ country, location, name }, idx) => {
+            {searchResults?.map((option, idx) => {
               return (
-                <div className={cx("flex flex-col")} key={name + idx}>
+                <div className={cx("flex flex-col")} key={option.name + idx}>
                   <div
                     className={cx(
                       "text-dark-200 flex  flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-light-500",
                       "bg-light-800",
-                      "cursor-pointer"
+                      "cursor-pointer",
+                      option.name === newAutoCompleteResult?.name && "bg-light-700"
                     )}
                     onClick={() => {
+                      if (option.name === newAutoCompleteResult?.name) {
+                        setNewAutoCompleteResult(null);
+                        setSearchValue(null);
+                        setIsSearchOpen(p => !p);
+                        return;
+                      }
+                      setSearchValue(option.name);
+                      setNewAutoCompleteResult(option as NewAutoCompleteResult);
                       getCityAirQuality({
                         variables: {
-                          city: name,
+                          city: option.name,
                           startDate: set(new Date(), { hours: 0 }).toISOString(),
                           endDate: set(new Date(), { hours: 24 }).toISOString(),
                         },
                       });
+                      setIsSearchOpen(p => !p);
                     }}>
-                    <h1
-                      className={cx(
-                        "select-none"
-                        // !haveAddress && isSelected && "text-white",
-                        // haveAddress && "cursor-default"
-                      )}>
-                      {name}
-                    </h1>
+                    <h1 className={cx("select-none")}>{option.name}</h1>
                   </div>
-                  {/* {haveAddress && (
-                      <div className="text-light-700_dark200 flex flex-col">
-                        {val.map((station, _index) =>
-                          !station?.addressStreet?.includes("bez ulicy") ? (
-                            <div
-                              key={station.id}
-                              className={cx(
-                                "hover-light-700_dark-400 flex cursor-pointer flex-col px-[2.4rem] py-[0.4rem] transition-colors duration-300 ease-in-out",
-                                selectedStation?.id === station.id &&
-                                  "background-light800_dark300"
-                              )}
-                              onClick={async () =>
-                                await handleChangeStation(station.id, city)
-                              }
-                            >
-                              <p className="select-none">
-                                {val.length > 1
-                                  ? `${_index + 1} ${station.addressStreet}`
-                                  : station.addressStreet}
-                              </p>
-                            </div>
-                          ) : null
-                        )}
-                      </div>
-                    )} */}
                 </div>
               );
             })}

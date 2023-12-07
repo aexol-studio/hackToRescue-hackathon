@@ -3,7 +3,12 @@ import { AirQuality, GeoLocation, LocationData } from "@/types";
 import { checkWhereLatLong, requestGeolocation } from "@/utils";
 import { createStore } from "zustand";
 type MoveMap = "station" | undefined;
-
+export type NewAutoCompleteResult = {
+  name: string;
+  state: string;
+  location: { lat: number; lon: number };
+  stations: { lat: number; lon: number }[];
+};
 export interface AppStoreProps {
   educationOpen: boolean;
   loading: boolean;
@@ -13,7 +18,8 @@ export interface AppStoreProps {
   location: LocationData | null;
   geoLocation: GeoLocation | null;
   searchValue: string | null;
-  searchResults: CityType[];
+  initialSearchResults: NewAutoCompleteResult[];
+  searchResults: NewAutoCompleteResult[];
   airQualities: Record<string, AirQuality> | null;
   airQuality: AirQuality | null;
   allowRotation: boolean;
@@ -23,6 +29,7 @@ export interface AppStoreProps {
   moveMap: MoveMap;
   scaleLounge: boolean;
   showLounge: boolean;
+  newAutoCompleteResult: NewAutoCompleteResult | null;
 }
 
 export interface AppStoreState extends AppStoreProps {
@@ -40,6 +47,7 @@ export interface AppStoreState extends AppStoreProps {
   toggle: () => void;
   setScaleLounge: (state: boolean) => void;
   setShowLunge: (state: boolean) => void;
+  setNewAutoCompleteResult: (newAutoCompleteResult: NewAutoCompleteResult | null) => void;
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
@@ -74,8 +82,8 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
     };
 
     const setSearch = (search: string) => {
-      const stations = get().stations;
-      const searchResults = stations.filter(station =>
+      const searchResultsOld = get().initialSearchResults;
+      const searchResults = searchResultsOld.filter(station =>
         station.name.toLowerCase().includes(search.toLowerCase())
       );
       set({ searchResults });
@@ -119,6 +127,9 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
 
     const setShowLunge = (showLounge: boolean) => set({ showLounge });
 
+    const setNewAutoCompleteResult = (newAutoCompleteResult: NewAutoCompleteResult | null) =>
+      set({ newAutoCompleteResult });
+
     return {
       isOpen: false,
       moveMap: undefined,
@@ -138,6 +149,8 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       airQualities: null,
       scaleLounge: false,
       showLounge: false,
+      newAutoCompleteResult: null,
+      initialSearchResults: [],
       close,
       goTo,
       open,
@@ -152,6 +165,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       setStations,
       setScaleLounge,
       setShowLunge,
+      setNewAutoCompleteResult,
       ...initProps,
     };
   });
