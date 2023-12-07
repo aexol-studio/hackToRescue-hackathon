@@ -62,20 +62,20 @@ const getInitialData = async () => {
     const { getCollectedCities } = await chain("query")({
       getCollectedCities: citySelector,
     });
-    const citiesWithWeather = await Promise.all(
-      getCollectedCities.map(async (city) => {
-        const { getRealTimeWeather } = await chain("query")({
-          getRealTimeWeather: [
-            { lat: city.location.lat, long: city.location.long },
-            weatherSelector,
-          ],
-        });
-        return { ...city, weather: getRealTimeWeather };
-      })
-    );
+    // const citiesWithWeather = await Promise.all(
+    //   getCollectedCities.map(async (city) => {
+    //     const { getRealTimeWeather } = await chain("query")({
+    //       getRealTimeWeather: [
+    //         { lat: city.location.lat, long: city.location.long },
+    //         weatherSelector,
+    //       ],
+    //     });
+    //     return { ...city, weather: getRealTimeWeather };
+    //   })
+    // );
 
     if (!getCollectedCities) return [];
-    return citiesWithWeather;
+    return getCollectedCities;
   } catch (error) {
     return [];
   }

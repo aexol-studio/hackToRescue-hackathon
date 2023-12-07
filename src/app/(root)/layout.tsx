@@ -22,10 +22,10 @@ export default function RootLayout({
       {/* <ToggleEducation /> */}
       <Timeline />
       <AirQualityInfo />
-
       <div className="absolute  bottom-0 right-0 w-[450px] h-[450px]">
         <Canvas />
       </div>
+
     </main>
   );
 }

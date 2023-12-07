@@ -10,7 +10,7 @@ import * as THREE from "three";
 useGLTF.preload(`/assets/models/model.glb`);
 useGLTF.preload(`/assets/models/111lungs.glb`);
 
-export const Model2: FC<{ test: boolean }> = ({ test }) => {
+export const Model2: FC<{ test: boolean,test2:b }> = ({ test }) => {
   console.log(test);
   const { nodes } = useGLTF(`/assets/models/model.glb`) as any;
   // const { nodes: newNodes } = useGLTF(`/assets/models/111lungs.glb`);
@@ -22,10 +22,11 @@ export const Model2: FC<{ test: boolean }> = ({ test }) => {
     })
   );
   const vec = new THREE.Vector3();
-  const { scale } = useSpring({ scale: test ? 0.5 : 1 });
-  const { y } = useSpring({ y: test ? 0.3 : 0.2 });
+  const { scale } = useSpring({ scale: test ? 0.5 : 1,delay:0 });
+  const { opacity } = useSpring({ opacity: test ? 0.8 : 0 });
+
   // console.log(scale);
-  const [colors, setColors] = useState({ old: "#fff", new: "#fff" });
+  const [colors, setColors] = useState({ old: "#ffffff00", new: "#fff" });
   const groupRef = useRef<Group>(null);
   const modelMeshes: Mesh[] = useMemo(
     () =>
@@ -62,10 +63,11 @@ export const Model2: FC<{ test: boolean }> = ({ test }) => {
     10,
     (i) => ({
       delay: 100 * i,
-      from: { color: colors.old },
-      to: { color: colors.new },
+    
+      from: { color: test ? 0:1 },
+      to: { color: test ? 1:0 },
     }),
-    [colors]
+    [test]
   );
 
   const zoomRef = useRef(1);
@@ -110,6 +112,10 @@ export const Model2: FC<{ test: boolean }> = ({ test }) => {
       window.removeEventListener("resize", () => handleModelResize());
   }, []);
 
+
+
+
+
   return (
     <>
       <animated.group
@@ -130,8 +136,8 @@ export const Model2: FC<{ test: boolean }> = ({ test }) => {
           >
             {/* @ts-ignore */}
             <animated.meshToonMaterial
-              color={color.color}
-              opacity={0.8}
+              color={'#FFF'}
+              opacity={color.color}
               transparent
             />
           </mesh>

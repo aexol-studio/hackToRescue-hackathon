@@ -3,7 +3,7 @@ import { Map as MapType } from "leaflet";
 import { useAppStore } from "@/stores";
 import { Minimap } from "./MiniMap";
 import { pickGoodIcon } from "./utils";
-import { generatePolygonColor } from "@/utils";
+import { cx, generatePolygonColor } from "@/utils";
 import React, {
   useEffect,
   useState,
@@ -11,46 +11,32 @@ import React, {
   useRef,
   useMemo,
 } from "react";
-import toast from "react-hot-toast";
+import { Canvas } from "@/components/canvas/Canvas";
+import { Search } from "@/components/search/Search";
 import { ScalableView } from "@/components/scalableView/ScalableView";
-
-const getLatestData = async () => {
-  const res = await fetch(`http://localhost:3000/api/getld?param=pm25-2019`);
-  const data = await res.json();
-  return data;
-};
-
 const ClientMap = () => {
   const [loading, setLoading] = useState(false);
-  const [json, setJson] = useState<any>();
+  const json = useRef(null);
   const {
     selectedStation,
     stations,
     selectStation,
     goTo,
-    setEducationOpen,
     moveMap,
   } = useAppStore((state) => ({
     selectedStation: state.selectedStation,
-    setEducationOpen: state.setEducationOpen,
     selectStation: state.selectStation,
     goTo: state.goTo,
     stations: state.stations,
     moveMap: state.moveMap,
   }));
-
-  useEffect(() => {
-    (async () => {
-      setJson(await getLatestData());
-    })();
-  }, []);
-
   const [map, setMap] = useState<MapType | null>(null);
   const [position, setPosition] = useState(() => map?.getCenter());
-
+  const [test, setTest] = useState(false);
   const onZoom = useCallback(() => {
     if (map?.getZoom() === 9.5) {
-    }
+      setTest(true);
+    } else setTest(false);
   }, [map]);
 
   const onMove = useCallback(() => {
@@ -68,14 +54,14 @@ const ClientMap = () => {
 
   const goToSelectedStation = useCallback(() => {
     if (selectedStation) {
-      // const zoom = 9;
+      const zoom = 14;
    
-      map?.setView(
+      map?.flyTo(
         [selectedStation.location.lat, selectedStation.location.long],
         zoom,
         {
           animate: true,
-          duration: 1,
+          duration: 2,
           easeLinearity: 0.2,
         }
       );
@@ -98,29 +84,14 @@ const ClientMap = () => {
     await goTo("station");
   };
 
-  const data = ["pm25-2019", "pm25-2020"];
   const loadData = async (e: React.FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
-      const param = formData.get("param");
-      setLoading(true);
-      setJson(null);
-      const res = await fetch(`/api/getld?param=${param}`);
-      const data = await res.json();
-      if ("error" in data) {
-        toast.error("Nie udało się pobrać danych. Spróbuj ponownie później.");
-        return;
-      } else {
-        toast.success("Dane zostały pobrane");
-        setJson(data);
-        setLoading(false);
-      }
-    } catch (e) {
-      toast.error("Nie udało się pobrać danych. Spróbuj ponownie później.");
-    }
+    e.preventDefault();
+    setLoading(true);
+    const res = await fetch("/api/getld");
+    const data = await res.json();
+    json.current = data;
+    setLoading(false);
   };
-
   const style = (feature: any) => {
     return {
       fillColor: generatePolygonColor(
@@ -148,53 +119,50 @@ const ClientMap = () => {
         center={[51.91, 19.14]}
         zoom={5.5}
         maxZoom={9.5}
-        minZoom={5.5}
+        // minZoom={5.5}
         zoomControl={false}
         ref={setMap}
       >
-        {stations.map(
-          ({ name, country, location: { lat, long }, weather }, idx) => {
-            const isSelected = selectedStation?.name === name;
-            return (
-              <Marker
-                key={name + idx}
-                eventHandlers={{ dblclick: async () => await dblclick(name) }}
-                opacity={true ? 0.8 : 0.5}
-                icon={pickGoodIcon(isSelected ? "selected" : "default")}
-                position={[lat, long]}
-              >
-                <Popup>
-                  <div className="flex flex-col">
-                    <span>{name}</span>
-                    <span></span>
-                    <button onClick={() => onButtonClick(name)}>
-                      Zmień stacje
-                    </button>
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          }
-        )}
+        {stations.map(({ name, country, location: { lat, long } }, idx) => {
+          const isSelected = selectedStation?.name === name;
+          return (
+            <Marker
+              key={name + idx}
+              eventHandlers={{ dblclick: async () => await dblclick(name) }}
+              opacity={true ? 0.8 : 0.5}
+              icon={pickGoodIcon(isSelected ? "selected" : "default")}
+              position={[lat, long]}
+            >
+              <Popup>
+                <div className="flex flex-col">
+                  <span>{name}</span>
+                  <button onClick={() => onButtonClick(name)}>
+                    Zmień stacje
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
         {map && <Minimap />}
-        {json && (
+        {json.current && (
           <GeoJSON
             style={style}
             data={{
               type: "FeatureCollection",
               // @ts-ignore
-              features: json.features,
+              features: json.current.features,
             }}
           />
         )}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">
             OpenStreetMap</a> contributors'
-          url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       </MapContainer>
     );
-  }, [map, selectedStation, json]);
+  }, [map, selectedStation, json.current]);
 
   return (
     <>
@@ -208,25 +176,15 @@ const ClientMap = () => {
           <span>longitude:</span>
           <span>{position ? position.lng.toFixed(2) : 19.14}</span>
         </p>
-        <form onSubmit={loadData}>
-          <select name="param">
-            {data.map((d) => {
-              const [param, year] = d.split("-");
-              return (
-                <option key={d} value={d}>
-                  {param} {year}
-                </option>
-              );
-            })}
-          </select>
-          {loading ? (
-            <p>loading...</p>
-          ) : (
+        {loading ? (
+          <p>loading...</p>
+        ) : (
+          <form onSubmit={loadData}>
             <button type="submit">load data</button>
-          )}
-        </form>
+          </form>
+        )}
       </div>
-      {/* <ScalableView show={!!selectedStation} /> */}
+      <ScalableView show={!!selectedStation} />
     </>
   );
 };

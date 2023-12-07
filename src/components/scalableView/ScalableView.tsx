@@ -14,10 +14,12 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
   return (
     <div
       className={cx(
-        "w-full h-screen bg-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all scale-0 duration-1000 z-[100] ",
-        show && "scale-100", airQuality?.st.indexLevel ? airQualityColors[airQuality.st.indexLevel.id] : "bg-black"
+        "w-full h-screen absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  -z-[60] ",
+        show && "z-[100]",
+        //  airQuality?.st.indexLevel ? airQualityColors[airQuality.st.indexLevel.id] : "bg-black"
       )}
     >
+      <div className={cx("w-full h-full absolute top-0 rounded-full scale-0 left-0 bg-[#d3f8e2] opacity-0 duration-1000 delay-300 ",show && "opacity-[75%] scale-125")}></div>
       <div className="z-[1100] absolute left-8 top-8 p-1 bg-white rounded-full cursor-pointer" onClick={()=>selectStation(null)}>
       <Globe2 color="black"/>
       </div>
@@ -25,7 +27,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
       <Search />
       </div>
       <Canvas2 test={test} />
-      <div className="absolute right-1/2 bottom-[15%]"  onClick={() => setTest((p) => !p)}>
+      <div className="absolute left-1/2 w-auto -translate-x-1/2 bottom-20 z-[1100] justify-center"  onClick={() => setTest((p) => !p)}>
       <YourLung open={test}/>
       </div>
     </div>
