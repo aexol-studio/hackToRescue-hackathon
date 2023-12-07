@@ -151,7 +151,7 @@ export async function GET(request: Request) {
       return selectedFeatures;
     };
 
-    transformedData.features = prioritizeFeatures(transformedData.features, 8);
+    transformedData.features = prioritizeFeatures(transformedData.features, 7);
     return Response.json({ ...transformedData });
   } catch (e) {
     return Response.json({ error: "Server error" }, { status: 500 });
