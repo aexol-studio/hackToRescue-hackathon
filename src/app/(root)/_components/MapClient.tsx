@@ -22,11 +22,9 @@ const ClientMap = () => {
     stations,
     selectStation,
     goTo,
-    setEducationOpen,
     moveMap,
   } = useAppStore((state) => ({
     selectedStation: state.selectedStation,
-    setEducationOpen: state.setEducationOpen,
     selectStation: state.selectStation,
     goTo: state.goTo,
     stations: state.stations,
@@ -183,7 +181,7 @@ const ClientMap = () => {
           </form>
         )}
       </div>
-      <ScalableView show={test} />
+      <ScalableView show={!!selectedStation} />
     </>
   );
 };
