@@ -30,13 +30,11 @@ export async function GET(request: Request) {
   const searchParams = url.searchParams;
   const param = searchParams.get("param");
   const fileToGet = files[param as keyof typeof files];
+  console.log(fileToGet);
   if (!fileToGet) {
     return Response.json({ error: "No such file" }, { status: 404 });
   }
-  const file = fs.readFileSync(
-    `${process.cwd()}/public/jsons/${fileToGet.name}`,
-    "utf8"
-  );
+  const file = fs.readFileSync(`${process.cwd()}/public/jsons/${fileToGet.name}`, "utf8");
   const data = JSON.parse(file) as {
     type: string;
     features: {
@@ -75,18 +73,16 @@ export async function GET(request: Request) {
     }
 
     const roundedCoordinates = feature.geometry.coordinates.map(
-      (coord) =>
+      coord =>
         coord
-          .map((single) => {
+          .map(single => {
             const [x, y] = single;
-            const roundedX =
-              Math.round(Number(x) * 10 ** precision) / 10 ** precision;
-            const roundedY =
-              Math.round(Number(y) * 10 ** precision) / 10 ** precision;
+            const roundedX = Math.round(Number(x) * 10 ** precision) / 10 ** precision;
+            const roundedY = Math.round(Number(y) * 10 ** precision) / 10 ** precision;
             if (isNaN(roundedX) || isNaN(roundedY)) return undefined;
             return [roundedX, roundedY];
           })
-          .filter((coord) => !!coord) as number[][]
+          .filter(coord => !!coord) as number[][]
     );
 
     const coordinatesKey = JSON.stringify(roundedCoordinates);
@@ -105,14 +101,13 @@ export async function GET(request: Request) {
         },
       };
     } else {
-      groupedFeatures[coordinatesKey].properties.density +=
-        feature.properties.wartosc;
+      groupedFeatures[coordinatesKey].properties.density += feature.properties.wartosc;
     }
   });
 
   const transformedData = {
     ...data,
-    features: Object.values(groupedFeatures).filter((feature) => !!feature),
+    features: Object.values(groupedFeatures).filter(feature => !!feature),
   };
 
   // fs.writeFileSync(

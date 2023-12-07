@@ -22,7 +22,6 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
       className={cx(
         "w-full h-screen absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  -z-[60] ",
         showLounge && "z-[100]"
-        //  airQuality?.st.indexLevel ? airQualityColors[airQuality.st.indexLevel.id] : "bg-black"
       )}>
       <div
         className={cx(
@@ -30,7 +29,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
           showLounge && "opacity-[75%] scale-[300%]"
         )}></div>
       <div
-        className="z-[1100] absolute left-8 top-8 p-1 bg-white rounded-full cursor-pointer"
+        className="z-[1100] absolute right-8 top-8 p-1 bg-white rounded-full cursor-pointer"
         onClick={() => {
           selectStation(null);
           setShowLunge(false);
