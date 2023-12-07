@@ -12,7 +12,7 @@ const getLatestData = async () => {
   const URL =
     process.env.NODE_ENV === "development" ? "http://localhost:3000/" : process.env.NEXT_PUBLIC_URL;
   if (!URL) throw new Error("No URL");
-  const res = await fetch(`${URL}api/getld?param=pm25-2019`);
+  const res = await fetch(`${URL}api/getld?param=pm25-2020`);
   const data = await res.json();
   return data;
 };
@@ -91,7 +91,7 @@ const ClientMap = () => {
     selectStation(name);
   };
 
-  const data = ["none", "pm25-2019", "pm25-2020", "pm10-2019", "pm10-2020", "pm10-2021"];
+  const data = ["none", "pm25-2020", "pm10-2020"];
   const loadData = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
