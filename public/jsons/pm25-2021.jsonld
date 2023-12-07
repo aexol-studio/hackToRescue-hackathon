@@ -1,0 +1,41 @@
+{
+  "@context": {
+    "Rozkłady stężeń": {
+      "@id": "https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap"
+    },
+    "links": "https://schema.org/relatedLink",
+    "totalPages": "https://schema.org/numberOfPages"
+  },
+  "features": [],
+  "meta": {
+    "dc:description": "Usługa sieciowa udostępniająca dane prezentowane na mapach rozkładów przestrzennych stężeń zanieczyszczeń w podziale na lata od 2019 roku, które publikowane są na portalu Jakość Powietrza GIOŚ pod adresem https://powietrze.gios.gov.pl/pjp/maps/modeling. Mapy opracowywane są w podziale na kryteria: OZ- ochrona zdrowia ludzi (pył zawieszony PM10 średnia roczna i 36-te maksymalne stężenie średnie dobowe, pył zawieszony PM2,5 średnia roczna, NO2 średnia roczna i 19-te maksymalne stężenia 1-godzinne, SO2 4-te maksymalne stężenie średnie dobowe i 25-te maksymalne stężenie 1-godzinne, O3 liczba dni w roku z przekroczeniem poziomu 120 μg/m3 przez wartości średnie 8-godzinne kroczące uśredniona dla 3 lat, BaP w pyle PM10 średnia roczna), OR - ochrona roślin (NOX średnia roczna, SO2 średnia roczna, O3 wartość wskaźnika AOT40 dla O3 uśrednionej dla okresu 5 lat)",
+    "sy:updateFrequency": "1",
+    "dc:language": "pol (ISO 639-2 / ISO 639-3)",
+    "schema:contentType": "application/ld+json",
+    "schema:provider": {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Warszawa",
+        "postalCode": "02-362",
+        "streetAddress": "Bitwy Warszawskiej 1920 3"
+      },
+      "email": "api@gios.gov.pl",
+      "name": "Główny Inspektorat Ochrony Środowiska"
+    },
+    "dc:title": "Mapy rozkładów stężeń zanieczyszczeń",
+    "schema:datePublished": "03.11.2022",
+    "schema:keywords": "dane pomiarowe, wyniki pomiarów, stężenie, rozkład przestrzenny, powietrze, jakość powietrza, zanieczyszczenie powietrza, stacje pomiarowe, stanowiska pomiarowe, monitoring powietrza, Państwowy Monitoring Środowiska, środowisko, stan środowiska",
+    "sy:updatePeriod": "yearly",
+    "schema:isPartOf": "Państwowy Monitoring Środowiska, Jakość powietrza"
+  },
+  "links": {
+    "next": "https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2021&indicatorType=OZ&indicator=PM25_sr_roczna",
+    "last": "https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2021&indicatorType=OZ&indicator=PM25_sr_roczna",
+    "prev": "https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2021&indicatorType=OZ&indicator=PM25_sr_roczna",
+    "self": "https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2021&indicatorType=OZ&indicator=PM25_sr_roczna",
+    "first": "https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2021&indicatorType=OZ&indicator=PM25_sr_roczna"
+  },
+  "totalPages": 1
+}
