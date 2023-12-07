@@ -27,7 +27,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
       <div
         className={cx(
           "w-full h-full absolute top-0 rounded-full scale-0 left-0 bg-black opacity-0 duration-1000 delay-300 ",
-          showLounge && "opacity-[75%] scale-125"
+          showLounge && "opacity-[75%] scale-[300%]"
         )}></div>
       <div
         className="z-[1100] absolute left-8 top-8 p-1 bg-white rounded-full cursor-pointer"
