@@ -123,7 +123,13 @@ const ClientMap = () => {
               <Popup>
                 <div className="flex flex-col">
                   <span>{name}</span>
-                  <button onClick={() => onButtonClick(name)}>Zmień stacje</button>
+                  <button
+                    onClick={() => {
+                      onButtonClick(name);
+                      setShowLunge(true);
+                    }}>
+                    Zmień stacje
+                  </button>
                 </div>
               </Popup>
             </Marker>
