@@ -119,13 +119,13 @@ const ClientMap = () => {
     return {
       fillColor: generatePolygonColor(
         feature.properties.nazwa_wska as string,
-        feature.properties.wartosc as number
+        feature.properties.density as number
       ),
       weight: 0.3,
       opacity: 1,
       color: generatePolygonColor(
         feature.properties.nazwa_wska as string,
-        feature.properties.wartosc as number
+        feature.properties.density as number
       ),
       dashArray: "3",
       fillOpacity: 0.5,
@@ -171,7 +171,14 @@ const ClientMap = () => {
             data={{
               type: "FeatureCollection",
               // @ts-ignore
-              features: json.features,
+              features: json.features.map((f: any) => {
+                return {
+                  ...f,
+                  properties: {
+                    ...f.properties,
+                  },
+                };
+              }),
             }}
           />
         )}

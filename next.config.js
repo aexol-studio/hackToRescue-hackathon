@@ -2,7 +2,11 @@
 const nextConfig = {
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost"],
+      allowedOrigins: [
+        "localhost",
+        "hack-to-rescue-hackathon.vercel.app",
+        "api.hacktotherescue.aexol.work",
+      ],
     },
   },
 };

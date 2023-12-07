@@ -22,25 +22,23 @@ const options = {
 
 export const requestGeolocation = async () => {
   if (navigator.geolocation) {
-    navigator.permissions
-      .query({ name: "geolocation" })
-      .then(function (result) {
-        if (result.state === "granted") {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {},
-            (errors) => {},
-            options
-          );
-        } else if (result.state === "prompt") {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {},
-            (errors) => {},
-            options
-          );
-        } else if (result.state === "denied") {
-          toast.error("Geolokalizacja jest wyłączona");
-        }
-      });
+    navigator.permissions.query({ name: "geolocation" }).then(function (result) {
+      if (result.state === "granted") {
+        navigator.geolocation.getCurrentPosition(
+          position => {},
+          errors => {},
+          options
+        );
+      } else if (result.state === "prompt") {
+        navigator.geolocation.getCurrentPosition(
+          position => {},
+          errors => {},
+          options
+        );
+      } else if (result.state === "denied") {
+        toast.error("Geolokalizacja jest wyłączona");
+      }
+    });
   }
 
   const data = await new Promise<GeolocationPosition>((resolve, reject) => {
@@ -68,9 +66,7 @@ export const checkWhereLatLong = async (lat: number, long: number) => {
   }
 };
 
-export const doGeoLocation = (
-  geoLocation: GeolocationPosition
-): GeoLocation => ({
+export const doGeoLocation = (geoLocation: GeolocationPosition): GeoLocation => ({
   latitude: geoLocation.coords.latitude,
   longitude: geoLocation.coords.longitude,
   altitude: geoLocation.coords.altitude,
