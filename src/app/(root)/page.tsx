@@ -1,13 +1,14 @@
-import { Education } from "./_components/Education";
-import { Map } from "./_components/Map";
-import { ToogleEducation } from "./_components/ToogleEducation";
+import dynamic from "next/dynamic";
 
-export default function Home() {
+const DynamicMap = dynamic(() => import("./_components/Map"), {
+  ssr: false,
+  loading: () => <div>Loading map...</div>,
+});
+
+export default async function Home() {
   return (
     <section>
-      <Map />
-      <ToogleEducation />
-      <Education />
+      <DynamicMap />
     </section>
   );
 }

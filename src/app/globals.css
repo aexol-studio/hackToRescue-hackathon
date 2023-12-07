@@ -3,22 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --leaflet-tile-filter: brightness(0.6) invert(1) contrast(3)
+    hue-rotate(200deg) saturate(0.3) brightness(0.7) !important;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --leaflet-tile-filter: brightness(0.6) invert(1) contrast(3)
+      hue-rotate(200deg) saturate(0.3) brightness(0.7) !important;
   }
 }
 
+html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  width: 100%;
+  height: 100%;
+  background-color: #000;
 }
