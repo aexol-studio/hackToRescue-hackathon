@@ -45,45 +45,38 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(
-  ({ graphQLErrors, networkError, operation, forward }) => {
-    for (const err of graphQLErrors || []) {
-      if (
-        err.message.includes("You are not logged in") ||
-        err.message.includes("jwt expired")
-      ) {
-        if (operation.query.loc?.source.body.includes("refreshToken")) return;
-        // if (!getRefreshToken()) return;
-        const observable = new Observable<FetchResult<Record<string, unknown>>>(
-          (observer) => {
-            (async () => {
-              try {
-                // await refreshToken();
-                operation.setContext({
-                  ...operation.getContext(),
-                  headers: {
-                    ...operation.getContext().headers,
-                    // Authorization: getAccessToken(),
-                  },
-                });
-                const subscriber = {
-                  next: observer.next.bind(observer),
-                  error: observer.error.bind(observer),
-                  complete: observer.complete.bind(observer),
-                };
-                forward(operation).subscribe(subscriber);
-              } catch {
-                observer.error(err);
-              }
-            })();
+const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+  for (const err of graphQLErrors || []) {
+    if (err.message.includes("You are not logged in") || err.message.includes("jwt expired")) {
+      if (operation.query.loc?.source.body.includes("refreshToken")) return;
+      // if (!getRefreshToken()) return;
+      const observable = new Observable<FetchResult<Record<string, unknown>>>(observer => {
+        (async () => {
+          try {
+            // await refreshToken();
+            operation.setContext({
+              ...operation.getContext(),
+              headers: {
+                ...operation.getContext().headers,
+                // Authorization: getAccessToken(),
+              },
+            });
+            const subscriber = {
+              next: observer.next.bind(observer),
+              error: observer.error.bind(observer),
+              complete: observer.complete.bind(observer),
+            };
+            forward(operation).subscribe(subscriber);
+          } catch {
+            observer.error(err);
           }
-        );
-        return observable;
-      }
+        })();
+      });
+      return observable;
     }
-    if (networkError) console.error(networkError);
   }
-);
+  if (networkError) console.error(networkError);
+});
 
 export const client = new ApolloClient({
   uri,

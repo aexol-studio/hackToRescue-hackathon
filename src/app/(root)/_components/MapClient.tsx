@@ -4,12 +4,15 @@ import { useAppStore } from "@/stores";
 import { Minimap } from "./MiniMap";
 import { pickGoodIcon } from "./utils";
 import { generatePolygonColor } from "@/utils";
-import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import toast from "react-hot-toast";
 import { ScalableView } from "@/components/scalableView/ScalableView";
 
 const getLatestData = async () => {
-  const res = await fetch(`http://localhost:3000/api/getld?param=pm25-2019`);
+  const URL =
+    process.env.NODE_ENV === "development" ? "http://localhost:3000/" : process.env.NEXT_PUBLIC_URL;
+  if (!URL) throw new Error("No URL");
+  const res = await fetch(`${URL}api/getld?param=pm25-2019`);
   const data = await res.json();
   return data;
 };
