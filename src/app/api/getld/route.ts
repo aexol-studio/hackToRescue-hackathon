@@ -166,7 +166,7 @@ export async function GET(request: Request) {
       return selectedFeatures;
     };
 
-    transformedData.features = prioritizeFeatures(transformedData.features, 10);
+    transformedData.features = prioritizeFeatures(transformedData.features, 9);
 
     // const updatedResponseData = JSON.stringify(transformedData);
     // fs.writeFileSync(`${process.cwd()}/public/jsons/mapaa.jsonld`, updatedResponseData);
