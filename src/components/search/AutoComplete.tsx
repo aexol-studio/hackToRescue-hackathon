@@ -41,8 +41,6 @@ export const AutoCompleteSearch = () => {
   const [getCityAirQuality] = useLazyQuery(GET_CITY_AIR_QUALITY, {
     onCompleted: d => {
       // const reducedArr = d.getCityParameters.reduce(([acc,curr])=>)
-
-      console.log(d);
     },
   });
 

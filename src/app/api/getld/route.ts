@@ -2,39 +2,20 @@ import fs from "fs";
 
 const precision = 1;
 const files = {
-  "pm25-2019": {
-    name: "pm25-2019.jsonld",
-    values: {
-      min: 10,
-      max: 150,
-    },
-  },
   "pm25-2020": {
-    name: "pm25-2020.jsonld",
+    file: "pm25-2020.jsonld",
+    url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM25_sr_roczna`,
     values: {
-      min: 10,
+      min: 6.5,
       max: 150,
-    },
-  },
-  "pm10-2019": {
-    name: "pm10-2019.jsonld",
-    values: {
-      min: 10,
-      max: 25,
     },
   },
   "pm10-2020": {
-    name: "pm10-2020.jsonld",
+    file: "pm10-2020.jsonld",
+    url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM10_sr_roczna`,
     values: {
-      min: 10,
-      max: 25,
-    },
-  },
-  "pm10-2021": {
-    name: "pm10-2021.jsonld",
-    values: {
-      min: 10,
-      max: 25,
+      min: 6.5,
+      max: 150,
     },
   },
 };
@@ -49,15 +30,13 @@ export async function GET(request: Request) {
     if (!param) {
       return Response.json({ error: "No param" }, { status: 404 });
     }
-
     if (!fileToGet) {
       return Response.json({ error: "No such file" }, { status: 404 });
     }
 
-    const file = fs.readFileSync(`${process.cwd()}/public/jsons/${fileToGet.name}`, "utf8");
-    const data = JSON.parse(file) as {
-      type: string;
+    let data: {
       features: {
+        id: number;
         type: string;
         geometry: { type: string; coordinates: number[][][] };
         properties: {
@@ -67,7 +46,17 @@ export async function GET(request: Request) {
           nazwa_wska: string;
         };
       }[];
-    };
+    } = { features: [] };
+
+    if (fileToGet.url && fileToGet.url !== "") {
+      const response = await fetch(fileToGet.url);
+      data = await response.json();
+    } else if (fileToGet.file && fileToGet.file !== "") {
+      const file = fs.readFileSync(`${process.cwd()}/public/jsons/${fileToGet.file}`, "utf-8");
+      data = JSON.parse(file);
+    } else {
+      return Response.json({ error: "No file" }, { status: 404 });
+    }
 
     const groupedFeatures = {} as {
       [key: string]: {
@@ -122,9 +111,7 @@ export async function GET(request: Request) {
             coordinates: roundedCoordinates,
           },
         };
-      } else {
-        groupedFeatures[coordinatesKey].properties.density += feature.properties.wartosc;
-      }
+      } else groupedFeatures[coordinatesKey].properties.density += feature.properties.wartosc;
     });
 
     const transformedData = {
@@ -152,7 +139,6 @@ export async function GET(request: Request) {
         .sort((a, b) => b.properties.density - a.properties.density);
       let currentSize = 0;
       let selectedFeatures = [];
-
       for (const feature of sortedFeatures) {
         const featureSize = Buffer.from(JSON.stringify(feature)).length / (1024 * 1024);
         if (currentSize + featureSize <= maxSize) {
@@ -162,14 +148,13 @@ export async function GET(request: Request) {
           break;
         }
       }
-
       return selectedFeatures;
     };
 
     transformedData.features = prioritizeFeatures(transformedData.features, 9);
 
-    // const updatedResponseData = JSON.stringify(transformedData);
-    // fs.writeFileSync(`${process.cwd()}/public/jsons/mapaa.jsonld`, updatedResponseData);
+    const updatedResponseData = JSON.stringify(transformedData);
+    fs.writeFileSync(`${process.cwd()}/public/jsons/mapa.json`, updatedResponseData);
 
     return Response.json({ ...transformedData });
   } catch (e) {
