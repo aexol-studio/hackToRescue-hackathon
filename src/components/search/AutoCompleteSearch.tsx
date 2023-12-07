@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
@@ -6,6 +8,8 @@ import { X } from "lucide-react";
 import { useLazyQuery } from "@apollo/client";
 import { GET_CITY_AIR_QUALITY } from "@/graphql/queries";
 import { set } from "date-fns";
+import { GeoLocalizationButton } from "./GeoLocationButton";
+import { HoverInfo } from "./HoverInfo";
 
 export const AutoCompleteSearch = () => {
   const { searchResults, selectedStation, selectStation, searchValue, setSearchValue } =
@@ -46,34 +50,29 @@ export const AutoCompleteSearch = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
   return (
-    <div className="relative">
-      <X
-        className="text-[#FF7000] absolute right-2 top-1/2 z-10 -translate-y-1/2 cursor-pointer"
-        onClick={() => {
-          setSearchValue(null);
-          selectStation(null);
-        }}
-      />
-
+    <div className="relative z-[1000]">
+      <div className="absolute right-5 top-1/2 z-10 -translate-y-1/2 flex gap-2 items-center">
+        <HoverInfo infoText="Geolokalizacja">
+          <GeoLocalizationButton />
+        </HoverInfo>
+      </div>
       <input
         value={searchValue || ""}
         ref={inputRef}
         type="text"
-        placeholder="Wybierz stację..."
+        placeholder="Type or select your area"
         onChange={e => setSearchValue(e.target.value)}
         onFocus={() => {
           if (isSearchOpen) return;
           setIsSearchOpen(true);
         }}
         className={cx(
-          "text-black-300 border-[#FF7000] bg-light-900  hover-light-700 w-full rounded-lg border-[1px] px-[1.2rem] py-[0.8rem] transition-all duration-700 ease-in-out",
-          " focus:outline-none",
+          "text-black-300 bg-light-900 w-full rounded-3xl px-[1.2rem] py-[0.8rem] transition-all duration-700 ease-out",
+          "focus:outline-none",
           isSearchOpen && "rounded-b-none"
         )}
       />
-
       <div
         className={cx(
           "absolute top-[100%] grid max-h-[24rem] w-full  transition-all duration-700 ease-in-out",
@@ -82,21 +81,20 @@ export const AutoCompleteSearch = () => {
         <div
           ref={listRef}
           className={cx(
-            "border-[#FF7000] border-t-none z-10 h-full w-full overflow-hidden rounded-b-lg  shadow-lg",
+            "z-10 h-full w-full overflow-hidden rounded-b-3xl  shadow-lg",
             isSearchOpen ? "border border-t-0" : ""
           )}>
           <div
             className={cx(
-              "scrollbar-thumb-rounded-full bg-light-900 h-full w-full overflow-y-auto scrollbar-thin  scrollbar-thumb-[#FF7000]",
-              !!Object.entries(searchResults).length && "py-[0.4rem]"
+              "scrollbar-thumb-rounded-full bg-white h-full w-full overflow-y-auto scrollbar-thin  scrollbar-thumb-[#FF7000]"
             )}>
             {searchResults.map(({ country, location, name }, idx) => {
               return (
                 <div className={cx("flex flex-col")} key={name + idx}>
                   <div
                     className={cx(
-                      "text-dark-200 flex  flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-light-500",
-                      "bg-light-800",
+                      "text-dark-200 flex  flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200",
+                      "bg-white",
                       "cursor-pointer"
                     )}
                     onClick={async () => {

@@ -7,11 +7,7 @@ import { citySelector, weatherSelector } from "@/graphql/queries";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const data = await getInitialData();
 
   return (
@@ -20,9 +16,10 @@ export default async function RootLayout({
         <ApolloProvider>
           <AppStoreProvider
             {...{
+              showLounge: false,
               searchResults: data,
               stations: data,
-              scaleLounge:false,
+              scaleLounge: false,
               airQualities: {},
               airQuality: null,
               allowRotation: false,
@@ -37,8 +34,7 @@ export default async function RootLayout({
               visibility: true,
               isOpen: false,
               moveMap: undefined,
-            }}
-          >
+            }}>
             {children}
           </AppStoreProvider>
         </ApolloProvider>

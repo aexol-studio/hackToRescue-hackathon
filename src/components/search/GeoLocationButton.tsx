@@ -10,10 +10,7 @@ export const GeoLocalizationButton = () => {
   const { geoLocation } = useAppStore(({ geoLocation }) => ({ geoLocation }));
 
   return (
-    <button
-      onClick={requestGeolocation}
-      className="flex items-center justify-center"
-    >
+    <button onClick={requestGeolocation} className="flex items-center justify-center">
       <AnimatePresence>
         {geoLocation ? (
           <motion.div
@@ -21,8 +18,7 @@ export const GeoLocalizationButton = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className={cx("text-green-500")}
-          >
+            className={cx("text-green-500")}>
             <LocateFixed />
           </motion.div>
         ) : (
@@ -31,8 +27,7 @@ export const GeoLocalizationButton = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className={cx("text-red-500")}
-          >
+            className={cx("text-[#C63D3D]")}>
             <LocateFixed />
           </motion.div>
         )}
