@@ -54,13 +54,14 @@ const ClientMap = () => {
 
   const goToSelectedStation = useCallback(() => {
     if (selectedStation) {
-      const zoom = 9;
+      // const zoom = 9;
+   
       map?.setView(
         [selectedStation.location.lat, selectedStation.location.long],
         zoom,
         {
           animate: true,
-          duration: 0.5,
+          duration: 1,
           easeLinearity: 0.2,
         }
       );
@@ -68,6 +69,7 @@ const ClientMap = () => {
   }, [map, selectedStation]);
 
   useEffect(() => {
+    console.log(moveMap)
     if (selectedStation && moveMap === "station") goToSelectedStation();
   }, [selectedStation, moveMap]);
 
@@ -76,9 +78,10 @@ const ClientMap = () => {
     selectStation(name);
     await goTo("station");
   };
-  const onButtonClick = (name: string) => {
+  const onButtonClick =async (name: string) => {
     if (window.innerWidth < 640) close();
     selectStation(name);
+    await goTo("station");
   };
 
   const loadData = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -181,7 +184,7 @@ const ClientMap = () => {
           </form>
         )}
       </div>
-      <ScalableView show={!!selectedStation} />
+      {/* <ScalableView show={!!selectedStation} /> */}
     </>
   );
 };
