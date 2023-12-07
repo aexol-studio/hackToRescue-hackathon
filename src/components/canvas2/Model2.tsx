@@ -1,7 +1,7 @@
 import { Loader, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { animated, useSprings, useSpring } from "@react-spring/three";
-import React, { useRef, useState, useMemo, useEffect } from "react";
+import React, { useRef, useState, useMemo, useEffect, FC } from "react";
 import { Group, Mesh } from "three";
 import { useAppStore } from "@/stores";
 import { airQualityColors } from "@/constans";
@@ -10,7 +10,8 @@ import * as THREE from "three";
 useGLTF.preload(`/assets/models/model.glb`);
 useGLTF.preload(`/assets/models/111lungs.glb`);
 
-export const Model2 = () => {
+export const Model2: FC<{ test: boolean }> = ({ test }) => {
+  console.log(test);
   const { nodes } = useGLTF(`/assets/models/model.glb`) as any;
   // const { nodes: newNodes } = useGLTF(`/assets/models/111lungs.glb`);
   const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(
@@ -20,7 +21,10 @@ export const Model2 = () => {
       hoveredQualityIndex: state.hoveredQualityIndex,
     })
   );
-  const { scale } = useSpring({ scale: active ? 1.5 : 1 });
+  const vec = new THREE.Vector3();
+  const { scale } = useSpring({ scale: test ? 0.5 : 1 });
+  const { y } = useSpring({ y: test ? 0.3 : 0.2 });
+  // console.log(scale);
   const [colors, setColors] = useState({ old: "#fff", new: "#fff" });
   const groupRef = useRef<Group>(null);
   const modelMeshes: Mesh[] = useMemo(
@@ -45,10 +49,14 @@ export const Model2 = () => {
   // // console.log(newNodes);
   // console.log(modelMeshes2);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     if (!groupRef.current || allowRotation) return;
     groupRef.current.rotation.z += delta * 0.2;
+    // state.camera.lookAt(groupRef.current.position);
+    if (test) state.camera.position.lerp(vec.set(0, -2, 6), 0.1);
+    else state.camera.position.lerp(vec.set(0, 0, 6), 0.1);
     groupRef.current.updateMatrixWorld();
+    state.camera.updateProjectionMatrix();
   });
   const [opacities] = useSprings(
     10,
@@ -104,8 +112,8 @@ export const Model2 = () => {
 
   return (
     <>
-      <perspectiveCamera position={[0, 0, 30]} />
-      <group
+      <animated.group
+        scale={scale}
         castShadow
         ref={groupRef}
         dispose={null}
@@ -128,7 +136,7 @@ export const Model2 = () => {
             />
           </mesh>
         ))}
-      </group>
+      </animated.group>
     </>
   );
 };

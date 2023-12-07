@@ -1,9 +1,10 @@
 import { cx } from "@/utils";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Search } from "../search/Search";
 import { Canvas2 } from "../canvas2/Canvas2";
 import { YourLung } from "./YourLung";
 export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
+  const [test, setTest] = useState(false);
   return (
     <div
       className={cx(
@@ -11,9 +12,14 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
         show && "scale-100"
       )}
     >
-      <button className="absolute top- left-0 z-[100] bg-white">SCALE</button>
+      <button
+        onClick={() => setTest((p) => !p)}
+        className="absolute top- left-0 z-[100] bg-white"
+      >
+        SCALE
+      </button>
       <Search />
-      <Canvas2 />
+      <Canvas2 test={test} />
       <YourLung />
     </div>
   );

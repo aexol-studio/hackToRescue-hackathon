@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, Suspense, useEffect } from "react";
+import React, { useRef, Suspense, useEffect, FC } from "react";
 import { Canvas as FiberCanvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { OrbitControls as OrbitControlsRef } from "three-stdlib";
@@ -8,7 +8,7 @@ import { Model2 } from "./Model2";
 import { Loader } from "./Loader";
 import { useAppStore } from "@/stores";
 
-export const Canvas2 = () => {
+export const Canvas2: FC<{ test: boolean }> = ({ test }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const orbitControlsRef = useRef<OrbitControlsRef>(null);
   const { allowRotation } = useAppStore((state) => ({
@@ -39,7 +39,7 @@ export const Canvas2 = () => {
       />
       <ambientLight intensity={1.5} />
       <Suspense fallback={<Loader />}> </Suspense>
-      <Model2 />
+      <Model2 test={test} />
       <OrbitControls
         ref={orbitControlsRef}
         enabled={allowRotation}
