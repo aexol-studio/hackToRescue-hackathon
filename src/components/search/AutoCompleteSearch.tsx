@@ -56,10 +56,6 @@ export const AutoCompleteSearch = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside, { capture: false });
   }, []);
 
-  console.log("====================================");
-  console.log(searchResults.length);
-  console.log("====================================");
-
   return (
     <div ref={listRef} className="w-full h-[50px] z-[1200] ">
       <div className="bg-white rounded-3xl">
