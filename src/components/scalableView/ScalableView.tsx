@@ -32,8 +32,14 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
         <Search />
       </div>
       <Canvas2 />
-      <div className="absolute left-1/2 w-full max-w-[1200px] -translate-x-1/2 bottom-10 z-[1100] justify-center px-7">
+      <div className="absolute left-1/2 w-full -translate-x-1/2 bottom-10  justify-center px-7">
         <YourLung />
+      </div>
+      <div className="absolute top-1/2 -translate-y-1/2 right-6 bg-white p-10">
+        <div className="flex gap-2 items-center">
+          <span>Dzień</span>
+          <span className="text-2xl font-bold">1</span>
+        </div>
       </div>
     </div>
   );

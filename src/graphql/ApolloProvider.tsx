@@ -13,7 +13,6 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 const uri = process.env.NEXT_PUBLIC_API || "";
-console.log(uri);
 const httpLink = new HttpLink({ uri });
 
 const authLink = setContext((_, { headers }) => {

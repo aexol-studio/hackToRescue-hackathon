@@ -1,4 +1,4 @@
-import { Loader, useGLTF } from "@react-three/drei";
+import { Loader, useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { animated, useSprings, useSpring } from "@react-spring/three";
 import React, { useRef, useState, useMemo, useEffect, FC } from "react";
@@ -7,15 +7,17 @@ import { useAppStore } from "@/stores";
 import { airQualityColors } from "@/constans";
 import * as THREE from "three";
 
-useGLTF.preload(`/assets/models/onlylungs.glb`);
+useGLTF.preload(`/assets/models/breathe-test.glb`);
 
 export const Model2: FC = () => {
   const { scaleLounge, showLounge } = useAppStore(({ scaleLounge, showLounge }) => ({
     scaleLounge,
     showLounge,
   }));
-  const { nodes } = useGLTF(`/assets/models/onlylungs.glb`) as any;
-  // const { nodes: newNodes } = useGLTF(`/assets/models/111lungs.glb`);
+  const groupRef = useRef<Group>(null);
+  const { nodes, animations } = useGLTF(`/assets/models/breathe-test.glb`) as any;
+  const { actions } = useAnimations(animations, groupRef);
+
   const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(state => ({
     allowRotation: state.allowRotation,
     airQuality: state.airQuality,
@@ -26,7 +28,6 @@ export const Model2: FC = () => {
 
   // console.log(scale);
   const [colors, setColors] = useState({ old: "#ffffff00", new: "#fff" });
-  const groupRef = useRef<Group>(null);
   const modelMeshes: Mesh[] = useMemo(
     () =>
       Object.entries(nodes)
@@ -35,27 +36,15 @@ export const Model2: FC = () => {
     []
   );
 
-  // const modelMeshes2: Mesh[] = useMemo(
-  //   () =>
-  //     Object.entries(newNodes)
-  //       .map(([key, value]) =>
-  //         key.toLowerCase().includes("sculpt") ? value : null
-  //       )
-  //       .filter(Boolean) as Mesh[],
-  //   []
-  // );
-  // // console.log(newNodes);
-  // console.log(modelMeshes2);
-
   useFrame((state, delta) => {
     if (!groupRef.current || allowRotation) return;
     groupRef.current.rotation.z += delta * 0.2;
     // state.camera.lookAt(groupRef.current.position);
-    if (scaleLounge) state.camera.position.lerp(vec.set(0, -2, 6), 0.1);
+    if (scaleLounge) state.camera.position.lerp(vec.set(0, -2.2, 6), 0.1);
     else state.camera.position.lerp(vec.set(0, 0, 6), 0.1);
-
     groupRef.current.updateMatrixWorld();
     state.camera.updateProjectionMatrix();
+    // actions["lung2.stl.cleaner.materialmerger.glesAction"]?.play();
   });
   const [opacities] = useSprings(
     10,
@@ -69,25 +58,24 @@ export const Model2: FC = () => {
     [showLounge]
   );
 
-  const zoomRef = useRef(1);
-  useEffect(() => {
-    if (hoveredQualityIndex !== undefined && hoveredQualityIndex !== -1) {
-      setColors(p => ({
-        new: airQualityColors[hoveredQualityIndex as keyof typeof airQualityColors],
-        old: p.new,
-      }));
-      return;
-    } else if ((airQuality?.st?.indexLevel?.id ?? -1) < 0)
-      setColors(p => ({
-        old: "#fff",
-        new: "#fff",
-      }));
-    else
-      setColors(p => ({
-        new: airQualityColors[airQuality?.st.indexLevel?.id as keyof typeof airQualityColors],
-        old: p.new,
-      }));
-  }, [airQuality, , hoveredQualityIndex]);
+  // useEffect(() => {
+  //   if (hoveredQualityIndex !== undefined && hoveredQualityIndex !== -1) {
+  //     setColors(p => ({
+  //       new: airQualityColors[hoveredQualityIndex as keyof typeof airQualityColors],
+  //       old: p.new,
+  //     }));
+  //     return;
+  //   } else if ((airQuality?.st?.indexLevel?.id ?? -1) < 0)
+  //     setColors(p => ({
+  //       old: "#fff",
+  //       new: "#fff",
+  //     }));
+  //   else
+  //     setColors(p => ({
+  //       new: airQualityColors[airQuality?.st.indexLevel?.id as keyof typeof airQualityColors],
+  //       old: p.new,
+  //     }));
+  // }, [airQuality, , hoveredQualityIndex]);
 
   useEffect(() => {
     if (groupRef.current) {
@@ -118,7 +106,7 @@ export const Model2: FC = () => {
         {opacities.map((color, i) => (
           <mesh key={i} scale={0.012} castShadow receiveShadow geometry={modelMeshes[i].geometry}>
             {/* @ts-ignore */}
-            <animated.meshToonMaterial color={"#FFF"} opacity={color.color} transparent />
+            <animated.meshToonMaterial color={"#fff"} opacity={color.color} transparent />
           </mesh>
         ))}
       </animated.group>
