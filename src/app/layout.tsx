@@ -1,12 +1,13 @@
-import { Inter } from "next/font/google";
+import { Inter, Jost } from "next/font/google";
 import "./globals.css";
+import "keen-slider/keen-slider.min.css";
 import { ApolloProvider } from "@/graphql/ApolloProvider";
 import { AppStoreProvider } from "@/stores/AppStoreProvider";
 import { Chain } from "@/graphql/zeus";
 import { citySelector, weatherSelector } from "@/graphql/queries";
 import { NewAutoCompleteResult } from "@/types";
 
-const inter = Inter({ subsets: ["latin"] });
+const jost = Jost({ subsets: ["latin"] });
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const data = await getInitialData();
@@ -32,7 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   );
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
+      <body className={`${jost.className}`}>
         <ApolloProvider>
           {/* @ts-ignore */}
           <AppStoreProvider
