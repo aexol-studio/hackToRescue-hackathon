@@ -2,6 +2,14 @@ import fs from "fs";
 
 const precision = 1;
 const files = {
+  "pm10-2019": {
+    file: "pm10-2019.jsonld",
+    // url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2019&indicatorType=OZ&indicator=PM10_sr_roczna`,
+    values: {
+      min: 6.5,
+      max: 150,
+    },
+  },
   "pm25-2020": {
     file: "pm25-2020.jsonld",
     // url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM25_sr_roczna`,
@@ -12,6 +20,14 @@ const files = {
   },
   "pm10-2020": {
     file: "pm10-2020.jsonld",
+    // url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM10_sr_roczna`,
+    values: {
+      min: 6.5,
+      max: 150,
+    },
+  },
+  "pm25-2019": {
+    file: "pm25-2019.jsonld",
     // url: `https://api.gios.gov.pl/pjp-api/v1/rest/concentration/getDistributionsOfConcentrationsMap?year=2020&indicatorType=OZ&indicator=PM10_sr_roczna`,
     values: {
       min: 6.5,
@@ -133,7 +149,7 @@ export async function GET(request: Request) {
     const prioritizeFeatures = (features: any[], maxSize: number) => {
       const sortedFeatures = features
         .slice()
-        .sort((a, b) => b.properties.density - a.properties.density);
+        .sort((a, b) => a.properties.density - b.properties.density);
       let currentSize = 0;
       let selectedFeatures = [];
       for (const feature of sortedFeatures) {
@@ -149,6 +165,8 @@ export async function GET(request: Request) {
     };
 
     transformedData.features = prioritizeFeatures(transformedData.features, 7);
+    // fs.writeFileSync(`${process.cwd()}/public/jsons/test.json`, JSON.stringify(transformedData));
+
     return Response.json({ ...transformedData });
   } catch (e) {
     return Response.json({ error: "Server error" }, { status: 500 });

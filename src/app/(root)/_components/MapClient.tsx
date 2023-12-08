@@ -12,7 +12,7 @@ const getLatestData = async () => {
   const URL =
     process.env.NODE_ENV === "development" ? "http://localhost:3000/" : process.env.NEXT_PUBLIC_URL;
   if (!URL) throw new Error("No URL");
-  const res = await fetch(`${URL}api/getld?param=pm25-2020`);
+  const res = await fetch(`${URL}api/getld?param=pm10-2019`);
   const data = await res.json();
   return data;
 };
@@ -28,6 +28,7 @@ const ClientMap = () => {
     setEducationOpen,
     moveMap,
     setShowLunge,
+    setIsMapMoving,
   } = useAppStore(state => ({
     selectedStation: state.selectedStation,
     setEducationOpen: state.setEducationOpen,
@@ -36,6 +37,8 @@ const ClientMap = () => {
     stations: state.stations,
     moveMap: state.moveMap,
     setShowLunge: state.setShowLunge,
+    isMapMoving: state.isMapMoving,
+    setIsMapMoving: state.setIsMapMoving,
   }));
 
   useEffect(() => {
@@ -56,12 +59,24 @@ const ClientMap = () => {
     setPosition(map?.getCenter());
   }, [map]);
 
+  const onMoveStart = useCallback(() => {
+    setIsMapMoving(true);
+  }, [map]);
+
+  const onMoveEnd = useCallback(() => {
+    setIsMapMoving(false);
+  }, [map]);
+
   useEffect(() => {
     map?.on("move", onMove);
     map?.on("zoom", onZoom);
+    map?.on("movestart", onMoveStart);
+    map?.on("moveend", onMoveEnd);
     return () => {
       map?.off("move", onMove);
       map?.off("zoom", onZoom);
+      map?.off("movestart", onMoveEnd);
+      map?.off("moveend", onMoveEnd);
     };
   }, [map]);
 
@@ -143,19 +158,24 @@ const ClientMap = () => {
         fadeAnimation
         className="h-full w-full"
         center={[51.91, 19.14]}
-        zoom={5.5}
-        maxZoom={9.5}
+        zoom={7}
+        maxZoom={9}
         minZoom={5.5}
         zoomControl={false}
+        maxBounds={[
+          [56.851535159245, 26.484375],
+          [56.851535159245, 12.765625],
+          [47.496674527470455, 17.765625],
+          [47.496674527470455, 25.484375],
+        ]}
         ref={setMap}>
         {stations.map(({ name, country, location: { lat, long }, weather }, idx) => {
-          const isSelected = selectedStation?.name === name;
           return (
             <Marker
               key={name + idx}
               eventHandlers={{ dblclick: async () => await dblclick(name) }}
               opacity={true ? 0.8 : 0.5}
-              icon={pickGoodIcon(isSelected ? "selected" : "default")}
+              icon={pickGoodIcon(`default`)}
               position={[lat, long]}>
               <Popup>
                 <div className="flex flex-col">
@@ -174,19 +194,12 @@ const ClientMap = () => {
             data={{
               type: "FeatureCollection",
               // @ts-ignore
-              features: json.features.map((f: any) => {
-                return {
-                  ...f,
-                  properties: {
-                    ...f.properties,
-                  },
-                };
-              }),
+              features: json.features,
             }}
           />
         )}
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution={`&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors. Presented information's on map are from 2019. Aexol`}
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
       </MapContainer>
@@ -196,29 +209,6 @@ const ClientMap = () => {
   return (
     <>
       <div className="h-screen w-screen fixed top-0 left-0 ">{display}</div>
-      <div className="text-sm w-[160px] hidden sm:flex flex-col gap-2 p-4 absolute bottom-5 left-5 text-black bg-white rounded z-50">
-        <p className="flex justify-between">
-          <span>latitude:</span>
-          <span> {position ? position.lat.toFixed(2) : 51.91}</span>
-        </p>
-        <p className="flex justify-between">
-          <span>longitude:</span>
-          <span>{position ? position.lng.toFixed(2) : 19.14}</span>
-        </p>
-        <form onSubmit={loadData}>
-          <select name="param">
-            {options.map(d => {
-              const [param, year] = d.split("-");
-              return (
-                <option key={d} value={d}>
-                  {param} {year}
-                </option>
-              );
-            })}
-          </select>
-          {loading ? <p>loading...</p> : <button type="submit">load data</button>}
-        </form>
-      </div>
       <ScalableView show={!!selectedStation} />
     </>
   );

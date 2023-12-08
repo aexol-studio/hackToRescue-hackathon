@@ -10,6 +10,7 @@ export type NewAutoCompleteResult = {
   stations: { lat: number; lon: number }[];
 };
 export interface AppStoreProps {
+  isMapMoving: boolean;
   educationOpen: boolean;
   loading: boolean;
   qualityLoading: boolean;
@@ -48,6 +49,8 @@ export interface AppStoreState extends AppStoreProps {
   setScaleLounge: (state: boolean) => void;
   setShowLunge: (state: boolean) => void;
   setNewAutoCompleteResult: (newAutoCompleteResult: NewAutoCompleteResult | null) => void;
+  initGeoLocation: () => Promise<void>;
+  setIsMapMoving: (isMapMoving: boolean) => void;
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
@@ -57,6 +60,21 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
     const open = () => set({ isOpen: true });
     const close = () => set({ isOpen: false });
     const toggle = () => set(state => ({ isOpen: !state.isOpen }));
+
+    const setIsMapMoving = (isMapMoving: boolean) => set({ isMapMoving });
+
+    const initGeoLocation = async () => {
+      try {
+        const geoLocation = await requestGeolocation();
+        if (!geoLocation) return;
+        const location = await checkWhereLatLong(geoLocation.latitude, geoLocation.longitude);
+        if (location) setSearchValue(location.address.city);
+        set({ geoLocation: geoLocation, location });
+      } catch (e) {
+        console.error(e);
+        set({ geoLocation: null, location: null });
+      }
+    };
 
     const goTo = async (where: MoveMap) => {
       set({ moveMap: where });
@@ -131,6 +149,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       set({ newAutoCompleteResult });
 
     return {
+      isMapMoving: false,
       isOpen: false,
       moveMap: undefined,
       visibility: true,
@@ -166,6 +185,8 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       setScaleLounge,
       setShowLunge,
       setNewAutoCompleteResult,
+      initGeoLocation,
+      setIsMapMoving,
       ...initProps,
     };
   });
