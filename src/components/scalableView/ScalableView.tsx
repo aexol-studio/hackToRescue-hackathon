@@ -110,7 +110,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
             .map((_, i) => (
               <span
                 className={cx(
-                  "text-base text-center hover:bg-light-800 p-[10px] bg-white rounded-[8px] font-bold",
+                  "text-base text-center hover:bg-light-800 p-1 md:p-[10px] bg-white rounded-[8px] font-bold",
                   openSelect.value === i + 1 && "bg-[#a8a8a8]"
                 )}
                 key={i}
