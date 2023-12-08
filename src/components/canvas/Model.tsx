@@ -8,7 +8,7 @@ import { airQualityColors } from "@/constans";
 useGLTF.preload(`/assets/models/breathe-test.glb`);
 
 export const Model = () => {
-  const { nodes, animations } = useGLTF(`/assets/models/breathe-test.glb`) as any;
+  const { nodes, animations } = useGLTF(`/assets/models/newday.glb`) as any;
   const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(state => ({
     allowRotation: state.allowRotation,
     airQuality: state.airQuality,

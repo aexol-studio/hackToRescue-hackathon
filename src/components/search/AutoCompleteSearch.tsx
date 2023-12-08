@@ -81,7 +81,7 @@ export const AutoCompleteSearch = () => {
           <div
             style={{ height: `${isSearchOpen ? `${searchResults.length * 37}px` : "0"}` }}
             className={cx(
-              "transition-all duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin max-h-[256px] overflow-y-auto"
+              "transition-all duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin max-h-[120px] lg:max-h-[256px] overflow-y-auto"
             )}>
             {searchResults.map((option, idx) => {
               const { name } = option;
