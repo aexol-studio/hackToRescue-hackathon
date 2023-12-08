@@ -31,8 +31,8 @@ export const Canvas2: FC = () => {
 
   return (
     <FiberCanvas ref={canvasRef}>
-      <directionalLight castShadow position={[1, 2, 3]} intensity={1.5} shadow-normalBias={0.04} />
-      <ambientLight intensity={0} />
+      <directionalLight castShadow position={[1, 2, 3]} intensity={0.7} shadow-normalBias={0.04} />
+      <ambientLight intensity={0.1} />
       <Suspense fallback={<Loader />}>
         <Model2 />
       </Suspense>

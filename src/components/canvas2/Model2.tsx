@@ -4,7 +4,7 @@ import { animated, useSprings, useSpring } from "@react-spring/three";
 import React, { useRef, useState, useMemo, useEffect, FC } from "react";
 import { Group, Mesh } from "three";
 import { useAppStore } from "@/stores";
-import { airQualityColors } from "@/constans";
+
 import * as THREE from "three";
 import { generateLungsColor } from "@/utils";
 
@@ -22,7 +22,7 @@ export const Model2: FC = () => {
   const { nodes, animations } = useGLTF(`/assets/models/newday.glb`) as any;
   const { actions } = useAnimations(animations, groupRef);
 
-  const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(state => ({
+  const { allowRotation } = useAppStore(state => ({
     allowRotation: state.allowRotation,
     airQuality: state.airQuality,
     hoveredQualityIndex: state.hoveredQualityIndex,
@@ -31,7 +31,7 @@ export const Model2: FC = () => {
   const { scale } = useSpring({ scale: scaleLounge ? 0.5 : 1, delay: 0 });
 
   console.log(animations);
-  const [colors, setColors] = useState({ old: "#CCCCCC", new: "#CCCCCC" });
+  const [colors, setColors] = useState({ old: "#fff", new: "#fff" });
   const modelMeshes: Mesh[] = useMemo(
     () =>
       Object.entries(nodes)
@@ -55,8 +55,8 @@ export const Model2: FC = () => {
 
     i => ({
       delay: 100 * i,
-      from: { opacity: showLounge ? 0 : 1, color: colors.old },
-      to: { opacity: showLounge ? 1 : 0, color: colors.new },
+      from: { opacity: showLounge ? 0 : 0.8, color: colors.old },
+      to: { opacity: showLounge ? 0.8 : 0, color: colors.new },
     }),
     [showLounge, lungPollution]
   );
@@ -64,10 +64,10 @@ export const Model2: FC = () => {
   useEffect(() => {
     if (showLounge)
       setColors(p => ({
-        new: generateLungsColor((lungPollution ?? 0) * 100) ?? "#CCCCCC",
+        new: generateLungsColor((lungPollution ?? 0) * 100) ?? "#fff",
         old: p.new,
       }));
-    else setColors({ new: "#CCCCCC", old: "#CCCCCC" });
+    else setColors({ new: "#fff", old: "#fff" });
   }, [lungPollution, showLounge]);
 
   useEffect(() => {

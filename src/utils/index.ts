@@ -147,23 +147,23 @@ export const generatePolygonColor = (key: string, density: number) => {
 };
 
 export const generateLungsColor = (num: number) => {
+  if (num <= 10) return "#fff";
+  if (num > 10 && num <= 20) return "#e6e6e6";
+  if (num > 20 && num <= 30) return "#ddd";
+  if (num > 30 && num <= 40) return "#c2c2c2";
+
+  if (num > 40 && num <= 50) return "#bbb";
+  if (num > 60 && num <= 70) return "#aaa";
+  if (num > 70 && num <= 80) return "#878787";
+  if (num > 80 && num < 90) return "#555";
+  return "#111";
   // if (num <= 10) return "#D9D9D9";
-  // if (num > 10 && num <= 20) return "#CCCCCC";
-  // if (num > 20 && num <= 30) return "#B3B3B3";
-  // if (num > 30 && num <= 40) return "#8C8C8C";
+  // if (num > 10 && num <= 20) return "#F0D759";
+  // if (num > 20 && num <= 30) return "#F09859";
+  // if (num > 30 && num <= 40) return "#F05998";
 
-  // if (num > 40 && num <= 50) return "#616161";
-  // if (num > 60 && num <= 70) return "#595959";
-  // if (num > 70 && num <= 80) return "#404040";
-  // if (num > 90) return "#333333";
-
-  if (num <= 10) return "#D9D9D9";
-  if (num > 10 && num <= 20) return "#F0D759";
-  if (num > 20 && num <= 30) return "#F09859";
-  if (num > 30 && num <= 40) return "#F05998";
-
-  if (num > 40 && num <= 50) return "#F25AD9";
-  if (num > 60 && num <= 70) return "#CA59F0";
-  if (num > 70 && num <= 80) return "#8B59F0";
-  if (num > 90) return "#000";
+  // if (num > 40 && num <= 50) return "#F25AD9";
+  // if (num > 60 && num <= 70) return "#CA59F0";
+  // if (num > 70 && num <= 80) return "#8B59F0";
+  // if (num > 90) return "#000";
 };
