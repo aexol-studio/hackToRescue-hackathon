@@ -51,68 +51,7 @@ export const AutoCompleteSearch = () => {
   });
   const [getCityAirQuality] = useLazyQuery(GET_CITY_AIR_QUALITY, {
     onCompleted: d => {
-      const reducedArr = d.getCityParameters.reduce(
-        (acc, curr) => {
-          if (curr.kind === "AUTOMATIC") {
-            curr.parameters.forEach(d => {
-              const p = {
-                time: d.time,
-                no2: d.no2 ? -d.no2 : 0,
-                o3: d.o3 ? -d.o3 : 0,
-                pm1: d.pm1 ? -d.pm1 : 0,
-                pm2p5: d.pm2p5 ? -d.pm2p5 : 0,
-                pm10: d.pm10 ? -d.pm10 : 0,
-                pm25: d.pm25 ? -d.pm25 : 0,
-                so2: d.so2 ? -d.so2 : 0,
-              };
-              acc.AUTOMATIC.push(p);
-            });
-          }
-
-          if (curr.kind === "OPEN_WEATHER") {
-            curr.parameters.forEach(d => {
-              const p = {
-                time: d.time,
-                no2: d.no2 ? -d.no2 : 0,
-                o3: d.o3 ? -d.o3 : 0,
-                pm1: d.pm1 ? -d.pm1 : 0,
-                pm2p5: d.pm2p5 ? -d.pm2p5 : 0,
-                pm10: d.pm10 ? -d.pm10 : 0,
-                pm25: d.pm25 ? -d.pm25 : 0,
-                so2: d.so2 ? -d.so2 : 0,
-              };
-              acc.OPEN_WEATHER.push(p);
-            });
-          }
-          if (curr.kind === "MANUAL") {
-            curr.parameters.forEach(d => {
-              const p = {
-                time: d.time,
-                no2: d.no2 ? -d.no2 : 0,
-                o3: d.o3 ? -d.o3 : 0,
-                pm1: d.pm1 ? -d.pm1 : 0,
-                pm2p5: d.pm2p5 ? -d.pm2p5 : 0,
-                pm10: d.pm10 ? -d.pm10 : 0,
-                pm25: d.pm25 ? -d.pm25 : 0,
-                so2: d.so2 ? -d.so2 : 0,
-              };
-              acc.MANUAL.push(p);
-            });
-          }
-          return acc;
-        },
-        {
-          AUTOMATIC: [],
-          OPEN_WEATHER: [],
-          MANUAL: [],
-        } as {
-          AUTOMATIC: any;
-          OPEN_WEATHER: any;
-          MANUAL: any;
-        }
-      );
-
-      setChartData(reducedArr);
+      // const reducedArr = d.getCityParameters.reduce(([acc,curr])=>)
     },
   });
 

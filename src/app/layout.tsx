@@ -1,16 +1,15 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ApolloProvider } from "@/graphql/ApolloProvider";
-import { AppStoreProvider, useAppStore } from "@/stores/AppStoreProvider";
+import { AppStoreProvider } from "@/stores/AppStoreProvider";
 import { Chain } from "@/graphql/zeus";
-import { citySelector, weatherSelector } from "@/graphql/queries";
+import { citySelector } from "@/graphql/queries";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const data = await getInitialData();
-  console.log(data);
-  const searchREsults = Object.values(
+  const searchResults = Object.values(
     data.reduce((acc, curr) => {
       if (acc[curr.name.trim()])
         acc[curr.name.trim()] = {
@@ -36,10 +35,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* @ts-ignore */}
           <AppStoreProvider
             {...{
-              initialSearchResults: searchREsults,
-              searchResults: searchREsults,
+              initialSearchResults: searchResults,
+              searchResults: searchResults,
               showLounge: false,
+<<<<<<< HEAD
 
+=======
+>>>>>>> ee9efacc6ed401fb47ff9eb121ffcd9b2894f6b3
               stations: data,
               scaleLounge: false,
               airQualities: {},
@@ -56,7 +58,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               visibility: true,
               isOpen: false,
               moveMap: undefined,
+<<<<<<< HEAD
 
+=======
+>>>>>>> ee9efacc6ed401fb47ff9eb121ffcd9b2894f6b3
               newAutoCompleteResult: null,
             }}>
             {children}

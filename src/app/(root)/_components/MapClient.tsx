@@ -91,7 +91,7 @@ const ClientMap = () => {
     selectStation(name);
   };
 
-  const data = ["none", "pm25-2020", "pm10-2020"];
+  const options = ["none", "pm25-2020", "pm10-2020"];
   const loadData = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -207,7 +207,7 @@ const ClientMap = () => {
         </p>
         <form onSubmit={loadData}>
           <select name="param">
-            {data.map(d => {
+            {options.map(d => {
               const [param, year] = d.split("-");
               return (
                 <option key={d} value={d}>
