@@ -27,12 +27,11 @@ export const airQualitiesIndexSelector = Selector("Parameters")({
 });
 
 export const weatherInfo = Selector("Weather")({
-  main: true,
-  description: true,
   temp: true,
-  feelTemp: true,
-  humidity: true,
   clouds: true,
+  windSpeed: true,
+  pressure: true,
+  humidity: true,
 });
 
 export type WeatherType = InputType<GraphQLTypes["Weather"], typeof weatherSelector>;
@@ -57,9 +56,17 @@ export const GET_CITY_AIR_QUALITY = typedQuery({
       city: $("city", "String!"),
       startDate: $("startDate", "String!"),
       endDate: $("endDate", "String!"),
+      interval: $("interval", "Int"),
     },
 
-    { city: true, stationId: true, parameters: airQualitiesIndexSelector },
+    { city: true, stationId: true, kind: true, parameters: airQualitiesIndexSelector },
+  ],
+});
+
+export const GET_WEATHER = typedQuery({
+  getRealTimeWeather: [
+    { lat: $("lat", "Float!"), long: $("long", "Float!"), city: $("city", "String!") },
+    weatherInfo,
   ],
 });
 

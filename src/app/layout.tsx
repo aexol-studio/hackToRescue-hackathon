@@ -39,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               initialSearchResults: searchREsults,
               searchResults: searchREsults,
               showLounge: false,
-              searchResults: data,
+
               stations: data,
               scaleLounge: false,
               airQualities: {},
@@ -56,11 +56,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               visibility: true,
               isOpen: false,
               moveMap: undefined,
-<<<<<<< HEAD
-              showLounge: false,
+
               newAutoCompleteResult: null,
-=======
->>>>>>> c2d094e766e885819452fde9284a28a2a0d2de68
             }}>
             {children}
           </AppStoreProvider>

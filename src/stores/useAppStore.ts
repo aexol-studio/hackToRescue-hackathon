@@ -3,6 +3,13 @@ import { AirQuality, GeoLocation, LocationData } from "@/types";
 import { checkWhereLatLong, requestGeolocation } from "@/utils";
 import { createStore } from "zustand";
 type MoveMap = "station" | undefined;
+export type WeatherType = {
+  clouds?: number;
+  humidity?: number;
+  pressure: number;
+  temp: number;
+  windSpeed: number;
+};
 export type NewAutoCompleteResult = {
   name: string;
   state: string;
@@ -30,6 +37,8 @@ export interface AppStoreProps {
   scaleLounge: boolean;
   showLounge: boolean;
   newAutoCompleteResult: NewAutoCompleteResult | null;
+  chartData?: { AUTOMATIC: any; OPEN_WEATHER: any; MANUAL: any } | null;
+  weather: WeatherType | null;
 }
 
 export interface AppStoreState extends AppStoreProps {
@@ -48,10 +57,12 @@ export interface AppStoreState extends AppStoreProps {
   setScaleLounge: (state: boolean) => void;
   setShowLunge: (state: boolean) => void;
   setNewAutoCompleteResult: (newAutoCompleteResult: NewAutoCompleteResult | null) => void;
+  setChartData: (data: { AUTOMATIC: any; OPEN_WEATHER: any; MANUAL: any } | null) => void;
+  setWeather: (weather: WeatherType | null) => void;
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
-
+``;
 export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
   createStore<AppStoreState>()((set, get) => {
     const open = () => set({ isOpen: true });
@@ -129,7 +140,9 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
 
     const setNewAutoCompleteResult = (newAutoCompleteResult: NewAutoCompleteResult | null) =>
       set({ newAutoCompleteResult });
-
+    const setChartData = (chartData: { AUTOMATIC: any; OPEN_WEATHER: any; MANUAL: any } | null) =>
+      set({ chartData });
+    const setWeather = (weather: WeatherType | null) => set({ weather });
     return {
       isOpen: false,
       moveMap: undefined,
@@ -151,6 +164,10 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       showLounge: false,
       newAutoCompleteResult: null,
       initialSearchResults: [],
+      charData: [],
+      weather: null,
+      setWeather,
+      setChartData,
       close,
       goTo,
       open,

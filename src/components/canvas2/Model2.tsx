@@ -51,7 +51,7 @@ export const Model2: FC = () => {
     if (!groupRef.current || allowRotation) return;
     groupRef.current.rotation.z += delta * 0.2;
     // state.camera.lookAt(groupRef.current.position);
-    if (scaleLounge) state.camera.position.lerp(vec.set(0, -2, 6), 0.1);
+    if (scaleLounge) state.camera.position.lerp(vec.set(0, -2.2, 6), 0.1);
     else state.camera.position.lerp(vec.set(0, 0, 6), 0.1);
 
     groupRef.current.updateMatrixWorld();
@@ -69,7 +69,6 @@ export const Model2: FC = () => {
     [showLounge]
   );
 
-  const zoomRef = useRef(1);
   useEffect(() => {
     if (hoveredQualityIndex !== undefined && hoveredQualityIndex !== -1) {
       setColors(p => ({

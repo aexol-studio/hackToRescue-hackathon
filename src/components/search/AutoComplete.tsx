@@ -1,23 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
-import { NewAutoCompleteResult, useAppStore } from "@/stores";
+import { NewAutoCompleteResult, WeatherType, useAppStore } from "@/stores";
 import { X } from "lucide-react";
 import { useLazyQuery } from "@apollo/client";
-import { GET_CITY_AIR_QUALITY } from "@/graphql/queries";
-import { set } from "date-fns";
+import { GET_CITY_AIR_QUALITY, GET_WEATHER } from "@/graphql/queries";
+import { set, sub } from "date-fns";
 
 export const AutoCompleteSearch = () => {
   const {
     searchResults,
-    selectedStation,
     selectStation,
     searchValue,
     setSearchValue,
     newAutoCompleteResult,
     setNewAutoCompleteResult,
+    setChartData,
+    setScaleLounge,
+    setWeather,
   } = useAppStore(
     ({
+      setWeather,
       searchResults,
       selectStation,
       selectedStation,
@@ -25,7 +28,10 @@ export const AutoCompleteSearch = () => {
       setSearchValue,
       newAutoCompleteResult,
       setNewAutoCompleteResult,
+      setChartData,
+      setScaleLounge,
     }) => ({
+      setWeather,
       searchResults,
       selectStation,
       selectedStation,
@@ -33,16 +39,80 @@ export const AutoCompleteSearch = () => {
       setSearchValue,
       newAutoCompleteResult,
       setNewAutoCompleteResult,
+      setChartData,
+      setScaleLounge,
     })
   );
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [getWeather] = useLazyQuery(GET_WEATHER, {
+    onCompleted: d => setWeather(d.getRealTimeWeather as WeatherType),
+  });
   const [getCityAirQuality] = useLazyQuery(GET_CITY_AIR_QUALITY, {
     onCompleted: d => {
-      // const reducedArr = d.getCityParameters.reduce(([acc,curr])=>)
+      const reducedArr = d.getCityParameters.reduce(
+        (acc, curr) => {
+          if (curr.kind === "AUTOMATIC") {
+            curr.parameters.forEach(d => {
+              const p = {
+                time: d.time,
+                no2: d.no2 ? -d.no2 : 0,
+                o3: d.o3 ? -d.o3 : 0,
+                pm1: d.pm1 ? -d.pm1 : 0,
+                pm2p5: d.pm2p5 ? -d.pm2p5 : 0,
+                pm10: d.pm10 ? -d.pm10 : 0,
+                pm25: d.pm25 ? -d.pm25 : 0,
+                so2: d.so2 ? -d.so2 : 0,
+              };
+              acc.AUTOMATIC.push(p);
+            });
+          }
 
-      console.log(d);
+          if (curr.kind === "OPEN_WEATHER") {
+            curr.parameters.forEach(d => {
+              const p = {
+                time: d.time,
+                no2: d.no2 ? -d.no2 : 0,
+                o3: d.o3 ? -d.o3 : 0,
+                pm1: d.pm1 ? -d.pm1 : 0,
+                pm2p5: d.pm2p5 ? -d.pm2p5 : 0,
+                pm10: d.pm10 ? -d.pm10 : 0,
+                pm25: d.pm25 ? -d.pm25 : 0,
+                so2: d.so2 ? -d.so2 : 0,
+              };
+              acc.OPEN_WEATHER.push(p);
+            });
+          }
+          if (curr.kind === "MANUAL") {
+            curr.parameters.forEach(d => {
+              const p = {
+                time: d.time,
+                no2: d.no2 ? -d.no2 : 0,
+                o3: d.o3 ? -d.o3 : 0,
+                pm1: d.pm1 ? -d.pm1 : 0,
+                pm2p5: d.pm2p5 ? -d.pm2p5 : 0,
+                pm10: d.pm10 ? -d.pm10 : 0,
+                pm25: d.pm25 ? -d.pm25 : 0,
+                so2: d.so2 ? -d.so2 : 0,
+              };
+              acc.MANUAL.push(p);
+            });
+          }
+          return acc;
+        },
+        {
+          AUTOMATIC: [],
+          OPEN_WEATHER: [],
+          MANUAL: [],
+        } as {
+          AUTOMATIC: any;
+          OPEN_WEATHER: any;
+          MANUAL: any;
+        }
+      );
+
+      setChartData(reducedArr);
     },
   });
 
@@ -63,6 +133,8 @@ export const AutoCompleteSearch = () => {
           setSearchValue(null);
           selectStation(null);
           setNewAutoCompleteResult(null);
+          setChartData(null);
+          setScaleLounge(false);
         }}
       />
 
@@ -96,7 +168,7 @@ export const AutoCompleteSearch = () => {
           )}>
           <div
             className={cx(
-              "scrollbar-thumb-rounded-full bg-light-900 h-full w-full overflow-y-auto scrollbar-thin  scrollbar-thumb-[#FF7000]",
+              "scrollbar-thumb-rounded-full bg-light-900 h-full w-full z-50 overflow-y-auto scrollbar-thin  scrollbar-thumb-[#FF7000]",
               !!Object.entries(searchResults).length && "py-[0.4rem]"
             )}>
             {searchResults?.map((option, idx) => {
@@ -114,17 +186,32 @@ export const AutoCompleteSearch = () => {
                         setNewAutoCompleteResult(null);
                         setSearchValue(null);
                         setIsSearchOpen(p => !p);
+                        setScaleLounge(false);
                         return;
                       }
+
+                      getWeather({
+                        variables: {
+                          city: option.name,
+                          // @ts-ignore
+                          lat: option.stations[0].location.lat,
+                          // @ts-ignore
+                          long: option.stations[0].location.long,
+                        },
+                      });
                       setSearchValue(option.name);
                       setNewAutoCompleteResult(option as NewAutoCompleteResult);
                       getCityAirQuality({
                         variables: {
                           city: option.name,
-                          startDate: set(new Date(), { hours: 0 }).toISOString(),
+                          startDate: set(sub(new Date(), { days: 14 }), { hours: 0 }).toISOString(),
                           endDate: set(new Date(), { hours: 24 }).toISOString(),
+                          interval: 8,
                         },
                       });
+                      setScaleLounge(true);
+
+                      //som corsy ?
                       setIsSearchOpen(p => !p);
                     }}>
                     <h1 className={cx("select-none")}>{option.name}</h1>
