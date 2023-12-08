@@ -5,25 +5,21 @@ import React, { useRef, useState, useMemo, useEffect } from "react";
 import { Group, Mesh } from "three";
 import { useAppStore } from "@/stores";
 import { airQualityColors } from "@/constans";
-useGLTF.preload(`/assets/models/model.glb`);
+useGLTF.preload(`/assets/models/breathe-test.glb`);
 
 export const Model = () => {
-  const { nodes } = useGLTF(`/assets/models/model.glb`) as any;
-  const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(
-    (state) => ({
-      allowRotation: state.allowRotation,
-      airQuality: state.airQuality,
-      hoveredQualityIndex: state.hoveredQualityIndex,
-    })
-  );
+  const { nodes, animations } = useGLTF(`/assets/models/breathe-test.glb`) as any;
+  const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(state => ({
+    allowRotation: state.allowRotation,
+    airQuality: state.airQuality,
+    hoveredQualityIndex: state.hoveredQualityIndex,
+  }));
   const [colors, setColors] = useState({ old: "#fff", new: "#fff" });
   const groupRef = useRef<Group>(null);
   const modelMeshes: Mesh[] = useMemo(
     () =>
       Object.entries(nodes)
-        .map(([key, value]) =>
-          key.toLowerCase().includes("object") ? value : null
-        )
+        .map(([key, value]) => (key.toLowerCase().includes("object") ? value : null))
         .filter(Boolean) as Mesh[],
     []
   );
@@ -35,7 +31,7 @@ export const Model = () => {
   });
   const [opacities] = useSprings(
     10,
-    (i) => ({
+    i => ({
       delay: 100 * i,
       from: { color: colors.old },
       to: { color: colors.new },
@@ -46,23 +42,19 @@ export const Model = () => {
   const zoomRef = useRef(1);
   useEffect(() => {
     if (hoveredQualityIndex !== undefined && hoveredQualityIndex !== -1) {
-      setColors((p) => ({
-        new: airQualityColors[
-          hoveredQualityIndex as keyof typeof airQualityColors
-        ],
+      setColors(p => ({
+        new: airQualityColors[hoveredQualityIndex as keyof typeof airQualityColors],
         old: p.new,
       }));
       return;
     } else if ((airQuality?.st?.indexLevel?.id ?? -1) < 0)
-      setColors((p) => ({
+      setColors(p => ({
         old: "#fff",
         new: "#fff",
       }));
     else
-      setColors((p) => ({
-        new: airQualityColors[
-          airQuality?.st.indexLevel?.id as keyof typeof airQualityColors
-        ],
+      setColors(p => ({
+        new: airQualityColors[airQuality?.st.indexLevel?.id as keyof typeof airQualityColors],
         old: p.new,
       }));
   }, [airQuality, , hoveredQualityIndex]);
@@ -81,8 +73,7 @@ export const Model = () => {
     };
 
     window.addEventListener("resize", () => handleModelResize());
-    return () =>
-      window.removeEventListener("resize", () => handleModelResize());
+    return () => window.removeEventListener("resize", () => handleModelResize());
   }, []);
 
   return (
@@ -93,22 +84,11 @@ export const Model = () => {
         ref={groupRef}
         dispose={null}
         position={[0, 0.2, 0]}
-        rotation={[-(Math.PI / 2.5), 0, 0]}
-      >
+        rotation={[-(Math.PI / 2.5), 0, 0]}>
         {opacities.map((color, i) => (
-          <mesh
-            key={i}
-            scale={0.012}
-            castShadow
-            receiveShadow
-            geometry={modelMeshes[i].geometry}
-          >
+          <mesh key={i} scale={0.012} castShadow receiveShadow geometry={modelMeshes[i].geometry}>
             {/* @ts-ignore */}
-            <animated.meshToonMaterial
-              color={color.color}
-              opacity={0.8}
-              transparent
-            />
+            <animated.meshToonMaterial color={color.color} opacity={0.8} transparent />
           </mesh>
         ))}
       </group>
