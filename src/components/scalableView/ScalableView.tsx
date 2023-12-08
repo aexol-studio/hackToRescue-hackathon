@@ -66,8 +66,11 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
       </div>
       <div className="absolute top-6 right-7 bg-white border-[#FF7000] border-[1px] p-3 rounded-3xl  cursor-pointer select-none">
         <div
-          className="flex gap-2 items-center text-2xl"
-          onClick={() => setOpenSelect(p => ({ ...p, open: !p.open }))}>
+          className={cx("flex gap-2 items-center text-2xl", !newAutoCompleteResult && "opacity-50")}
+          onClick={() => {
+            if (!newAutoCompleteResult) return;
+            setOpenSelect(p => ({ ...p, open: !p.open }));
+          }}>
           <span>Dzień</span>
           <span className="text-3xl font-bold">{openSelect.value ?? "-"}</span>
           <ChevronDown className={cx(openSelect.open && "rotate-180")} />
