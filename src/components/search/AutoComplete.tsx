@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
 import { WeatherType, useAppStore } from "@/stores";
@@ -8,7 +8,7 @@ import { GET_CITY_AIR_QUALITY, GET_LUNGE_POLLUTION, GET_WEATHER } from "@/graphq
 import { set, sub } from "date-fns";
 import { NewAutoCompleteResult } from "@/types";
 
-export const AutoCompleteSearch = () => {
+export const AutoCompleteSearch: FC<{ clearDay: () => void }> = ({ clearDay }) => {
   const {
     searchResults,
     selectStation,
@@ -144,6 +144,7 @@ export const AutoCompleteSearch = () => {
           setScaleLounge(false);
           setLungPollution(0);
           setWeather(null);
+          clearDay();
         }}
       />
 
@@ -196,6 +197,7 @@ export const AutoCompleteSearch = () => {
                         setSearchValue(null);
                         setIsSearchOpen(p => !p);
                         setScaleLounge(false);
+
                         return;
                       }
                       getLounge({ variables: { city: option.name, day: 1 } });
