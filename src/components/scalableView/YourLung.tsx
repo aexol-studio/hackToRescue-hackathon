@@ -13,6 +13,7 @@ import {
 import { cx } from "@/utils";
 import { Chart } from "./Chart";
 import { voyages } from "@/constans/voyages";
+import { HoverInfo } from "./HoverInfo";
 
 const DAYS = Array.from({ length: 14 }, (_, i) => i + 1);
 
@@ -101,12 +102,18 @@ export const YourLung = () => {
                 <span className="font-bold ">
                   {weather?.temp ? `${Math.round((weather?.temp - 273.15) * 100) / 100} C` : "-"}
                 </span>{" "}
-                <span className="text-sm">temperatura</span> <Info className="w-4 h-4" />
+                <span className="text-sm">temperatura</span>{" "}
+                <HoverInfo text="asddasasdasdasdads">
+                  <Info className="w-4 h-4 cursor-pointer" />
+                </HoverInfo>
               </div>
               <div className="flex items-center gap-2">
                 <Cloudy />{" "}
                 <span className="font-bold">{weather?.clouds ? `${weather.clouds}%` : "-"}</span>{" "}
-                <span className="text-sm">zachmurzenie</span> <Info className="w-4 h-4" />
+                <span className="text-sm">zachmurzenie</span>{" "}
+                <HoverInfo text="asddasasdasdasdads">
+                  <Info className="w-4 h-4 cursor-pointer" />
+                </HoverInfo>
               </div>
               {/* <div className="flex items-center gap-2">
                 <CloudDrizzle /> <span className="font-bold">-2</span> <span>opady</span>{" "}
@@ -117,21 +124,30 @@ export const YourLung = () => {
                 <span className="font-bold">
                   {weather?.windSpeed ? `${weather?.windSpeed}km/h` : "-"}
                 </span>{" "}
-                <span className="text-sm">wiatr</span> <Info className="w-4 h-4" />
+                <span className="text-sm">wiatr</span>{" "}
+                <HoverInfo text="asddasasdasdasdads">
+                  <Info className="w-4 h-4 cursor-pointer " />
+                </HoverInfo>
               </div>
               <div className="flex items-center gap-2">
                 <Thermometer />{" "}
                 <span className="font-bold">
                   {weather?.pressure ? `${weather?.pressure}hPa` : "-"}
                 </span>{" "}
-                <span className="text-sm">ciśnienie</span> <Info className="w-4 h-4" />
+                <span className="text-sm">ciśnienie</span>
+                <HoverInfo text="asddasasdasdasdads">
+                  <Info className="w-4 h-4 cursor-pointer" />
+                </HoverInfo>
               </div>
               <div className="flex items-center gap-2">
                 <Droplets />{" "}
                 <span className="font-bold">
                   {weather?.humidity ? `${weather?.humidity}%` : "-"}
                 </span>{" "}
-                <span className="text-sm">wilgotność</span> <Info className="w-4 h-4" />
+                <span className="text-sm">wilgotność</span>{" "}
+                <HoverInfo text="asddasasdasdasdads">
+                  <Info className="cursor-pointer w-4 h-4" />
+                </HoverInfo>
               </div>
             </div>
           </div>

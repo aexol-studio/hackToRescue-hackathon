@@ -119,10 +119,10 @@ export const Education = () => {
               </section>
 
               <section className="hidden sm:max-w-[1600px] w-full sm:flex justify-center items-center my-24">
-                <div className="grid sm:flex w-full gap-4 justify-center items-center">
+                <div className="grid sm:flex w-full gap-4  items-center">
                   <div className="flex flex-col gap-4">
-                    <div className="gap-1 sm:gap-0 w-full h-[160px] p-4 font-jost font-medium text-xl sm:text-4xl text-white flex items-end">
-                      <h2>Działania prewencyjne w Polsce</h2>
+                    <div className="gap-1 sm:gap-0 w-full max-w-[160px] h-[160px] p-4 font-jost font-medium text-xl sm:text-4xl text-white flex items-end">
+                      <h2 className="text-xl lg:text-2xl">Działania prewencyjne w Polsce</h2>
                       <span className="sm:ml-[-24px]">
                         <svg
                           width="28"
