@@ -14,7 +14,7 @@ export const ToggleEducation = () => {
   );
 
   return (
-    <div className="flex justify-center ">
+    <div className="select-none flex justify-center ">
       <div
         className={cx(
           "z-40 cursor-pointer w-fit justify-center items-center",
@@ -22,7 +22,7 @@ export const ToggleEducation = () => {
         )}
         onClick={() => setEducationOpen(true)}>
         <div className="px-6 pt-[8px] pb-[12px] bg-black  rounded-full text-white justify-center items-center">
-          <span className="font-medium text-xs tracking-widest whitespace-nowrap font-jost">
+          <span className="font-medium text-sm tracking-widest whitespace-nowrap font-jost">
             Chcę to zmienić
           </span>
         </div>

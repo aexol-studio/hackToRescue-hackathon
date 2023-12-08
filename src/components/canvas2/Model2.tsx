@@ -1,36 +1,29 @@
-import { Loader, useAnimations, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { animated, useSprings, useSpring } from "@react-spring/three";
 import React, { useRef, useState, useMemo, useEffect, FC } from "react";
 import { Group, Mesh } from "three";
 import { useAppStore } from "@/stores";
-import { airQualityColors } from "@/constans";
 import * as THREE from "three";
 import { generateLungsColor } from "@/utils";
 
 useGLTF.preload(`/assets/models/newday.glb`);
 
 export const Model2: FC = () => {
-  const { scaleLounge, showLounge, lungPollution } = useAppStore(
-    ({ scaleLounge, showLounge, lungPollution }) => ({
-      scaleLounge,
-      showLounge,
-      lungPollution,
-    })
-  );
-  const groupRef = useRef<Group>(null);
-  const { nodes, animations } = useGLTF(`/assets/models/newday.glb`) as any;
-  const { actions } = useAnimations(animations, groupRef);
-
-  const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(state => ({
+  const { scaleLounge, showLounge, lungPollution, allowRotation } = useAppStore(state => ({
     allowRotation: state.allowRotation,
     airQuality: state.airQuality,
     hoveredQualityIndex: state.hoveredQualityIndex,
+    scaleLounge: state.scaleLounge,
+    showLounge: state.showLounge,
+    lungPollution: state.lungPollution,
   }));
+  const groupRef = useRef<Group>(null);
+  const { nodes } = useGLTF(`/assets/models/newday.glb`) as any;
+
   const vec = new THREE.Vector3();
   const { scale } = useSpring({ scale: scaleLounge ? 0.5 : 1, delay: 0 });
 
-  console.log(animations);
   const [colors, setColors] = useState({ old: "#CCCCCC", new: "#CCCCCC" });
   const modelMeshes: Mesh[] = useMemo(
     () =>
@@ -48,11 +41,9 @@ export const Model2: FC = () => {
     else state.camera.position.lerp(vec.set(0, 0, 6), 0.2);
     groupRef.current.updateMatrixWorld();
     state.camera.updateProjectionMatrix();
-    actions["Sketchfab_model.scale"]?.play();
   });
   const [lungSprings] = useSprings(
     10,
-
     i => ({
       delay: 100 * i,
       from: { opacity: showLounge ? 0 : 1, color: colors.old },
@@ -86,10 +77,7 @@ export const Model2: FC = () => {
     window.addEventListener("resize", () => handleModelResize());
     return () => window.removeEventListener("resize", () => handleModelResize());
   }, []);
-  useEffect(() => {
-    console.log(colors);
-    console.log(lungPollution);
-  }, [colors, lungPollution]);
+
   return (
     <>
       <animated.group
