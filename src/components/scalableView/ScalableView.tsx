@@ -1,11 +1,11 @@
 import { cx } from "@/utils";
 import React, { FC, useState } from "react";
-import { Search } from "../search/Search2";
 import { Canvas2 } from "../canvas2/Canvas2";
 import { YourLung } from "./YourLung";
 import { useAppStore } from "@/stores";
 import { airQualityColors } from "@/constans";
 import { Globe2 } from "lucide-react";
+import { Search } from "../search/Search";
 
 export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
   const { airQuality, selectStation, showLounge } = useAppStore(

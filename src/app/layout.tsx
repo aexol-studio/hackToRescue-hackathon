@@ -3,7 +3,8 @@ import "./globals.css";
 import { ApolloProvider } from "@/graphql/ApolloProvider";
 import { AppStoreProvider } from "@/stores/AppStoreProvider";
 import { Chain } from "@/graphql/zeus";
-import { citySelector } from "@/graphql/queries";
+import { citySelector, weatherSelector } from "@/graphql/queries";
+import { NewAutoCompleteResult } from "@/types";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,10 +24,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         acc[curr.name.trim()] = {
           name: curr.name,
           state: curr.state,
+          location: curr.location,
           stations: [{ state: curr.state, location: { ...curr.location } }],
         };
       return acc;
-    }, {} as any)
+    }, {} as Record<string, NewAutoCompleteResult>)
   );
   return (
     <html lang="en">
@@ -38,10 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               initialSearchResults: searchResults,
               searchResults: searchResults,
               showLounge: false,
-<<<<<<< HEAD
 
-=======
->>>>>>> ee9efacc6ed401fb47ff9eb121ffcd9b2894f6b3
               stations: data,
               scaleLounge: false,
               airQualities: {},
@@ -58,10 +57,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               visibility: true,
               isOpen: false,
               moveMap: undefined,
-<<<<<<< HEAD
 
-=======
->>>>>>> ee9efacc6ed401fb47ff9eb121ffcd9b2894f6b3
               newAutoCompleteResult: null,
             }}>
             {children}

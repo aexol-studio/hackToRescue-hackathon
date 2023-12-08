@@ -44,7 +44,7 @@ export const Model2: FC = () => {
     else state.camera.position.lerp(vec.set(0, 0, 6), 0.1);
     groupRef.current.updateMatrixWorld();
     state.camera.updateProjectionMatrix();
-    // actions["lung2.stl.cleaner.materialmerger.glesAction"]?.play();
+    actions["lung2.stl.cleaner.materialmerger.glesAction"]?.play();
   });
   const [opacities] = useSprings(
     10,

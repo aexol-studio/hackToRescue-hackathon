@@ -1,27 +1,30 @@
 # Air Quality Hackathon
 
-# Cześć ! 🙌
+# Hej! 🙌
 
-To jest repozytorium front-endowe dla zadania `Polish Smog Alert` w wyzwaniu `hacktotherescue`.
-Aby uruchomić repozytorium, wykonaj następujące kroki:
+To repozytorium front-endowe dla zadania `Polish Smog Alert` w ramach wyzwania `hacktotherescue`.
+Aby uruchomić to repozytorium, postępuj zgodnie z poniższymi krokami:
 
-1. sklonuj repozytorium.
-2. przejdź do katalogu z repozytorium.
-3. wpisz `npm i`.
-4. dodaj wymagane zmienne środowiskowe do pliku `.env`.
-5. uruchom `npm run dev`.
+1. Sklonuj repozytorium.
+2. Przejdź do katalogu z repozytorium.
+3. Wpisz `npm install` w terminalu.
+4. Dodaj wymagane zmienne środowiskowe do pliku `.env`.
+5. Uruchom `npm run dev`.
 
-# Hello ! 🙌
+#### Gotowe! 🚀
 
-This is front end repository for task `Polish Smog Alert` in `hacktotherescue` challenge.
+# Hello! 🙌
 
-To run repository we have to:
+This is the front-end repository for the `Polish Smog Alert` task in the `hacktotherescue` challenge.
+To run the repository, follow these steps:
 
-1. clone repository
-2. go into repository
-3. type `npm i`
-4. add needed envs into `.env` file
-5. run `npm run dev`
+1. Clone the repository.
+2. Navigate to the repository directory.
+3. Type npm install in the terminal.
+4. Add the required environment variables to the .env file.
+5. Run npm run dev.
+
+#### That's it! 🚀
 
 # ENVs
 

@@ -1,8 +1,8 @@
 import { CityType } from "@/graphql/queries";
-import { AirQuality, GeoLocation, LocationData } from "@/types";
+import { AirQuality, GeoLocation, LocationData, NewAutoCompleteResult } from "@/types";
 import { checkWhereLatLong, requestGeolocation } from "@/utils";
 import { createStore } from "zustand";
-type MoveMap = "station" | undefined;
+
 export type WeatherType = {
   clouds?: number;
   humidity?: number;
@@ -10,13 +10,11 @@ export type WeatherType = {
   temp: number;
   windSpeed: number;
 };
-export type NewAutoCompleteResult = {
-  name: string;
-  state: string;
-  location: { lat: number; lon: number };
-  stations: { lat: number; lon: number }[];
-};
+
+type MoveMap = "station" | Pick<GeoLocation, "longitude" | "latitude"> | undefined;
+
 export interface AppStoreProps {
+  isMapMoving: boolean;
   educationOpen: boolean;
   loading: boolean;
   qualityLoading: boolean;
@@ -59,6 +57,8 @@ export interface AppStoreState extends AppStoreProps {
   setNewAutoCompleteResult: (newAutoCompleteResult: NewAutoCompleteResult | null) => void;
   setChartData: (data: { AUTOMATIC: any; OPEN_WEATHER: any; MANUAL: any } | null) => void;
   setWeather: (weather: WeatherType | null) => void;
+  initGeoLocation: () => Promise<void>;
+  setIsMapMoving: (isMapMoving: boolean) => void;
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
@@ -68,6 +68,21 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
     const open = () => set({ isOpen: true });
     const close = () => set({ isOpen: false });
     const toggle = () => set(state => ({ isOpen: !state.isOpen }));
+
+    const setIsMapMoving = (isMapMoving: boolean) => set({ isMapMoving });
+
+    const initGeoLocation = async () => {
+      try {
+        const geoLocation = await requestGeolocation();
+        if (!geoLocation) return;
+        const location = await checkWhereLatLong(geoLocation.latitude, geoLocation.longitude);
+        if (location) setSearchValue(location.address.city);
+        set({ geoLocation: geoLocation, location });
+      } catch (e) {
+        console.error(e);
+        set({ geoLocation: null, location: null });
+      }
+    };
 
     const goTo = async (where: MoveMap) => {
       set({ moveMap: where });
@@ -144,6 +159,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       set({ chartData });
     const setWeather = (weather: WeatherType | null) => set({ weather });
     return {
+      isMapMoving: false,
       isOpen: false,
       moveMap: undefined,
       visibility: true,
@@ -183,6 +199,8 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       setScaleLounge,
       setShowLunge,
       setNewAutoCompleteResult,
+      initGeoLocation,
+      setIsMapMoving,
       ...initProps,
     };
   });

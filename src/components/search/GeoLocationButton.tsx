@@ -8,7 +8,6 @@ import { cx, requestGeolocation } from "@/utils";
 
 export const GeoLocalizationButton = () => {
   const { geoLocation } = useAppStore(({ geoLocation }) => ({ geoLocation }));
-
   return (
     <button onClick={requestGeolocation} className="flex items-center justify-center">
       <AnimatePresence>

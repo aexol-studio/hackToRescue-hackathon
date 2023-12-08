@@ -110,19 +110,19 @@ export const calculateDistance = ({
 
 export const generatePolygonColor = (key: string, density: number) => {
   if (key.toLowerCase().includes("pm10")) {
-    if (density > 50) {
+    if (density >= 25) {
       return "#FF000060";
     }
-    if (density >= 40 && density <= 50) {
+    if (density >= 15 && density <= 25) {
       return "#FF660060";
     }
-    if (density >= 31 && density <= 40) {
-      return "#FFFF0060";
+    if (density >= 10 && density <= 15) {
+      return "#FFFF0040";
     }
-    if (density >= 20 && density <= 31) {
+    if (density >= 5 && density <= 10) {
       return "#99FF3360";
     }
-    if (density <= 20) {
+    if (density >= 0 && density <= 5) {
       return "#00990060";
     }
   }
@@ -134,7 +134,7 @@ export const generatePolygonColor = (key: string, density: number) => {
       return "#FF660060";
     }
     if (density >= 10 && density <= 15) {
-      return "#FFFF0060";
+      return "#FFFF0040";
     }
     if (density >= 5 && density <= 10) {
       return "#99FF3360";
