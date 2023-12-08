@@ -152,6 +152,20 @@ export const AutoCompleteSearch: FC<{ clearDay: () => void }> = ({ clearDay }) =
     setIsSearchOpen(p => !p);
   };
 
+  useEffect(() => {
+    if (selectedStation) {
+      handleChangeStation({
+        location: {
+          lat: selectedStation.location.lat,
+          long: selectedStation.location.long,
+        },
+        name: selectedStation.name,
+        state: selectedStation.state,
+        stations: [{ location: selectedStation.location, state: selectedStation.state }],
+      });
+    }
+  }, [selectedStation]);
+
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
