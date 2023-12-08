@@ -7,6 +7,8 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_CITY_AIR_QUALITY, GET_LUNGE_POLLUTION, GET_WEATHER } from "@/graphql/queries";
 import { set, sub } from "date-fns";
 import { NewAutoCompleteResult } from "@/types";
+import { GeoLocalizationButton } from "./GeoLocationButton";
+import { HoverInfo } from "./HoverInfo";
 
 export const AutoCompleteSearch: FC<{ clearDay: () => void }> = ({ clearDay }) => {
   const {
@@ -122,112 +124,84 @@ export const AutoCompleteSearch: FC<{ clearDay: () => void }> = ({ clearDay }) =
       setChartData(reducedArr);
     },
   });
+
+  const handleChangeStation = (option: NewAutoCompleteResult) => {
+    getLounge({ variables: { city: option.name, day: 1 } });
+
+    getWeather({
+      variables: {
+        city: option.name,
+        // @ts-ignore
+        lat: option.stations[0].location.lat,
+        // @ts-ignore
+        long: option.stations[0].location.long,
+      },
+    });
+    setSearchValue(option.name);
+    setNewAutoCompleteResult(option as NewAutoCompleteResult);
+    getCityAirQuality({
+      variables: {
+        city: option.name,
+        startDate: set(sub(new Date(), { days: 14 }), { hours: 0 }).toISOString(),
+        endDate: set(new Date(), { hours: 24 }).toISOString(),
+        interval: 8,
+      },
+    });
+    //som corsy ?
+    setIsSearchOpen(p => !p);
+  };
+
   const listRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (listRef.current && !listRef.current.contains(e.target as Node)) setIsSearchOpen(false);
+      if (!listRef.current || listRef.current.contains(e.target as Node)) {
+        return;
+      }
+      setIsSearchOpen(false);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside, { capture: false });
+    return () => document.removeEventListener("mousedown", handleClickOutside, { capture: false });
   }, []);
 
   useEffect(() => {}, []);
   return (
-    <div className="relative">
-      <X
-        className="text-[#FF7000] absolute right-2 top-1/2 z-10 -translate-y-1/2 cursor-pointer"
-        onClick={() => {
-          setSearchValue(null);
-          selectStation(null);
-          setNewAutoCompleteResult(null);
-          setChartData(null);
-          setScaleLounge(false);
-          setLungPollution(0);
-          setWeather(null);
-          clearDay();
-        }}
-      />
-
-      <input
-        value={searchValue || ""}
-        ref={inputRef}
-        type="text"
-        placeholder="Wybierz stację..."
-        onChange={e => setSearchValue(e.target.value)}
-        onFocus={() => {
-          if (isSearchOpen) return;
-          setIsSearchOpen(true);
-        }}
-        className={cx(
-          "text-black-300 border-[#FF7000] bg-light-900  hover-light-700 w-full rounded-lg border-[1px] px-[1.2rem] py-[0.8rem] transition-all duration-700 ease-in-out",
-          " focus:outline-none",
-          isSearchOpen && "rounded-b-none"
-        )}
-      />
-
-      <div
-        className={cx(
-          "absolute top-[100%] grid max-h-[24rem] w-full  transition-all duration-700 ease-in-out",
-          isSearchOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-        )}>
-        <div
-          ref={listRef}
-          className={cx(
-            "border-[#FF7000] border-t-none z-10 h-full w-full overflow-hidden rounded-b-lg  shadow-lg",
-            isSearchOpen ? "border border-t-0" : ""
-          )}>
-          <div
+    <div ref={listRef} className="w-full h-[50px] z-[1200] ">
+      <div className="bg-white rounded-3xl">
+        <div className="relative">
+          <div className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex gap-2 items-center">
+            <HoverInfo infoText="Geolokalizacja">
+              <GeoLocalizationButton />
+            </HoverInfo>
+          </div>
+          <input
+            value={searchValue || ""}
+            ref={inputRef}
+            type="text"
+            placeholder="Wpisz lub wybierz miasto"
+            onChange={e => setSearchValue(e.target.value)}
+            onFocus={() => setIsSearchOpen(true)}
             className={cx(
-              "scrollbar-thumb-rounded-full bg-light-900 h-full w-full z-50 overflow-y-auto scrollbar-thin  scrollbar-thumb-[#FF7000]",
-              !!Object.entries(searchResults).length && "py-[0.4rem]"
+              "text-base font-jost text-black w-full px-[1.2rem] py-[0.8rem] focus:outline-none bg-transparent rounded-3xl"
+            )}
+          />
+        </div>
+        <div className="rounded-b-3xl overflow-hidden ">
+          <div
+            style={{ height: `${isSearchOpen ? `${searchResults.length * 37}px` : "0"}` }}
+            className={cx(
+              "transition-all duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin max-h-[120px] lg:max-h-[256px] overflow-y-auto"
             )}>
-            {searchResults?.map((option, idx) => {
+            {searchResults.map((option, idx) => {
+              const { name } = option;
               return (
-                <div className={cx("flex flex-col")} key={option.name + idx}>
-                  <div
-                    className={cx(
-                      "text-dark-200 flex  flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-light-500",
-                      "bg-light-800",
-                      "cursor-pointer",
-                      option.name === newAutoCompleteResult?.name && "bg-light-700"
-                    )}
-                    onClick={() => {
-                      if (option.name === newAutoCompleteResult?.name) {
-                        setNewAutoCompleteResult(null);
-                        setSearchValue(null);
-                        setIsSearchOpen(p => !p);
-                        setScaleLounge(false);
-
-                        return;
-                      }
-                      getLounge({ variables: { city: option.name, day: 1 } });
-
-                      getWeather({
-                        variables: {
-                          city: option.name,
-                          // @ts-ignore
-                          lat: option.stations[0].location.lat,
-                          // @ts-ignore
-                          long: option.stations[0].location.long,
-                        },
-                      });
-                      setSearchValue(option.name);
-                      setNewAutoCompleteResult(option as NewAutoCompleteResult);
-                      getCityAirQuality({
-                        variables: {
-                          city: option.name,
-                          startDate: set(sub(new Date(), { days: 14 }), { hours: 0 }).toISOString(),
-                          endDate: set(new Date(), { hours: 24 }).toISOString(),
-                          interval: 8,
-                        },
-                      });
-                      setScaleLounge(true);
-
-                      //som corsy ?
-                      setIsSearchOpen(p => !p);
-                    }}>
-                    <h1 className={cx("select-none")}>{option.name}</h1>
-                  </div>
+                <div
+                  key={name + idx}
+                  className={cx(
+                    "text-black flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
+                  )}
+                  onClick={() => handleChangeStation(option)}>
+                  <span className={cx("select-none")}>{name}</span>
                 </div>
               );
             })}
