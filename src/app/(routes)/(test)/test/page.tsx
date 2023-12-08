@@ -11,7 +11,7 @@ export default async function TestPage() {
       </div>
       <AirQualityInfo />
       <div className="w-[40rem] h-[20rem] fixed bottom-0 right-0">
-        {/* <iframe className="w-full h-full" src="/widget"></iframe> */}
+        <iframe className="w-full h-full" src="/widget"></iframe>
       </div>
     </div>
   );

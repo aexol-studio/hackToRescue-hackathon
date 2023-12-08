@@ -71,11 +71,11 @@ export const Education = () => {
               }}
               className="absolute right-5 top-5 cursor-pointer text-dark-500"
             />
-            <div className="px-4 py-10 sm:py-32 sm:px-28 max-w-[1600px]">
+            <div className="px-4 py-10 lg:py-32 md:px-28 max-w-[1600px]">
               <div className="flex flex-col gap-8 text-white">
                 <h2 className="text-3xl font-[500]">Ogólne zalecenia</h2>
                 <div className="flex flex-col gap-6">
-                  <div className="grid sm:flex gap-[10px]">
+                  <div className="grid lg:flex gap-[10px]">
                     <span className="min-w-[24px] min-h-[24px]">
                       <CheckCircle />
                     </span>
@@ -84,7 +84,7 @@ export const Education = () => {
                       lub aplikacjach.
                     </p>
                   </div>
-                  <div className="grid sm:flex gap-[10px]">
+                  <div className="grid lg:flex gap-[10px]">
                     <span className="min-w-[24px] min-h-[24px]">
                       <CheckCircle />
                     </span>
@@ -92,7 +92,7 @@ export const Education = () => {
                       Zapoznaj się ze skalą AQI (Air Quality Index) i śledzić poziom zanieczyszczeń.
                     </p>
                   </div>
-                  <div className="grid sm:flex gap-[10px]">
+                  <div className="grid lg:flex gap-[10px]">
                     <span className="min-w-[24px] min-h-[24px]">
                       <CheckCircle />
                     </span>
@@ -102,7 +102,7 @@ export const Education = () => {
                       ćwiczenia fizyczne.
                     </p>
                   </div>
-                  <div className="grid sm:flex gap-[10px]">
+                  <div className="grid lg:flex gap-[10px]">
                     <span className="min-w-[24px] min-h-[24px]">
                       <CheckCircle />
                     </span>
@@ -114,16 +114,16 @@ export const Education = () => {
                   </div>
                 </div>
               </div>
-              <section className="block sm:hidden">
+              <section className="block lg:hidden">
                 <Carousel />
               </section>
 
-              <section className="hidden sm:max-w-[1600px] w-full sm:flex justify-center items-center my-24">
-                <div className="grid sm:flex w-full gap-4  items-center">
+              <section className="hidden lg:max-w-[1600px] w-full lg:flex justify-center items-center my-24">
+                <div className="grid lg:flex w-full gap-4  items-center">
                   <div className="flex flex-col gap-4">
-                    <div className="gap-1 sm:gap-0 w-full max-w-[160px] h-[160px] p-4 font-jost font-medium text-xl sm:text-4xl text-white flex items-end">
+                    <div className="gap-1 lg:gap-0 w-full max-w-[160px] h-[160px] p-4 font-jost font-medium text-xl lg:text-4xl text-white flex items-end">
                       <h2 className="text-xl lg:text-2xl">Działania prewencyjne w Polsce</h2>
-                      <span className="sm:ml-[-24px]">
+                      <span className="lg:ml-[-24px]">
                         <svg
                           width="28"
                           height="29"
@@ -167,7 +167,7 @@ export const Education = () => {
                         </svg>
                       </span>
                     </div>
-                    <div className="hidden max-w-[240px] sm:flex sm:flex-col gap-4 bg-[#303133] rounded-[24px] p-4">
+                    <div className="hidden max-w-[240px] lg:flex lg:flex-col gap-4 bg-[#303133] rounded-[24px] p-4">
                       <Coins size={40} color="#777777" />
                       <p className="text-base font-[400] text-white">
                         Wprowadzenie podatków od emisji CO2 dla firm i sektorów gospodarki, aby
@@ -237,12 +237,12 @@ export const Education = () => {
                   </div>
                 </div>
               </section>
-              <div className="grid sm:flex flex-col my-10 sm:my-0">
+              <div className="grid lg:flex flex-col my-10 lg:my-0">
                 <div className="max-w-[800px]">
-                  <h2 className="text-xl sm:text-3xl font-[500] text-white">
+                  <h2 className="text-xl lg:text-3xl font-[500] text-white">
                     Program Priorytetowy „Czyste Powietrze”
                   </h2>
-                  <p className="mt-4 text-white font-[400] text-base sm:text-lg">
+                  <p className="mt-4 text-white font-[400] text-base lg:text-lg">
                     Celem programu jest poprawa jakości powietrza oraz zmniejszenie emisji gazów
                     cieplarnianych poprzez wymianę źródeł ciepła i poprawę efektywności
                     energetycznej budynków mieszkalnych jednorodzinnych. Sprawdź czy możesz
@@ -250,14 +250,14 @@ export const Education = () => {
                   </p>
                 </div>
                 <Link
-                  className="w-fit mt-[64px] sm:mt-12 px-6 py-3 bg-white text-[#303133] rounded-[40px] text-sm font-[500]"
+                  className="w-fit mt-[64px] lg:mt-12 px-6 py-3 bg-white text-[#303133] rounded-[40px] text-sm font-[500]"
                   href={"https://czystepowietrze.gov.pl/czyste-powietrze/"}>
                   Dowiedz się więcej
                 </Link>
               </div>
             </div>
-            <footer className="grid sm:flex justify-between w-full bg-black gap-10 sm:gap-0 pt-10 pb-16 sm:py-20 px-4 sm:px-32">
-              <div className="grid sm:flex gap-6">
+            <footer className="grid lg:flex justify-between w-full bg-black gap-10 lg:gap-0 pt-10 pb-16 lg:py-20 px-4 lg:px-32">
+              <div className="grid lg:flex gap-6">
                 <div className="relative w-[200px] h-[46px]">
                   <Link href="https://hacktotherescue.org/">
                     <Image src="/hack_the_rescue_logo.png" fill alt="hack the rescue logo" />
