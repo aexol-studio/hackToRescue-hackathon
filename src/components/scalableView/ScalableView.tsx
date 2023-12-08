@@ -1,18 +1,20 @@
 import { cx } from "@/utils";
 import React, { FC, useState } from "react";
-import { Search } from "../search/Search2";
 import { Canvas2 } from "../canvas2/Canvas2";
 import { YourLung } from "./YourLung";
 import { useAppStore } from "@/stores";
 import { airQualityColors } from "@/constans";
 import { Globe2 } from "lucide-react";
+import { Search } from "../search/Search";
+import { AutoCompleteSearch } from "../search/AutoComplete";
 
 export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
-  const { airQuality, selectStation, showLounge } = useAppStore(
-    ({ airQuality, selectStation, showLounge }) => ({
+  const { airQuality, selectStation, showLounge, setShowLunge } = useAppStore(
+    ({ airQuality, selectStation, showLounge, setShowLunge }) => ({
       airQuality,
       selectStation,
       showLounge,
+      setShowLunge,
     })
   );
 
@@ -28,8 +30,11 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
           showLounge && "opacity-[75%] scale-[300%]"
         )}></div>
 
-      <div className="absolute left-1/2 z-[1000]">
-        <Search />
+      <div className="absolute left-1/2 top-6 -translate-x-1/2 flex items-center gap-2 z-[1000]">
+        <AutoCompleteSearch />
+        <div className="bg-white p-1 w-min rounded-full cursor-pointer">
+          <Globe2 onClick={() => setShowLunge(false)} />
+        </div>
       </div>
       <Canvas2 />
       <div className="absolute left-1/2 w-full -translate-x-1/2 bottom-10  justify-center px-7">

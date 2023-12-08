@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
-import { NewAutoCompleteResult, WeatherType, useAppStore } from "@/stores";
+import { WeatherType, useAppStore } from "@/stores";
 import { X } from "lucide-react";
 import { useLazyQuery } from "@apollo/client";
 import { GET_CITY_AIR_QUALITY, GET_LUNGE_POLLUTION, GET_WEATHER } from "@/graphql/queries";
 import { set, sub } from "date-fns";
+import { NewAutoCompleteResult } from "@/types";
 
 export const AutoCompleteSearch = () => {
   const {

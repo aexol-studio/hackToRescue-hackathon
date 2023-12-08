@@ -1,12 +1,7 @@
 "use client";
 import { useStore } from "zustand";
 import { useContext, useRef, createContext } from "react";
-import {
-  useAppStoreType,
-  AppStoreProps,
-  AppStoreState,
-  createAppStore,
-} from "./useAppStore";
+import { useAppStoreType, AppStoreProps, AppStoreState, createAppStore } from "./useAppStore";
 
 export const AppStoreContext = createContext<useAppStoreType | null>(null);
 type StoreContextProps = React.PropsWithChildren<AppStoreProps>;
@@ -16,11 +11,7 @@ export function AppStoreProvider({ children, ...props }: StoreContextProps) {
   if (!storeRef.current) {
     storeRef.current = createAppStore(props);
   }
-  return (
-    <AppStoreContext.Provider value={storeRef.current}>
-      {children}
-    </AppStoreContext.Provider>
-  );
+  return <AppStoreContext.Provider value={storeRef.current}>{children}</AppStoreContext.Provider>;
 }
 
 export function useAppStore<T>(selector: (state: AppStoreState) => T): T {

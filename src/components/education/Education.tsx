@@ -1,7 +1,7 @@
 "use client";
 import { cx } from "@/utils";
 import { X } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppStore } from "@/stores";
 
 export const Education = () => {
@@ -9,11 +9,12 @@ export const Education = () => {
     educationOpen: state.educationOpen,
     setEducationOpen: state.setEducationOpen,
   }));
+
   return (
     <>
       <div
         className={cx(
-          "absolute h-3/4 top-full w-full px-6 duration-700 transition-transform  z-50 ",
+          "absolute h-3/4 top-full w-full duration-700 transition-transform  z-50 select-none",
           educationOpen && "-translate-y-full"
         )}>
         <div className="w-full h-full overflow-hidden border-[#FF7000] border-[1px] rounded-t-xl ">

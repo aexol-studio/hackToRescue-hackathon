@@ -5,15 +5,14 @@ import { AutoCompleteSearch } from "./AutoCompleteSearch";
 
 import { GeoLocalizationButton } from "./GeoLocationButton";
 import { RotateButton } from "./RotateButton";
-import { UserIcon } from "./UserIcon";
-import { MapButton } from "./MapButton";
 import { HoverInfo } from "./HoverInfo";
 import { useAppStore } from "@/stores";
 import { Globe2 } from "lucide-react";
 
 export const Search = () => {
-  const { selectStation } = useAppStore(({ selectStation }) => ({
+  const { selectStation, setShowLunge } = useAppStore(({ selectStation, setShowLunge }) => ({
     selectStation,
+    setShowLunge,
   }));
   return (
     <div className="absolute left-1/2 top-6 flex w-screen -translate-x-1/2 justify-center">
@@ -48,6 +47,7 @@ export const Search = () => {
                 className="flex p-1 bg-white rounded-full cursor-pointer"
                 onClick={() => {
                   selectStation(null);
+                  setShowLunge(false);
                 }}>
                 <Globe2 color="black" />
               </div>
