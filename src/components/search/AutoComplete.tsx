@@ -194,6 +194,7 @@ export const AutoCompleteSearch: FC<{ clearDay: () => void }> = ({ clearDay }) =
               "transition-all duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin max-h-[120px] lg:max-h-[256px] overflow-y-auto"
             )}>
             {searchResults.map((option, idx) => {
+              console.log(option);
               const { name } = option;
               return (
                 <div
