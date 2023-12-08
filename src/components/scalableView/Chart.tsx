@@ -41,14 +41,17 @@ const formatter = (value: number) => {
 };
 
 export const Chart = () => {
-  const { chartData } = useAppStore(({ chartData }) => ({ chartData }));
+  const { chartData, showLounge } = useAppStore(({ chartData, showLounge }) => ({
+    chartData,
+    showLounge,
+  }));
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
         width={500}
         height={300}
-        data={chartData?.OPEN_WEATHER}
+        data={showLounge ? chartData?.OPEN_WEATHER : []}
         margin={{
           top: 40,
           left: 50,
@@ -56,13 +59,13 @@ export const Chart = () => {
           bottom: 30,
         }}>
         <Tooltip />
-        <Legend />
+
         <YAxis interval="preserveStartEnd" domain={[0, -5]} tickFormatter={formatter} />
         <Line type="monotone" dataKey="no2" stroke="#8B59F0" />
         <Line type="monotone" dataKey="o3" stroke="#CA59F0" />
         <Line type="monotone" dataKey="pm1" stroke="#F25AD9" />
         <Line type="monotone" dataKey="pm2p5" stroke="#F05998" />
-        <Line type="monotone" dataKey="pm10" stroke="#F09859 " />
+        <Line type="monotone" dataKey="pm10" stroke="#F09859" />
         <Line type="monotone" dataKey="pm25" stroke="#F0D759" />
         <Line type="monotone" dataKey="so2" stroke="#F05959 " />
       </LineChart>

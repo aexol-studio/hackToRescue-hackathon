@@ -6,14 +6,18 @@ import { Group, Mesh } from "three";
 import { useAppStore } from "@/stores";
 import { airQualityColors } from "@/constans";
 import * as THREE from "three";
+import { generateLungsColor } from "@/utils";
 
 useGLTF.preload(`/assets/models/breathe-test.glb`);
 
 export const Model2: FC = () => {
-  const { scaleLounge, showLounge } = useAppStore(({ scaleLounge, showLounge }) => ({
-    scaleLounge,
-    showLounge,
-  }));
+  const { scaleLounge, showLounge, lungPollution } = useAppStore(
+    ({ scaleLounge, showLounge, lungPollution }) => ({
+      scaleLounge,
+      showLounge,
+      lungPollution,
+    })
+  );
   const groupRef = useRef<Group>(null);
   const { nodes, animations } = useGLTF(`/assets/models/breathe-test.glb`) as any;
   const { actions } = useAnimations(animations, groupRef);
@@ -27,7 +31,7 @@ export const Model2: FC = () => {
   const { scale } = useSpring({ scale: scaleLounge ? 0.5 : 1, delay: 0 });
 
   // console.log(scale);
-  const [colors, setColors] = useState({ old: "#ffffff00", new: "#fff" });
+  const [colors, setColors] = useState({ old: "#CCCCCC", new: "#CCCCCC" });
   const modelMeshes: Mesh[] = useMemo(
     () =>
       Object.entries(nodes)
@@ -40,42 +44,31 @@ export const Model2: FC = () => {
     if (!groupRef.current || allowRotation) return;
     groupRef.current.rotation.z += delta * 0.2;
     // state.camera.lookAt(groupRef.current.position);
-    if (scaleLounge) state.camera.position.lerp(vec.set(0, -2.2, 6), 0.1);
-    else state.camera.position.lerp(vec.set(0, 0, 6), 0.1);
+    if (scaleLounge) state.camera.position.lerp(vec.set(0, -2.2, 6), 0.2);
+    else state.camera.position.lerp(vec.set(0, 0, 6), 0.2);
     groupRef.current.updateMatrixWorld();
     state.camera.updateProjectionMatrix();
     actions["lung2.stl.cleaner.materialmerger.glesAction"]?.play();
   });
-  const [opacities] = useSprings(
+  const [lungSprings] = useSprings(
     10,
 
     i => ({
-      // config: { duration: 100 },
       delay: 100 * i,
-      from: { color: showLounge ? 0 : 1 },
-      to: { color: showLounge ? 1 : 0 },
+      from: { opacity: showLounge ? 0 : 1, color: colors.old },
+      to: { opacity: showLounge ? 1 : 0, color: colors.new },
     }),
-    [showLounge]
+    [showLounge, lungPollution]
   );
 
-  // useEffect(() => {
-  //   if (hoveredQualityIndex !== undefined && hoveredQualityIndex !== -1) {
-  //     setColors(p => ({
-  //       new: airQualityColors[hoveredQualityIndex as keyof typeof airQualityColors],
-  //       old: p.new,
-  //     }));
-  //     return;
-  //   } else if ((airQuality?.st?.indexLevel?.id ?? -1) < 0)
-  //     setColors(p => ({
-  //       old: "#fff",
-  //       new: "#fff",
-  //     }));
-  //   else
-  //     setColors(p => ({
-  //       new: airQualityColors[airQuality?.st.indexLevel?.id as keyof typeof airQualityColors],
-  //       old: p.new,
-  //     }));
-  // }, [airQuality, , hoveredQualityIndex]);
+  useEffect(() => {
+    if (showLounge)
+      setColors(p => ({
+        new: generateLungsColor((lungPollution ?? 0) * 100) ?? "#CCCCCC",
+        old: p.new,
+      }));
+    else setColors({ new: "#CCCCCC", old: "#CCCCCC" });
+  }, [lungPollution, showLounge]);
 
   useEffect(() => {
     if (groupRef.current) {
@@ -93,7 +86,10 @@ export const Model2: FC = () => {
     window.addEventListener("resize", () => handleModelResize());
     return () => window.removeEventListener("resize", () => handleModelResize());
   }, []);
-
+  useEffect(() => {
+    console.log(colors);
+    console.log(lungPollution);
+  }, [colors, lungPollution]);
   return (
     <>
       <animated.group
@@ -103,10 +99,10 @@ export const Model2: FC = () => {
         dispose={null}
         position={[0, 0.2, 0]}
         rotation={[-(Math.PI / 2.5), 0, 0]}>
-        {opacities.map((color, i) => (
+        {lungSprings.map((spring, i) => (
           <mesh key={i} scale={0.012} castShadow receiveShadow geometry={modelMeshes[i].geometry}>
             {/* @ts-ignore */}
-            <animated.meshToonMaterial color={"#fff"} opacity={color.color} transparent />
+            <animated.meshToonMaterial color={spring.color} opacity={spring.opacity} transparent />
           </mesh>
         ))}
       </animated.group>

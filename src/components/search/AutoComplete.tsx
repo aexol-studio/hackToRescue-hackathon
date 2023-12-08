@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
-import { NewAutoCompleteResult, WeatherType, useAppStore } from "@/stores";
+import { WeatherType, useAppStore } from "@/stores";
 import { X } from "lucide-react";
 import { useLazyQuery } from "@apollo/client";
 import { GET_CITY_AIR_QUALITY, GET_LUNGE_POLLUTION, GET_WEATHER } from "@/graphql/queries";
 import { set, sub } from "date-fns";
+import { NewAutoCompleteResult } from "@/types";
 
 export const AutoCompleteSearch = () => {
   const {
@@ -18,6 +19,7 @@ export const AutoCompleteSearch = () => {
     setChartData,
     setScaleLounge,
     setWeather,
+    setLungPollution,
   } = useAppStore(
     ({
       setWeather,
@@ -30,6 +32,7 @@ export const AutoCompleteSearch = () => {
       setNewAutoCompleteResult,
       setChartData,
       setScaleLounge,
+      setLungPollution,
     }) => ({
       setWeather,
       searchResults,
@@ -41,11 +44,14 @@ export const AutoCompleteSearch = () => {
       setNewAutoCompleteResult,
       setChartData,
       setScaleLounge,
+      setLungPollution,
     })
   );
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [getLounge] = useLazyQuery(GET_LUNGE_POLLUTION, { onCompleted: d => console.log(d) });
+  const [getLounge] = useLazyQuery(GET_LUNGE_POLLUTION, {
+    onCompleted: d => setLungPollution(d.getIndexForCity),
+  });
   const [getWeather] = useLazyQuery(GET_WEATHER, {
     onCompleted: d => setWeather(d.getRealTimeWeather as WeatherType),
   });
@@ -113,7 +119,6 @@ export const AutoCompleteSearch = () => {
         }
       );
 
-      console.log(d);
       setChartData(reducedArr);
     },
   });
@@ -137,6 +142,8 @@ export const AutoCompleteSearch = () => {
           setNewAutoCompleteResult(null);
           setChartData(null);
           setScaleLounge(false);
+          setLungPollution(0);
+          setWeather(null);
         }}
       />
 
@@ -191,7 +198,7 @@ export const AutoCompleteSearch = () => {
                         setScaleLounge(false);
                         return;
                       }
-                      getLounge({ variables: { city: "Białystok", day: 1 } });
+                      getLounge({ variables: { city: option.name, day: 1 } });
 
                       getWeather({
                         variables: {

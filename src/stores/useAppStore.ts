@@ -37,6 +37,7 @@ export interface AppStoreProps {
   newAutoCompleteResult: NewAutoCompleteResult | null;
   chartData?: { AUTOMATIC: any; OPEN_WEATHER: any; MANUAL: any } | null;
   weather: WeatherType | null;
+  lungPollution: number | null;
 }
 
 export interface AppStoreState extends AppStoreProps {
@@ -59,6 +60,7 @@ export interface AppStoreState extends AppStoreProps {
   setWeather: (weather: WeatherType | null) => void;
   initGeoLocation: () => Promise<void>;
   setIsMapMoving: (isMapMoving: boolean) => void;
+  setLungPollution: (lungPollution: number | null) => void;
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
@@ -158,6 +160,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
     const setChartData = (chartData: { AUTOMATIC: any; OPEN_WEATHER: any; MANUAL: any } | null) =>
       set({ chartData });
     const setWeather = (weather: WeatherType | null) => set({ weather });
+    const setLungPollution = (lungPollution: number | null) => set({ lungPollution });
     return {
       isMapMoving: false,
       isOpen: false,
@@ -182,6 +185,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       initialSearchResults: [],
       charData: [],
       weather: null,
+      lungPollution: null,
       setWeather,
       setChartData,
       close,
@@ -201,6 +205,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       setNewAutoCompleteResult,
       initGeoLocation,
       setIsMapMoving,
+      setLungPollution,
       ...initProps,
     };
   });
