@@ -36,18 +36,6 @@ export const Model2: FC = () => {
     []
   );
 
-  // const modelMeshes2: Mesh[] = useMemo(
-  //   () =>
-  //     Object.entries(newNodes)
-  //       .map(([key, value]) =>
-  //         key.toLowerCase().includes("sculpt") ? value : null
-  //       )
-  //       .filter(Boolean) as Mesh[],
-  //   []
-  // );
-  // // console.log(newNodes);
-  // console.log(modelMeshes2);
-
   useFrame((state, delta) => {
     if (!groupRef.current || allowRotation) return;
     groupRef.current.rotation.z += delta * 0.2;
@@ -56,7 +44,7 @@ export const Model2: FC = () => {
     else state.camera.position.lerp(vec.set(0, 0, 6), 0.1);
     groupRef.current.updateMatrixWorld();
     state.camera.updateProjectionMatrix();
-    actions["lung2.stl.cleaner.materialmerger.glesAction"]?.play();
+    // actions["lung2.stl.cleaner.materialmerger.glesAction"]?.play();
   });
   const [opacities] = useSprings(
     10,
@@ -70,24 +58,24 @@ export const Model2: FC = () => {
     [showLounge]
   );
 
-  useEffect(() => {
-    if (hoveredQualityIndex !== undefined && hoveredQualityIndex !== -1) {
-      setColors(p => ({
-        new: airQualityColors[hoveredQualityIndex as keyof typeof airQualityColors],
-        old: p.new,
-      }));
-      return;
-    } else if ((airQuality?.st?.indexLevel?.id ?? -1) < 0)
-      setColors(p => ({
-        old: "#fff",
-        new: "#fff",
-      }));
-    else
-      setColors(p => ({
-        new: airQualityColors[airQuality?.st.indexLevel?.id as keyof typeof airQualityColors],
-        old: p.new,
-      }));
-  }, [airQuality, , hoveredQualityIndex]);
+  // useEffect(() => {
+  //   if (hoveredQualityIndex !== undefined && hoveredQualityIndex !== -1) {
+  //     setColors(p => ({
+  //       new: airQualityColors[hoveredQualityIndex as keyof typeof airQualityColors],
+  //       old: p.new,
+  //     }));
+  //     return;
+  //   } else if ((airQuality?.st?.indexLevel?.id ?? -1) < 0)
+  //     setColors(p => ({
+  //       old: "#fff",
+  //       new: "#fff",
+  //     }));
+  //   else
+  //     setColors(p => ({
+  //       new: airQualityColors[airQuality?.st.indexLevel?.id as keyof typeof airQualityColors],
+  //       old: p.new,
+  //     }));
+  // }, [airQuality, , hoveredQualityIndex]);
 
   useEffect(() => {
     if (groupRef.current) {
@@ -118,7 +106,7 @@ export const Model2: FC = () => {
         {opacities.map((color, i) => (
           <mesh key={i} scale={0.012} castShadow receiveShadow geometry={modelMeshes[i].geometry}>
             {/* @ts-ignore */}
-            <animated.meshToonMaterial color={color.color} opacity={0.8} transparent />
+            <animated.meshToonMaterial color={"#fff"} opacity={color.color} transparent />
           </mesh>
         ))}
       </animated.group>

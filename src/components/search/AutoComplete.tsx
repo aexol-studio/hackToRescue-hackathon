@@ -4,7 +4,7 @@ import { cx } from "@/utils";
 import { NewAutoCompleteResult, WeatherType, useAppStore } from "@/stores";
 import { X } from "lucide-react";
 import { useLazyQuery } from "@apollo/client";
-import { GET_CITY_AIR_QUALITY, GET_WEATHER } from "@/graphql/queries";
+import { GET_CITY_AIR_QUALITY, GET_LUNGE_POLLUTION, GET_WEATHER } from "@/graphql/queries";
 import { set, sub } from "date-fns";
 
 export const AutoCompleteSearch = () => {
@@ -45,7 +45,7 @@ export const AutoCompleteSearch = () => {
   );
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const [getLounge] = useLazyQuery(GET_LUNGE_POLLUTION, { onCompleted: d => console.log(d) });
   const [getWeather] = useLazyQuery(GET_WEATHER, {
     onCompleted: d => setWeather(d.getRealTimeWeather as WeatherType),
   });
@@ -64,6 +64,7 @@ export const AutoCompleteSearch = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {}, []);
   return (
     <div className="relative">
       <X
@@ -128,6 +129,7 @@ export const AutoCompleteSearch = () => {
                         setScaleLounge(false);
                         return;
                       }
+                      getLounge({ variables: { city: "Białystok", day: 1 } });
 
                       getWeather({
                         variables: {

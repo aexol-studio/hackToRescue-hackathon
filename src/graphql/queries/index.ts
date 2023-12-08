@@ -73,3 +73,7 @@ export const GET_WEATHER = typedQuery({
 export const GET_CITIES = typedQuery({
   getCollectedCities: citySelector,
 });
+
+export const GET_LUNGE_POLLUTION = typedQuery({
+  getIndexForCity: [{ city: $("city", "String!"), day: $("day", "Int!") }, true],
+});
