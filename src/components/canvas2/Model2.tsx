@@ -8,7 +8,7 @@ import { airQualityColors } from "@/constans";
 import * as THREE from "three";
 import { generateLungsColor } from "@/utils";
 
-useGLTF.preload(`/assets/models/breathe-test.glb`);
+useGLTF.preload(`/assets/models/newday.glb`);
 
 export const Model2: FC = () => {
   const { scaleLounge, showLounge, lungPollution } = useAppStore(
@@ -19,7 +19,7 @@ export const Model2: FC = () => {
     })
   );
   const groupRef = useRef<Group>(null);
-  const { nodes, animations } = useGLTF(`/assets/models/breathe-test.glb`) as any;
+  const { nodes, animations } = useGLTF(`/assets/models/newday.glb`) as any;
   const { actions } = useAnimations(animations, groupRef);
 
   const { airQuality, hoveredQualityIndex, allowRotation } = useAppStore(state => ({
@@ -30,7 +30,7 @@ export const Model2: FC = () => {
   const vec = new THREE.Vector3();
   const { scale } = useSpring({ scale: scaleLounge ? 0.5 : 1, delay: 0 });
 
-  // console.log(scale);
+  console.log(animations);
   const [colors, setColors] = useState({ old: "#CCCCCC", new: "#CCCCCC" });
   const modelMeshes: Mesh[] = useMemo(
     () =>
@@ -48,7 +48,7 @@ export const Model2: FC = () => {
     else state.camera.position.lerp(vec.set(0, 0, 6), 0.2);
     groupRef.current.updateMatrixWorld();
     state.camera.updateProjectionMatrix();
-    actions["lung2.stl.cleaner.materialmerger.glesAction"]?.play();
+    actions["Sketchfab_model.scale"]?.play();
   });
   const [lungSprings] = useSprings(
     10,
