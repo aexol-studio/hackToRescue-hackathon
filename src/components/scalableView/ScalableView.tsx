@@ -54,7 +54,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
           showLounge && "opacity-[75%] scale-[300%]"
         )}></div>
 
-      <div className="absolute left-1/2 w-full md:w-max flex justify-center items-center gap-2 -translate-x-1/2 top-6 z-[1000]">
+      <div className="absolute left-1/2 w-full md:w-max flex justify-center items-center gap-4 -translate-x-1/2 top-6 z-[1000]">
         <AutoCompleteSearch clearDay={() => setOpenSelect({ open: false, value: null })} />
         <div className="p-1 bg-white rounded-full cursor-pointer">
           <Globe2 onClick={() => setShowLunge(false)} />
