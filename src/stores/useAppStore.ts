@@ -1,14 +1,11 @@
 import { CityType } from "@/graphql/queries";
-import { AirQuality, GeoLocation, LocationData } from "@/types";
+import { AirQuality, GeoLocation, LocationData, NewAutoCompleteResult, } from "@/types";
 import { checkWhereLatLong, requestGeolocation } from "@/utils";
 import { createStore } from "zustand";
-type MoveMap = "station" | undefined;
-export type NewAutoCompleteResult = {
-  name: string;
-  state: string;
-  location: { lat: number; lon: number };
-  stations: { lat: number; lon: number }[];
-};
+
+
+type MoveMap = "station"|Pick<GeoLocation,"longitude"|"latitude">  | undefined;
+
 export interface AppStoreProps {
   isMapMoving: boolean;
   educationOpen: boolean;

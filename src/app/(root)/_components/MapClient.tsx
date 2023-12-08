@@ -8,6 +8,8 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import toast from "react-hot-toast";
 import { ScalableView } from "@/components/scalableView/ScalableView";
 
+const zoom = 9;
+
 const getLatestData = async () => {
   const URL =
     process.env.NODE_ENV === "development" ? "http://localhost:3000/" : process.env.NEXT_PUBLIC_URL;
@@ -26,6 +28,7 @@ const ClientMap = () => {
     selectStation,
     goTo,
     setEducationOpen,
+
     moveMap,
     setShowLunge,
     setIsMapMoving,
@@ -82,17 +85,24 @@ const ClientMap = () => {
 
   const goToSelectedStation = useCallback(() => {
     if (selectedStation) {
-      const zoom = 9;
       map?.setView([selectedStation.location.lat, selectedStation.location.long], zoom, {
         animate: true,
         duration: 0.5,
         easeLinearity: 0.2,
       });
     }
-  }, [map, selectedStation]);
+    if (typeof moveMap === "object") {
+      map?.setView([moveMap.latitude, moveMap.longitude], zoom, {
+        animate: true,
+        duration: 0.5,
+        easeLinearity: 0.2,
+      });
+    }
+  }, [map, selectedStation, moveMap]);
 
   useEffect(() => {
-    if (selectedStation && moveMap === "station") goToSelectedStation();
+    if ((selectedStation && moveMap === "station") || typeof moveMap === "object")
+      goToSelectedStation();
   }, [selectedStation, moveMap]);
 
   const dblclick = async (name: string) => {
@@ -178,10 +188,16 @@ const ClientMap = () => {
               icon={pickGoodIcon(`default`)}
               position={[lat, long]}>
               <Popup>
-                <div className="flex flex-col">
-                  <span>{name}</span>
-                  <span></span>
-                  <button onClick={() => onButtonClick(name)}>Zmień stacje</button>
+                <div className="flex flex-col gap-1">
+                  <span className="font-jost font-bold text-sm tracking-wide">{name}</span>
+                  <button
+                    className="font-jost font-normal text-sm"
+                    onClick={() => {
+                      onButtonClick(name);
+                      setShowLunge(true);
+                    }}>
+                    Wybierz stację
+                  </button>
                 </div>
               </Popup>
             </Marker>
