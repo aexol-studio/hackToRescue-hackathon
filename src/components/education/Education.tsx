@@ -52,7 +52,7 @@ export const Education = () => {
         ref={ref}
         className={cx(
           scrolledDown ? "h-screen" : "h-3/4",
-          "absolute top-full w-full duration-700 transition-all z-50",
+          "absolute top-full w-full duration-700 transition-all z-[2137]",
           educationOpen && "-translate-y-full"
         )}>
         <div className="w-full h-full overflow-hidden">

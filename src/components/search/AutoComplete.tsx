@@ -167,7 +167,7 @@ export const AutoCompleteSearch: FC<{ clearDay: () => void }> = ({ clearDay }) =
   useEffect(() => {}, []);
   return (
     <div ref={listRef} className="w-full h-[50px] z-[1200] ">
-      <div className="bg-white rounded-3xl">
+      <div className="bg-white rounded-3xl shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
         <div className="relative">
           <div className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex gap-2 items-center">
             <HoverInfo infoText="Geolokalizacja">
@@ -198,7 +198,7 @@ export const AutoCompleteSearch: FC<{ clearDay: () => void }> = ({ clearDay }) =
                 <div
                   key={name + idx}
                   className={cx(
-                    "text-black flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
+                    "text-black flex flex-col px-[1.2rem] py-[0.4rem] hover:bg-gray-200 cursor-pointer"
                   )}
                   onClick={() => handleChangeStation(option)}>
                   <span className={cx("select-none")}>{name}</span>

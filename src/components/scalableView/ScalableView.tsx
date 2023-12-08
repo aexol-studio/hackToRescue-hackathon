@@ -9,6 +9,8 @@ import { Search } from "../search/Search";
 import { AutoCompleteSearch } from "../search/AutoComplete";
 import { useLazyQuery } from "@apollo/client";
 import { GET_LUNGE_POLLUTION } from "@/graphql/queries";
+import { HoverInfo } from "../search/HoverInfo";
+import { ToggleEducation } from "../education/ToggleEducation";
 
 export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
   const [openSelect, setOpenSelect] = useState<{ open: boolean; value: null | number }>({
@@ -22,6 +24,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
     setShowLunge,
     newAutoCompleteResult,
     setLungPollution,
+    setMapZoomOutTrigger,
   } = useAppStore(
     ({
       airQuality,
@@ -30,6 +33,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
       setShowLunge,
       newAutoCompleteResult,
       setLungPollution,
+      setMapZoomOutTrigger,
     }) => ({
       airQuality,
       selectStation,
@@ -37,6 +41,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
       setShowLunge,
       newAutoCompleteResult,
       setLungPollution,
+      setMapZoomOutTrigger,
     })
   );
   const [getLungPollution] = useLazyQuery(GET_LUNGE_POLLUTION, {
@@ -50,7 +55,6 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
     } else {
       setCanShowLounge(false);
     }
-
     return () => {
       setCanShowLounge(false);
     };
@@ -59,24 +63,37 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
   return (
     <div
       className={cx(
-        "w-full h-screen absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-[60] ",
+        "w-full h-screen absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-[60]",
         showLounge && "z-[100]"
       )}>
       <div
         className={cx(
-          "w-full h-full absolute top-0 scale-0 left-0 bg-[#DA0000] opacity-0 duration-300 delay-300",
-          showLounge && "opacity-[80%] scale-[300%]"
-        )}></div>
-
-      <div className="absolute left-1/2 w-full md:w-max flex justify-center items-center gap-4 -translate-x-1/2 top-6 z-[1000]">
-        <AutoCompleteSearch clearDay={() => setOpenSelect({ open: false, value: null })} />
-        <div className="p-1 bg-white rounded-full cursor-pointer">
-          <Globe2 onClick={() => setShowLunge(false)} />
+          "w-full h-full absolute top-0 scale-0 left-0 bg-[#DA0000] opacity-0 duration-500 delay-300",
+          showLounge && "opacity-[80%] scale-[100%]"
+        )}
+      />
+      <div className="z-[2137] fixed left-[48px] top-[48px] p-1 bg-white rounded-full cursor-pointer">
+        <HoverInfo infoText="Mapa">
+          <Globe2
+            onClick={() => {
+              setShowLunge(false);
+              setMapZoomOutTrigger(true);
+              selectStation(null);
+            }}
+          />
+        </HoverInfo>
+      </div>
+      <div className="absolute left-1/2 w-full md:w-max flex justify-center items-center gap-4 -translate-x-1/2 top-[48px] z-[1000]">
+        <div className="w-[320px]">
+          <AutoCompleteSearch clearDay={() => setOpenSelect({ open: false, value: null })} />
         </div>
       </div>
       {canShowLounge && <Canvas2 />}
       <div className="absolute left-1/2 w-full -translate-x-1/2 bottom-4 md:bottom-10  justify-center px-2">
         <YourLung />
+        <div className="mt-[40px]">
+          <ToggleEducation />
+        </div>
       </div>
       <div className="absolute top-6 right-7 bg-white border-[#FF7000] border-[1px] p-3 rounded-3xl  cursor-pointer select-none">
         <div

@@ -39,6 +39,7 @@ export interface AppStoreProps {
   weather: WeatherType | null;
   lungPollution: number | null;
   isMapLoading: boolean;
+  mapZoomOutTrigger: boolean;
 }
 
 export interface AppStoreState extends AppStoreProps {
@@ -63,6 +64,7 @@ export interface AppStoreState extends AppStoreProps {
   setIsMapMoving: (isMapMoving: boolean) => void;
   setLungPollution: (lungPollution: number | null) => void;
   setIsMapLoading: (state: boolean) => void;
+  setMapZoomOutTrigger: (state: boolean) => void;
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
@@ -72,6 +74,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
     const open = () => set({ isOpen: true });
     const close = () => set({ isOpen: false });
     const toggle = () => set(state => ({ isOpen: !state.isOpen }));
+    const setMapZoomOutTrigger = (state: boolean) => set({ mapZoomOutTrigger: state });
 
     const setIsMapMoving = (isMapMoving: boolean) => set({ isMapMoving });
     const setIsMapLoading = (state: boolean) => set({ isMapLoading: state });
@@ -189,6 +192,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       weather: null,
       lungPollution: null,
       isMapLoading: true,
+      mapZoomOutTrigger: false,
       setWeather,
       setChartData,
       close,
@@ -210,6 +214,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       setIsMapMoving,
       setLungPollution,
       setIsMapLoading,
+      setMapZoomOutTrigger,
       ...initProps,
     };
   });

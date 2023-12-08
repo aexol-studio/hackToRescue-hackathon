@@ -8,7 +8,7 @@ import { GeoLocalizationButton } from "./GeoLocationButton";
 import { HoverInfo } from "./HoverInfo";
 import { NewAutoCompleteResult } from "@/types";
 
-export const AutoCompleteSearch = () => {
+export const AutoCompleteSearch = ({ disabled }: { disabled?: boolean }) => {
   const { searchResults, searchValue, setSearchValue, setNewAutoCompleteResult, showLounge, goTo } =
     useAppStore(
       ({
@@ -57,8 +57,12 @@ export const AutoCompleteSearch = () => {
   }, []);
 
   return (
-    <div ref={listRef} className="w-full h-[50px] z-[1200] ">
-      <div className="bg-white rounded-3xl">
+    <div
+      ref={listRef}
+      className={`w-full h-[50px] z-[1200] ${
+        disabled ? "pointer-events-none" : "pointer-events-auto"
+      }`}>
+      <div className="bg-white rounded-3xl shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
         <div className="relative">
           <div className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex gap-2 items-center">
             <HoverInfo infoText="Geolokalizacja">
@@ -81,7 +85,7 @@ export const AutoCompleteSearch = () => {
           <div
             style={{ height: `${isSearchOpen ? `${searchResults.length * 37}px` : "0"}` }}
             className={cx(
-              "transition-all duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin max-h-[120px] lg:max-h-[256px] overflow-y-auto"
+              "transition-all duration-500 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin max-h-[120px] lg:max-h-[256px] overflow-y-auto"
             )}>
             {searchResults.map((option, idx) => {
               const { name } = option;
@@ -89,7 +93,7 @@ export const AutoCompleteSearch = () => {
                 <div
                   key={name + idx}
                   className={cx(
-                    "text-black flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
+                    "text-black flex flex-col px-[1.2rem] py-[0.4rem] hover:bg-gray-200 cursor-pointer"
                   )}
                   onClick={() => handleChangeStation(option)}>
                   <span className={cx("select-none")}>{name}</span>

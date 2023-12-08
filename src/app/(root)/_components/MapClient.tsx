@@ -29,6 +29,9 @@ const ClientMap = () => {
     moveMap,
     setShowLunge,
     setIsMapMoving,
+    isMapMoving,
+    mapZoomOutTrigger,
+    setMapZoomOutTrigger,
   } = useAppStore(state => ({
     showLounge: state.showLounge,
     selectedStation: state.selectedStation,
@@ -40,6 +43,8 @@ const ClientMap = () => {
     setShowLunge: state.setShowLunge,
     isMapMoving: state.isMapMoving,
     setIsMapMoving: state.setIsMapMoving,
+    setMapZoomOutTrigger: state.setMapZoomOutTrigger,
+    mapZoomOutTrigger: state.mapZoomOutTrigger,
   }));
 
   useEffect(() => {
@@ -111,6 +116,20 @@ const ClientMap = () => {
     if ((selectedStation && moveMap === "station") || typeof moveMap === "object")
       goToSelectedStation();
   }, [selectedStation, moveMap]);
+
+  useEffect(() => {
+    (async () => {
+      if (mapZoomOutTrigger) {
+        await delay(550);
+        map?.flyTo([((position?.lat as number) || 0) - 0.2, position?.lng as number], 9, {
+          animate: true,
+          duration: 0.8,
+          easeLinearity: 0.5,
+        });
+        setMapZoomOutTrigger(false);
+      }
+    })();
+  }, [mapZoomOutTrigger]);
 
   const dblclick = async (name: string) => {
     if (window.innerWidth < 640) close();

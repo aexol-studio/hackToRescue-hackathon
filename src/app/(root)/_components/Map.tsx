@@ -27,13 +27,7 @@ const Map: FunctionComponent = () => {
     return null;
   }
 
-  return isMapLoading ? (
-    <div className="bg-red-900 absolute top-0 w-[400px] h-[400px]">XXXX</div>
-  ) : Client ? (
-    <Client />
-  ) : (
-    <div>FAJNY LOADER</div>
-  );
+  return !isMapLoading && Client ? <Client /> : null;
 };
 
 export default Map;

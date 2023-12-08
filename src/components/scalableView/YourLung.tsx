@@ -58,7 +58,7 @@ export const YourLung = () => {
     <div className="w-full ">
       <div
         className={cx(
-          `max-w-[1600px] mx-auto transition-all duration-500 flex flex-col ease-in-out bg-white rounded-3xl text-black overflow-hidden opacity-100 w-full `
+          `max-w-[1600px] mx-auto transition-all duration-500 flex flex-col ease-in-out bg-white rounded-[40px] text-black overflow-hidden opacity-100 w-full `
         )}>
         <div
           className="px-7 py-4 flex flex-col md:flex-row items-center justify-between select-none cursor-pointer "
@@ -78,7 +78,7 @@ export const YourLung = () => {
             "bg-[#f7f7f7] p-6  flex flex-col md:flex-row gap-6 max-h-[200px] overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-[#FF7000] md:max-h-[1000px] transition-all  duration-[500ms] ",
             !scaleLounge && "max-h-0 p-0 md:max-h-0"
           )}>
-          <div className="bg-white flex flex-col  rounded-2xl w-full md:w-min">
+          <div className="bg-white flex flex-col rounded-2xl w-full md:w-min">
             <div className=" py-2 flex md:flex-row flex-col items-center md:px-6 justify-between border-b">
               <span>Województwo</span>
               <span>
