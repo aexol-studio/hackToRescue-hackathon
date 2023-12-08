@@ -61,7 +61,7 @@ export const YourLung = () => {
           `transition-all duration-500 flex flex-col ease-in-out bg-white rounded-3xl text-black overflow-hidden opacity-100 w-full `
         )}>
         <div
-          className="px-7 py-4 flex flex-col md:flex-row items-center justify-between select-none cursor-pointer"
+          className="px-7 py-4 flex flex-col md:flex-row items-center justify-between select-none cursor-pointer "
           onClick={() => {
             setScaleLounge(!scaleLounge);
           }}>
@@ -97,58 +97,89 @@ export const YourLung = () => {
               }
             </div>
             <div className="px-6 py-6 flex flex-col items-center md:items-start gap-3">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center  gap-2">
                 <Thermometer />{" "}
                 <span className="font-bold ">
                   {weather?.temp ? `${Math.round((weather?.temp - 273.15) * 100) / 100} C` : "-"}
                 </span>{" "}
                 <span className="text-sm">temperatura</span>{" "}
-                <HoverInfo text="asddasasdasdasdads">
+                <HoverInfo
+                  text="Ekspozycja na smog i wysoka temperatura powietrza mogą prowadzić "
+                  text2="do zwiększonego ryzyka zaostrzeń chorób układu oddechowego">
                   <Info className="w-4 h-4 cursor-pointer" />
                 </HoverInfo>
               </div>
-              <div className="flex items-center gap-2">
+              <span className="text-sm md:hidden">
+                Ekspozycja na smog i wysoka temperatura powietrza mogą prowadzić do zwiększonego
+                ryzyka zaostrzeń chorób układu oddechowego
+              </span>
+              <div className="flex items-center  gap-2">
                 <Cloudy />{" "}
                 <span className="font-bold">{weather?.clouds ? `${weather.clouds}%` : "-"}</span>{" "}
                 <span className="text-sm">zachmurzenie</span>{" "}
-                <HoverInfo text="asddasasdasdasdads">
+                <HoverInfo
+                  text="W warunkach silnego zachmurzenia smog mogą utrzymywać się bliżej powierzchni ziemi, "
+                  text2="co może prowadzić do nasilenia problemów zdrowotnych z układem oddechowym">
                   <Info className="w-4 h-4 cursor-pointer" />
                 </HoverInfo>
               </div>
+              <span className="text-sm md:hidden">
+                W warunkach silnego zachmurzenia smog mogą utrzymywać się bliżej powierzchni ziemi,
+                co może prowadzić do nasilenia problemów zdrowotnych z układem oddechowym
+              </span>
               {/* <div className="flex items-center gap-2">
                 <CloudDrizzle /> <span className="font-bold">-2</span> <span>opady</span>{" "}
                 <Info className="w-4 h-4" />
               </div> */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center  gap-2">
                 <Wind />{" "}
                 <span className="font-bold">
                   {weather?.windSpeed ? `${weather?.windSpeed}km/h` : "-"}
                 </span>{" "}
                 <span className="text-sm">wiatr</span>{" "}
-                <HoverInfo text="asddasasdasdasdads">
+                <HoverInfo
+                  text="Silny wiatr może przyczyniać się do rozprzestrzeniania zanieczyszczeń na większe obszary. "
+                  text2="Natomiast brak wiatru sprawia, że ekspozycja na smog może mieć poważniejsze konsekwencje.">
                   <Info className="w-4 h-4 cursor-pointer " />
                 </HoverInfo>
               </div>
-              <div className="flex items-center gap-2">
+              <span className="text-sm md:hidden">
+                Silny wiatr może przyczyniać się do rozprzestrzeniania zanieczyszczeń na większe
+                obszary. Natomiast brak wiatru sprawia, że ekspozycja na smog może mieć poważniejsze
+                konsekwencje
+              </span>
+              <div className="flex items-center  gap-2">
                 <Thermometer />{" "}
                 <span className="font-bold">
                   {weather?.pressure ? `${weather?.pressure}hPa` : "-"}
                 </span>{" "}
                 <span className="text-sm">ciśnienie</span>
-                <HoverInfo text="asddasasdasdasdads">
+                <HoverInfo
+                  text="Niskie ciśnienie może sprzyjać gromadzeniu się zanieczyszczeń, "
+                  text2="co potencjalnie pogłębiać problemy zdrowotne związane z układem oddechowym">
                   <Info className="w-4 h-4 cursor-pointer" />
                 </HoverInfo>
               </div>
+              <span className="text-sm md:hidden">
+                Niskie ciśnienie może sprzyjać gromadzeniu się zanieczyszczeń, co potencjalnie
+                pogłębiać problemy zdrowotne związane z układem oddechowym
+              </span>
               <div className="flex items-center gap-2">
                 <Droplets />{" "}
                 <span className="font-bold">
                   {weather?.humidity ? `${weather?.humidity}%` : "-"}
                 </span>{" "}
                 <span className="text-sm">wilgotność</span>{" "}
-                <HoverInfo text="asddasasdasdasdads">
+                <HoverInfo
+                  text="Wysoka wilgotność atmosferyczna może przyczynić się do zatrzymywania zanieczyszczeń w powietrzu, "
+                  text2="co może nasilać skutki ekspozycji na` smog.">
                   <Info className="cursor-pointer w-4 h-4" />
                 </HoverInfo>
               </div>
+              <span className="text-sm md:hidden">
+                Wysoka wilgotność atmosferyczna może przyczynić się do zatrzymywania zanieczyszczeń
+                w powietrzu, co może nasilać skutki ekspozycji na` smog.{" "}
+              </span>
             </div>
           </div>
           <div className="bg-white grow hidden md:block">{scaleLounge ? <Chart /> : null}</div>
