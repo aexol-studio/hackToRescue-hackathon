@@ -14,7 +14,7 @@ export const Education = () => {
     <>
       <div
         className={cx(
-          "absolute h-3/4 top-full w-full duration-700 transition-transform  z-50 ",
+          "absolute h-3/4 top-full w-full duration-700 transition-transform  z-50 select-none",
           educationOpen && "-translate-y-full"
         )}>
         <div className="w-full h-full overflow-hidden border-[#FF7000] border-[1px] rounded-t-xl ">

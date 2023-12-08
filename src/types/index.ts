@@ -12,6 +12,13 @@ export type AirQuality = Record<
   }
 >;
 
+export type NewAutoCompleteResult = {
+  name: string;
+  state: string;
+  location: { lat: number; long: number };
+  stations: {state:string; location:{ lat: number; long: number} }[];
+};
+
 type Address = {
   road: string;
   suburb: string;

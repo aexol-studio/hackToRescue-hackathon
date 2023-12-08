@@ -3,12 +3,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
-import { NewAutoCompleteResult, useAppStore } from "@/stores";
+import { useAppStore } from "@/stores";
 import { useLazyQuery } from "@apollo/client";
 import { GET_CITY_AIR_QUALITY } from "@/graphql/queries";
 import { GeoLocalizationButton } from "./GeoLocationButton";
 import { HoverInfo } from "./HoverInfo";
 import { set } from "date-fns";
+import { NewAutoCompleteResult } from "@/types";
 
 export const AutoCompleteSearch = () => {
   const { searchResults, searchValue, setSearchValue, setNewAutoCompleteResult, showLounge, goTo } =
@@ -33,10 +34,13 @@ export const AutoCompleteSearch = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChangeStation = (option: NewAutoCompleteResult) => {
-    const { name } = option;
+    const { name, location } = option;
+    const { lat, long } = location;
+
     setSearchValue(name);
     setNewAutoCompleteResult(option as NewAutoCompleteResult);
     setIsSearchOpen(p => !p);
+
     if (showLounge) {
       getCityAirQuality({
         variables: {
@@ -46,7 +50,7 @@ export const AutoCompleteSearch = () => {
         },
       });
     } else {
-      goTo("station");
+      goTo({ latitude: lat, longitude: long });
     }
   };
 
