@@ -4,11 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { cx } from "@/utils";
 import { useAppStore } from "@/stores";
-import { useLazyQuery } from "@apollo/client";
-import { GET_CITY_AIR_QUALITY } from "@/graphql/queries";
 import { GeoLocalizationButton } from "./GeoLocationButton";
 import { HoverInfo } from "./HoverInfo";
-import { set } from "date-fns";
 import { NewAutoCompleteResult } from "@/types";
 
 export const AutoCompleteSearch = () => {
@@ -41,26 +38,10 @@ export const AutoCompleteSearch = () => {
     setNewAutoCompleteResult(option as NewAutoCompleteResult);
     setIsSearchOpen(p => !p);
 
-    if (showLounge) {
-      getCityAirQuality({
-        variables: {
-          city: name,
-          startDate: set(new Date(), { hours: 0 }).toISOString(),
-          endDate: set(new Date(), { hours: 24 }).toISOString(),
-        },
-      });
-    } else {
+    if (!showLounge) {
       goTo({ latitude: lat, longitude: long });
     }
   };
-
-  const [getCityAirQuality] = useLazyQuery(GET_CITY_AIR_QUALITY, {
-    onCompleted: d => {
-      // const reducedArr = d.getCityParameters.reduce(([acc,curr])=>)
-
-      console.log(d);
-    },
-  });
 
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -74,6 +55,10 @@ export const AutoCompleteSearch = () => {
     document.addEventListener("mousedown", handleClickOutside, { capture: false });
     return () => document.removeEventListener("mousedown", handleClickOutside, { capture: false });
   }, []);
+
+  console.log("====================================");
+  console.log(searchResults.length);
+  console.log("====================================");
 
   return (
     <div ref={listRef} className="w-full h-[50px] z-[1200] ">
@@ -98,21 +83,20 @@ export const AutoCompleteSearch = () => {
         </div>
         <div className="rounded-b-3xl overflow-hidden ">
           <div
+            style={{ height: `${isSearchOpen ? `${searchResults.length * 37}px` : "0"}` }}
             className={cx(
-              "transition-[height] duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin",
-              isSearchOpen ? "h-[258px] overflow-y-auto" : "h-0"
+              "transition-all duration-700 ease-in-out scrollbar-thumb-rounded-full scrollbar-thin max-h-[256px] overflow-y-auto"
             )}>
             {searchResults.map((option, idx) => {
               const { name } = option;
               return (
-                <div key={name + idx}>
-                  <div
-                    className={cx(
-                      "text-black flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
-                    )}
-                    onClick={() => handleChangeStation(option)}>
-                    <h1 className={cx("select-none")}>{name}</h1>
-                  </div>
+                <div
+                  key={name + idx}
+                  className={cx(
+                    "text-black flex flex-col px-[1.2rem] py-[0.4rem] transition-colors duration-300 ease-in-out hover:bg-gray-200 cursor-pointer"
+                  )}
+                  onClick={() => handleChangeStation(option)}>
+                  <span className={cx("select-none")}>{name}</span>
                 </div>
               );
             })}

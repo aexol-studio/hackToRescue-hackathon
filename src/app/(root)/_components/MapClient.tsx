@@ -1,7 +1,6 @@
 import { MapContainer, Marker, Popup, TileLayer, GeoJSON } from "react-leaflet";
 import { Map as MapType } from "leaflet";
 import { useAppStore } from "@/stores";
-import { Minimap } from "./MiniMap";
 import { pickGoodIcon } from "./utils";
 import { generatePolygonColor } from "@/utils";
 import React, { useEffect, useState, useCallback, useMemo } from "react";
@@ -92,7 +91,7 @@ const ClientMap = () => {
       });
     }
     if (typeof moveMap === "object") {
-      map?.setView([moveMap.latitude, moveMap.longitude], zoom, {
+      map?.setView([moveMap.latitude - 0.2, moveMap.longitude], zoom, {
         animate: true,
         duration: 0.5,
         easeLinearity: 0.2,
@@ -203,7 +202,6 @@ const ClientMap = () => {
             </Marker>
           );
         })}
-        {map && <Minimap />}
         {json && (
           <GeoJSON
             style={style}
