@@ -85,6 +85,7 @@ const getInitialData = async () => {
     const { getCollectedCities } = await chain("query")({
       getCollectedCities: citySelector,
     });
+    console.log(getCollectedCities);
     // const citiesWithWeather = await Promise.all(
     //   getCollectedCities.map(async (city) => {
     //     const { getRealTimeWeather } = await chain("query")({

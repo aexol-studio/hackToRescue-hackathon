@@ -20,12 +20,11 @@ export const Model2: FC = () => {
     })
   );
   const groupRef = useRef<Group>(null);
-  const { nodes, animations } = useGLTF(`/assets/models/newday.glb`) as any;
+  const { nodes } = useGLTF(`/assets/models/newday.glb`) as any;
 
   const vec = new THREE.Vector3();
   const { scale } = useSpring({ scale: scaleLounge ? 0.5 : 1, delay: 0 });
 
-  console.log(animations);
   const [colors, setColors] = useState({ old: "#fff", new: "#fff" });
   const modelMeshes: Mesh[] = useMemo(
     () =>

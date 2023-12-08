@@ -84,7 +84,9 @@ export const YourLung = () => {
               <span>
                 {newAutoCompleteResult?.state
                   ? voyages.find(v =>
-                      newAutoCompleteResult?.state.toLowerCase().includes(v.voyageEN?.toLowerCase())
+                      newAutoCompleteResult?.state
+                        .toLowerCase()
+                        .includes(v?.voyageEN?.toLowerCase() || "")
                     )?.voyage
                   : "-"}
               </span>
@@ -92,7 +94,9 @@ export const YourLung = () => {
             <div className="white p-4 md:px-6 pb-6 border-b overflow-y-auto max-h-[150px] md:min-w-[300px]  scrollbar-thin scrollbar-thumb-rounded-full  scrollbar-thumb-[#FF7000]">
               {
                 voyages.find(v =>
-                  newAutoCompleteResult?.state.toLowerCase().includes(v.voyageEN?.toLowerCase())
+                  newAutoCompleteResult?.state
+                    .toLowerCase()
+                    .includes(v?.voyageEN?.toLowerCase() || "")
                 )?.data
               }
             </div>

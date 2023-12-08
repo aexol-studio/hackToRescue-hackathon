@@ -6,6 +6,7 @@ const nextConfig = {
         "localhost",
         "hack-to-rescue-hackathon.vercel.app",
         "api.hacktotherescue.aexol.work",
+        "api-hacktotherescue.deliverky.com",
       ],
     },
   },

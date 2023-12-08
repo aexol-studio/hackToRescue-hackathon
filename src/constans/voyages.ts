@@ -50,4 +50,8 @@ export const voyages = [
     voyageEN: "Kuyavia-Pomerania",
     data: "Od 1 września 2019 r. – zakaz palenia paliwami niskiej jakości. Od 1 stycznia 2024 r. – zakaz użytkowania pozaklasowych kotłów i pieców grzewczych, a także zakaz eksploatacji kominków, które przekraczają normy w zakresie emisji pyłów.  Od 1 stycznia 2028 r. – zakaz eksploatacji kotłów o klasie energetycznej poniżej 5.",
   },
+  { voyagesEN: "", data: "" },
+  { voyagesEN: "", data: "" },
+  { voyagesEN: "", data: "" },
+  { voyagesEN: "", data: "" },
 ];

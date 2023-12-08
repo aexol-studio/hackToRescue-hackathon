@@ -133,6 +133,7 @@ const ClientMap = () => {
 
   const dblclick = async (name: string) => {
     if (window.innerWidth < 640) close();
+
     selectStation(name);
     await goTo("station");
   };

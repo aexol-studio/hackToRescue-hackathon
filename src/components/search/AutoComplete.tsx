@@ -22,6 +22,7 @@ export const AutoCompleteSearch: FC<{ clearDay: () => void }> = ({ clearDay }) =
     setScaleLounge,
     setWeather,
     setLungPollution,
+    selectedStation,
   } = useAppStore(
     ({
       setWeather,
