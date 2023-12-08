@@ -7,8 +7,6 @@ import React, { useEffect, useState, useCallback, useMemo } from "react";
 import toast from "react-hot-toast";
 import { ScalableView } from "@/components/scalableView/ScalableView";
 
-const zoom = 9;
-
 const getLatestData = async () => {
   const URL =
     process.env.NODE_ENV === "development" ? "http://localhost:3000/" : process.env.NEXT_PUBLIC_URL;
@@ -27,11 +25,12 @@ const ClientMap = () => {
     selectStation,
     goTo,
     setEducationOpen,
-
+    showLounge,
     moveMap,
     setShowLunge,
     setIsMapMoving,
   } = useAppStore(state => ({
+    showLounge: state.showLounge,
     selectedStation: state.selectedStation,
     setEducationOpen: state.setEducationOpen,
     selectStation: state.selectStation,
@@ -81,17 +80,26 @@ const ClientMap = () => {
       map?.off("moveend", onMoveEnd);
     };
   }, [map]);
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-  const goToSelectedStation = useCallback(() => {
+  const goToSelectedStation = useCallback(async () => {
     if (selectedStation) {
-      map?.setView([selectedStation.location.lat, selectedStation.location.long], zoom, {
+      map?.flyTo([selectedStation.location.lat - 0.2, selectedStation.location.long], 10, {
         animate: true,
         duration: 0.5,
         easeLinearity: 0.2,
       });
+      await delay(550);
+      map?.flyTo([selectedStation.location.lat, selectedStation.location.long], 16, {
+        animate: true,
+        duration: 0.8,
+        easeLinearity: 0.4,
+      });
+      setShowLunge(true);
     }
+
     if (typeof moveMap === "object") {
-      map?.setView([moveMap.latitude - 0.2, moveMap.longitude], zoom, {
+      map?.flyTo([moveMap.latitude - 0.2, moveMap.longitude], 10, {
         animate: true,
         duration: 0.5,
         easeLinearity: 0.2,
@@ -107,7 +115,6 @@ const ClientMap = () => {
   const dblclick = async (name: string) => {
     if (window.innerWidth < 640) close();
     selectStation(name);
-    setShowLunge(true);
     await goTo("station");
   };
   const onButtonClick = (name: string) => {
@@ -168,7 +175,7 @@ const ClientMap = () => {
         className="h-full w-full"
         center={[51.91, 19.14]}
         zoom={7}
-        maxZoom={9}
+        // maxZoom={9}
         minZoom={5.5}
         zoomControl={false}
         maxBounds={[

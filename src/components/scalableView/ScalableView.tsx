@@ -1,5 +1,5 @@
 import { cx } from "@/utils";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Canvas2 } from "../canvas2/Canvas2";
 import { YourLung } from "./YourLung";
 import { useAppStore } from "@/stores";
@@ -42,16 +42,30 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
   const [getLungPollution] = useLazyQuery(GET_LUNGE_POLLUTION, {
     onCompleted: d => setLungPollution(d.getIndexForCity),
   });
+  const [canShowLounge, setCanShowLounge] = useState(false);
+
+  useEffect(() => {
+    if (show) {
+      setTimeout(() => setCanShowLounge(true), 1000);
+    } else {
+      setCanShowLounge(false);
+    }
+
+    return () => {
+      setCanShowLounge(false);
+    };
+  }, [show]);
+
   return (
     <div
       className={cx(
-        "w-full h-screen absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  -z-[60] ",
+        "w-full h-screen absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-[60] ",
         showLounge && "z-[100]"
       )}>
       <div
         className={cx(
-          "w-full h-full absolute top-0 rounded-full scale-0 left-0 bg-black opacity-0 duration-1000 delay-300 ",
-          showLounge && "opacity-[75%] scale-[300%]"
+          "w-full h-full absolute top-0 scale-0 left-0 bg-[#DA0000] opacity-0 duration-300 delay-300",
+          showLounge && "opacity-[80%] scale-[300%]"
         )}></div>
 
       <div className="absolute left-1/2 w-full md:w-max flex justify-center items-center gap-4 -translate-x-1/2 top-6 z-[1000]">
@@ -60,7 +74,7 @@ export const ScalableView: FC<{ show: boolean }> = ({ show }) => {
           <Globe2 onClick={() => setShowLunge(false)} />
         </div>
       </div>
-      <Canvas2 />
+      {canShowLounge && <Canvas2 />}
       <div className="absolute left-1/2 w-full -translate-x-1/2 bottom-4 md:bottom-10  justify-center px-2">
         <YourLung />
       </div>

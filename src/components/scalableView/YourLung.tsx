@@ -58,7 +58,7 @@ export const YourLung = () => {
     <div className="w-full ">
       <div
         className={cx(
-          `transition-all duration-500 flex flex-col ease-in-out bg-white rounded-3xl text-black overflow-hidden opacity-100 w-full `
+          `max-w-[1600px] mx-auto transition-all duration-500 flex flex-col ease-in-out bg-white rounded-3xl text-black overflow-hidden opacity-100 w-full `
         )}>
         <div
           className="px-7 py-4 flex flex-col md:flex-row items-center justify-between select-none cursor-pointer "

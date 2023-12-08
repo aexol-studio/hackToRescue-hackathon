@@ -1,9 +1,15 @@
 "use client";
 import { useAppStore } from "@/stores";
-import React, { useEffect, useState, FunctionComponent } from "react";
+import React, { useEffect, useState, FunctionComponent, Suspense } from "react";
 
 const Map: FunctionComponent = () => {
-  const { initGeoLocation } = useAppStore(({ initGeoLocation }) => ({ initGeoLocation }));
+  const { isMapLoading, initGeoLocation, setIsMapLoading } = useAppStore(
+    ({ isMapLoading, initGeoLocation, setIsMapLoading }) => ({
+      isMapLoading,
+      initGeoLocation,
+      setIsMapLoading,
+    })
+  );
   const [Client, setClient] = useState<FunctionComponent>();
 
   useEffect(() => {
@@ -12,6 +18,7 @@ const Map: FunctionComponent = () => {
         const newClient = (await import("./MapClient")).default;
         setClient(() => newClient);
         await initGeoLocation();
+        setIsMapLoading(false);
       }
     })();
   }, []);
@@ -20,7 +27,13 @@ const Map: FunctionComponent = () => {
     return null;
   }
 
-  return Client ? <Client /> : <div>FAJNY LOADER</div>;
+  return isMapLoading ? (
+    <div className="bg-red-900 absolute top-0 w-[400px] h-[400px]">XXXX</div>
+  ) : Client ? (
+    <Client />
+  ) : (
+    <div>FAJNY LOADER</div>
+  );
 };
 
 export default Map;

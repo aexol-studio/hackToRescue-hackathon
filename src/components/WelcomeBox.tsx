@@ -19,9 +19,9 @@ export const WelcomeBox = () => {
   return (
     <div
       ref={ref}
-      className="sm:px-12 py-8 rounded-2xl transition-all duration-300 ease-in-out absolute w-fit sm:w-3/4 sm:w-auto left-1/2 bottom-1/2 -translate-x-1/2 translate-y-1/2 grid gap-10 ">
-      <div className="grid gap-6">
-        <h1 className="select-none text-lg sm:text-xl font-jost font-black text-black text-center whitespace-nowrap">
+      className="sm:px-4 py-4 rounded-2xl transition-all duration-300 ease-in-out absolute w-fit sm:w-3/4 sm:w-auto left-1/2 bottom-1/2 -translate-x-1/2 translate-y-1/2 grid gap-10 ">
+      <div className="grid gap-[22px]">
+        <h1 className="select-none text-lg sm:text-3xl font-jost font-black text-black text-center whitespace-nowrap">
           Zobacz czym oddychasz. Zmień to!
         </h1>
         <AutoCompleteSearch />

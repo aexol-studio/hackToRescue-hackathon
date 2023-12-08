@@ -38,6 +38,7 @@ export interface AppStoreProps {
   chartData?: { AUTOMATIC: any; OPEN_WEATHER: any; MANUAL: any } | null;
   weather: WeatherType | null;
   lungPollution: number | null;
+  isMapLoading: boolean;
 }
 
 export interface AppStoreState extends AppStoreProps {
@@ -61,6 +62,7 @@ export interface AppStoreState extends AppStoreProps {
   initGeoLocation: () => Promise<void>;
   setIsMapMoving: (isMapMoving: boolean) => void;
   setLungPollution: (lungPollution: number | null) => void;
+  setIsMapLoading: (state: boolean) => void;
 }
 
 export type useAppStoreType = ReturnType<typeof createAppStore>;
@@ -72,7 +74,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
     const toggle = () => set(state => ({ isOpen: !state.isOpen }));
 
     const setIsMapMoving = (isMapMoving: boolean) => set({ isMapMoving });
-
+    const setIsMapLoading = (state: boolean) => set({ isMapLoading: state });
     const initGeoLocation = async () => {
       try {
         const geoLocation = await requestGeolocation();
@@ -186,6 +188,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       charData: [],
       weather: null,
       lungPollution: null,
+      isMapLoading: true,
       setWeather,
       setChartData,
       close,
@@ -206,6 +209,7 @@ export const createAppStore = (initProps?: Partial<AppStoreProps>) =>
       initGeoLocation,
       setIsMapMoving,
       setLungPollution,
+      setIsMapLoading,
       ...initProps,
     };
   });
